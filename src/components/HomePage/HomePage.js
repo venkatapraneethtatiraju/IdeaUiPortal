@@ -19,6 +19,7 @@ export default class HomePage extends PureComponent {
       name:'Add an Idea',
       btnColor: '#e4500e',
       showModal: false,
+      saveandSubmit: "Save & Submit",
       headerTabs: {
         leftTabs: {
           dashboard: {
@@ -63,6 +64,10 @@ export default class HomePage extends PureComponent {
     }))
   }
 
+  saveandSubmitHandler = (event) => {
+
+  }
+
 
   render() {
     
@@ -89,6 +94,9 @@ export default class HomePage extends PureComponent {
           <PopUpModel modelText="testing" 
           onOk={this.buttonActionHandler}
           onCancel={this.buttonActionHandler}
+          saveandSubmitHandler={this.saveandSubmitHandler}
+          saveandSubmit={this.state.saveandSubmit}
+          btnColor={this.state.btnColor}
           />
         }
         <Switch>
