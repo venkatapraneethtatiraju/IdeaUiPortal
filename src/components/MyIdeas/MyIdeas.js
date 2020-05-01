@@ -92,6 +92,7 @@ class MyIdeas extends Component {
       debugger;
     }
     render() {
+      debugger;
         return (
             <div className="my-ideas-container">
               <Row justify="center">

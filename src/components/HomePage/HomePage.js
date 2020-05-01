@@ -37,6 +37,7 @@ export default class HomePage extends PureComponent {
   }
 
   setTabActive = (key) => {
+    debugger;
     const toggledHeaderTabs = {...this.state.headerTabs.leftTabs};
     Object.keys(toggledHeaderTabs).map(tab => toggledHeaderTabs[tab].isActive = (tab === key) )
     return toggledHeaderTabs;
