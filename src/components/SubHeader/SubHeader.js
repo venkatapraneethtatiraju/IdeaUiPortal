@@ -5,7 +5,7 @@ class SubHeader extends Component {
     render() {
         return (
             <div className="sub-header-container">
-                <h1>{this.props.subHeaderTitle}</h1>
+                <h2>{this.props.subHeaderTitle}</h2>
                 <GenericButton 
                 buttonClickHandler={this.props.buttonClickHandler}
                 buttonName={this.props.name}

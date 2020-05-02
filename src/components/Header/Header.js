@@ -16,7 +16,7 @@ const Header = (props) => (
           <Link to={tab}>
              <div className={props.tabsData.leftTabs[tab].isActive ? "nav-list-items active": "nav-list-items"} onClick={() => props.clickActionHandler(tab)} key={props.tabsData.leftTabs[tab].title}>
               <img src={props.tabsData.leftTabs[tab].icon} alt="logo" className="nav-logos" />
-              <span>{props.tabsData.leftTabs[tab].title}</span>
+              <span className="header-nav-titles">{props.tabsData.leftTabs[tab].title}</span>
             </div>
           </Link>
         ))}

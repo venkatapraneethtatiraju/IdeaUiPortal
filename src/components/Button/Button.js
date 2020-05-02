@@ -12,7 +12,10 @@ class GenericButton extends Component {
                 style={{
                     borderColor: this.props.btnColor,
                     backgroundColor: this.props.btnColor,
-                    borderRadius: '2px'
+                    borderRadius: '2px',
+                    fontWeight: 500,
+                    fontSize: '16px',
+                    height: 'auto'
                 }}
                 >
                 {this.props.buttonName}

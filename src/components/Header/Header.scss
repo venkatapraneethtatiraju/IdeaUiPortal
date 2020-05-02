@@ -11,16 +11,25 @@
         flex-wrap: wrap;
         align-items: center;
         flex: 1;
-        span {
+        .header-nav-titles {
             color: white;
             margin-left: 5.4px;
+            font-size: 18px;
+            font-weight: 500;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.11;
+            letter-spacing: normal;
+            display: inline-block;
+            vertical-align: middle;
         }
         .header-logos {
             min-width: 112px;
             max-height: 67px;
         }
         .nav-logos {
-            height: 14.9px;
+            height: 24.2px;
+            width: 24.2px;
         }
         .nav-list-items {
             padding: 21px;
@@ -32,8 +41,8 @@
     }
     .right-nav-content {
         .nav-logos {
-            // height: 25px;
-            height: 14.9px;
+            height: 24.2px;
+            width: 24.2px;
         }
         .ant-avatar {
             margin: 0px 20px;
