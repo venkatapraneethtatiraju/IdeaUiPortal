@@ -1,54 +1,273 @@
+// .my-ideas-container {
+//     padding: 24px 0px;
+//     .ant-table {
+//         display: block;
+//         .ant-table-cell:not(:first-child) {
+//             width: 15%;
+//         }
+//         .ant-table-thead {
+//           tr {
+//             span {
+//               // color: #5a5a5a;
+//               font-size: 14px;
+//               font-weight: 500;
+//               font-stretch: normal;
+//               font-style: normal;
+//             }
+//           }
+//         }
+
+//         @media screen and (max-width: 600px) {
+//           &-thead {
+//             display: none;
+//           }
+
+//           &-thead>tr,
+//           &-tbody>tr {
+
+//             th,
+//             td {
+//               &:first-of-type {
+//                 padding-top: 1rem;
+//               }
+
+//               &:last-of-type {
+//                 padding-bottom: 1rem;
+//               }
+//             }
+
+//             >th,
+//             >td {
+//               display: block;
+//               width: auto !important;
+//               border: none;
+//               padding: 0 1rem;
+//               font-size: 1.1rem;
+
+//               &:last-child {
+//                 border-bottom: 1px solid #eee;
+//               }
+//             }
+//           }
+//         }
+//       }
+// }
+
+// .Submitted{
+
+//   width: 96px;
+//   height: 22px;
+//   border-radius: 4px;
+//   background-color: #a5aad9;
+//   font-family: Avenir;
+//   font-size: 12px;
+//   font-weight: 500;
+//   font-style: normal;
+//   line-height: 1.17;
+//   letter-spacing: normal;
+//   text-align: center;
+//   color: #ffffff;
+
+// }
+
+// .Completed{
+//   width: 96px;
+//   height: 22px;
+//   border-radius: 4px;
+//   background-color: #1a8b45;
+//   font-family: Avenir;
+//   font-size: 12px;
+//   font-weight: 500;
+//   font-style: normal;
+//   line-height: 1.17;
+//   letter-spacing: normal;
+//   text-align: center;
+//   color: #ffffff;
+
+// }
+
+// .Draft{
+
+//   width: 96px;
+//   height: 22px;
+//   border-radius: 4px;
+//   background-color: #f7941d;
+//   font-family: Avenir;
+//   font-size: 12px;
+//   font-weight: 500;
+//   font-style: normal;
+//   line-height: 1.17;
+//   letter-spacing: normal;
+//   text-align: center;
+//   color: #ffffff;
+
+// }
+
+// .Reviewed{
+
+//   width: 96px;
+//   height: 22px;
+//   border-radius: 4px;
+//   background-color: #0c5cc9;
+//   font-family: Avenir;
+//   font-size: 12px;
+//   font-weight: 500;
+//   font-style: normal;
+//   line-height: 1.17;
+//   letter-spacing: normal;
+//   text-align: center;
+//   color: #ffffff;
+
+// }
+
 .my-ideas-container {
-    padding: 24px 0px;
-    .ant-table {
-        display: block;
-        .ant-table-cell:not(:first-child) {
-            width: 15%;
+  padding: 24px 0px;
+  overflow: hidden;
+  .ant-table-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    overflow: hidden;
+  }
+  .ant-table-container {
+    border-radius: 12px;
+    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    overflow: hidden;
+  }
+  .ant-table {
+    border-radius: 12px;
+    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    overflow: hidden;
+  }
+  .ant-table {
+    display: block;
+    .ant-table-cell:not(:first-child) {
+      width: 15%;
+    }
+    .ant-table-thead {
+      tr {
+        span {
+          // color: #5a5a5a;
+          font-size: 14px;
+          font-weight: 500;
+          font-stretch: normal;
+          font-style: normal;
         }
-        .ant-table-thead {
-          tr {
-            span {
-              // color: #5a5a5a;
-              font-size: 14px;
-              font-weight: 500;
-              font-stretch: normal;
-              font-style: normal;
-            }
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      &-thead {
+        display: none;
+      }
+
+      &-thead > tr,
+      &-tbody > tr {
+        th,
+        td {
+          &:first-of-type {
+            padding-top: 1rem;
+          }
+
+          &:last-of-type {
+            padding-bottom: 1rem;
           }
         }
-      
-        @media screen and (max-width: 600px) {
-          &-thead {
-            display: none;
-          }
-      
-          &-thead>tr,
-          &-tbody>tr {
-      
-            th,
-            td {
-              &:first-of-type {
-                padding-top: 1rem;
-              }
-      
-              &:last-of-type {
-                padding-bottom: 1rem;
-              }
-            }
-      
-            >th,
-            >td {
-              display: block;
-              width: auto !important;
-              border: none;
-              padding: 0 1rem;
-              font-size: 1.1rem;
-      
-              &:last-child {
-                border-bottom: 1px solid #eee;
-              }
-            }
+
+        > th,
+        > td {
+          display: block;
+          width: auto !important;
+          border: none;
+          padding: 0 1rem;
+          font-size: 1.1rem;
+
+          &:last-child {
+            border-bottom: 1px solid #eee;
           }
         }
       }
+    }
+  }
+}
+
+.Submitted {
+  width: 96px;
+  height: 22px;
+  border-radius: 4px;
+  background-color: #a5aad9;
+  font-family: Avenir;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.17;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+
+.Completed {
+  width: 96px;
+  height: 22px;
+  border-radius: 4px;
+  background-color: #1a8b45;
+  font-family: Avenir;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.17;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+
+.Draft {
+  width: 96px;
+  height: 22px;
+  border-radius: 4px;
+  background-color: #f7941d;
+  font-family: Avenir;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.17;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+
+.Reviewed {
+  width: 96px;
+  height: 22px;
+  border-radius: 4px;
+  background-color: #0c5cc9;
+  font-family: Avenir;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.17;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+
+.Approved {
+  width: 96px;
+  height: 22px;
+  border-radius: 4px;
+  background-color:#0c5cc9;
+  font-family: Avenir;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.17;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+
+.ant-pagination-item {
+  display: none !important;
 }

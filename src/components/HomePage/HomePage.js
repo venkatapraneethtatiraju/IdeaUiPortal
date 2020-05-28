@@ -7,19 +7,25 @@ import ClockIcon from '../../images/clock.svg';
 import ThinkIcon from '../../images/think.svg';
 import Dashboard from '../Dashboard/Dashboard';
 import MyIdeas from '../MyIdeas/MyIdeas';
-import {Row, Col} from 'antd';
+import {Row, Col, Alert} from 'antd';
 import {Route, Switch, Redirect } from 'react-router-dom';
 import PopUpModel from '../PopUpModel/PopUpModel'
+import Login from '../login/Login';
+import { getToken } from '../Auth/Auth';
+import AlertBox from '../Alert/Alert.js'
 
 export default class HomePage extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      myIdeaData:{},
+      isSubmitted:false,
       subHeaderTitle: 'Dashboard',
       name:'Add an Idea',
       btnColor: '#e4500e',
       showModal: false,
       saveandSubmit: "Save & Submit",
+      showAlert : false,
       headerTabs: {
         leftTabs: {
           dashboard: {
@@ -32,9 +38,16 @@ export default class HomePage extends PureComponent {
             isActive: false,
             icon: ThinkIcon
           }
+         
         }
-      }
+      },
+      ideaSubject : '',
+      ideaType : '',
+      ideaCategoryValue : '',
+      ideaDetails : '',
+      status : 0
     };
+    this.saveandSubmitHandler = this.saveandSubmitHandler.bind(this)
   }
 
   setTabActive = (key) => {
@@ -60,17 +73,56 @@ export default class HomePage extends PureComponent {
   buttonActionHandler = (event) => {
     this.setState(prevstate => ({
       ...prevstate,
-      showModal: !prevstate.showModal
+      showModal: !prevstate.showModal,
+      
     }))
+    setTimeout(() => {
+      this.setState({showAlert : false})
+      }, 4000);
   }
 
-  saveandSubmitHandler = (event) => {
-
+  saveandSubmitHandler (ideaSubject,ideaType,ideaCategoryValue,ideaDetails,ideaStatusId) {
+    console.log("parent")
+  
+    // Simple POST request with a JSON body using fetch
+    console.log(ideaStatusId)
+    let requestParam = {
+      title : ideaSubject,
+      ideaDescription : ideaDetails,
+      categoryId : ideaType,
+      subCategoryId : ideaCategoryValue,
+      ideaStatusId : ideaStatusId
+    }
+    this.createIdeaPostRequest(requestParam);
+   // this.clickActionHandler()
   }
+  createIdeaPostRequest(requestParam) {
+    let token = getToken();
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json','Authorization' : `Bearer ${token}`},
+        body: JSON.stringify(requestParam)
+    };
+
+    console.log("requestOptions", requestOptions)
+    fetch('https://cors-anywhere.herokuapp.com/http://iportal.herokuapp.com/innovation-portal/api/v1/ideas', requestOptions)
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data.code);
+          this.setState({myIdeaData:data,status : data.code, showAlert : true})
+         this.buttonActionHandler();
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          this.setState({status : error.code})
+        });  
+  }
+
+
 
 
   render() {
-    
+    const alertName = "Idea Submitted Successfully!";
     return (
       <div className="home-page">
         <Header 
@@ -78,6 +130,11 @@ export default class HomePage extends PureComponent {
         clickActionHandler = {this.clickActionHandler}
         tabsData = {this.state.headerTabs}
         ></Header>
+
+          { this.state.showAlert ?
+          <AlertBox alertName={alertName} /> : null
+          }
+
         <Row  justify="center" className="sub-header-wrapper">
           <Col xs={20} sm={20} md={20} lg={20} xl={20}>
             <SubHeader 
@@ -86,6 +143,7 @@ export default class HomePage extends PureComponent {
             name = {this.state.name}
             btnColor={this.state.btnColor}
             showModal={this.state.showModal}
+            inputRef={(input) => this.textInput = input} 
             >
             </SubHeader>
           </Col>
@@ -100,9 +158,12 @@ export default class HomePage extends PureComponent {
           />
         }
         <Switch>
-          <Redirect exact from="/" to="/dashboard" />
+        <Redirect exact from="/" to="/dashboard" />
+          <Route path="/login" component={Login} /> 
           <Route path="/dashboard" component={Dashboard} />
-          <Route path="/myIdeas" component={MyIdeas} />
+          <Route path="/myIdeas" >
+          <MyIdeas myIdeaData={this.state.myIdeaData} />
+          </Route>
         </Switch>
       </div>
     );

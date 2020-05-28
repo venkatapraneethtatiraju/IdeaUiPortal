@@ -1,34 +1,109 @@
+div.ant-modal-content {
+  height: 550px;
+  width: 760px;
+  border-radius: 12px;
+  box-shadow: 0 4px 3px 0 rgba(0, 0, 0, 0.1);
+}
+.ant-modal-header {
+  border-radius: 12px 12px 0 0;
+}
+
+.ant-modal-body {
+  font-size: 14px;
+  line-height: 1.5715;
+  word-wrap: break-word;
+  padding: 0px 10px 0px 10px;
+}
 .ant-row {
-    &.popup-header-title {
-      align-items: center;
+  &.popup-header-title {
+    align-items: center;
+  }
+  .ant-tag {
+    border-radius: 4px;
+  }
+  .attachment-title-container {
+    border: 1px dashed grey;
+    padding: 5px;
+    width: 100%;
+  }
+  .attachments-column {
+    padding: 0px;
+    margin: 0px;
+  }
+  .column-2 {
+    flex: 1;
+    padding-top: 26px;
+  }
+  .column-left {
+    padding-top: 26px;
+    padding-bottom: 0px;
+    width: 350px;
+    height: 478px;
+
+    background-color: #f7f7f7;
+  }
+
+  .timeline-header,
+  .text-formatter {
+    width: 100%;
+  }
+  label {
+    color: #707070;
+  }
+  p,
+  .attachment-label {
+    color: #a7a7a7;
+  }
+  .content-format-container {
+    width: 100%;
+    .ant-card-body {
+      min-height: 100px;
+      padding: 0px;
     }
-    .ant-tag {
-      border-radius: 4px;
-    }
-    .attachment-title-container {
-      border: 1px dashed grey;
-      padding: 5px;
-      width: 100%;
-    }
-    .column-2 {
-      flex: 1;
-    }
-    .timeline-header, .text-formatter {
-      width: 100%;
-    }
-    label{
-      color: #707070;
-    }
-    p, .attachment-label {
-      color: #a7a7a7;
-    }
-    .content-format-container {
-      width: 100%;
-      .ant-card-body{
-        min-height: 150px;
-      }
-      .formatter-icons{
-        cursor: pointer;
-      }
+    .formatter-icons {
+      cursor: pointer;
     }
   }
+}
+
+.errorInput {
+  border: 1px solid #cc0000;
+}
+.errorMessage {
+  width: 351px;
+  height: 16px;
+  font-family: Avenir;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: normal;
+  text-align: left;
+  color: #cc0000;
+}
+
+.ant-tag-has-color {
+  cursor: pointer;
+}
+.circle {
+  position: absolute;
+  margin: -18px 19px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+}
+.ant-modal-close-x {
+  display: block;
+  width: 32px;
+  height: 32px;
+  /* font-size: 16px; */
+  font-style: normal;
+  line-height: 60px;
+  text-align: center;
+  text-transform: none;
+  text-rendering: auto;
+  color: white;
+  margin: 0 15px;
+}

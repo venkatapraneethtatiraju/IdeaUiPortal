@@ -1,4 +1,3 @@
-
 import 'react-app-polyfill/ie9';
 import 'react-app-polyfill/stable';
 import 'react-app-polyfill/ie11';
@@ -8,15 +7,18 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter,Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Switch>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Switch>
           <Route path="/" component={App} />
-      </Switch>
-    </BrowserRouter>
+        </Switch>
+      </BrowserRouter>
+    </ErrorBoundary>
   </React.StrictMode>,
   document.getElementById('root')
 );
