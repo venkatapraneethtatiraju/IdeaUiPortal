@@ -1,0 +1,334 @@
+body {
+  background-color: #eeeeee;
+}
+.mainContaine {
+  /* position: absolute;
+  top: 200px;
+  left:  400px;
+  height: 190px;
+  bottom: 0px;
+  border-radius: 12px;
+  box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  line-height: 1.35;
+  letter-spacing: normal; */
+  height: 200px;
+  width: 440px;
+  border-radius: 12px;
+  box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  line-height: 1.35;
+  letter-spacing: normal;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+}
+
+.labelLogin {
+  position: absolute;
+  top: 165px;
+  left: 400px;
+  width: 50px;
+  height: 27px;
+  font-family: Avenir;
+  font-size: 20px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.35;
+  letter-spacing: normal;
+  text-align: left;
+  color: #5a5a5a;
+}
+
+.ant-form-item-label {
+  width: 122px;
+  height: 25px;
+  font-family: Avenir;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 3;
+  letter-spacing: normal;
+  text-align: left;
+  color: #707070;
+  padding-left: 15px;
+}
+
+.center {
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  margin: 50px 0px;
+  padding: 0px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+/* .formlabel {
+    display: flex;
+    margin-top: 20px;
+    margin-left: 40px;
+} */
+
+.inputEmail {
+  width: 394px;
+  height: 40px;
+  border: solid 1px #dedede;
+
+  background-color: #ffffff;
+  margin: 15px;
+}
+
+.loginButton {
+  width: 393px;
+  height: 38px;
+  border-radius: 4px;
+  background-color: #b7b7b7;
+  margin: 18px;
+
+  font-family: Avenir;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.optMessage {
+  height: 16px;
+  font-family: Avenir;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0;
+  letter-spacing: normal;
+  text-align: left;
+  color: #969696;
+  position: absolute;
+  padding-left: 15px;
+  text-align: left;
+}
+.emailMessage{
+  height: 16px;
+  font-family: Avenir;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0;
+  letter-spacing: normal;
+  text-align: left;
+  color: #cc0000;
+  position: absolute;
+  padding-left: 15px;
+  text-align: left;
+}
+
+.loginLbl {
+  position: absolute;
+  width: 50px;
+  height: 27px;
+  font-family: Avenir;
+  font-size: 20px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.35;
+  letter-spacing: normal;
+  text-align: left;
+  color: #5a5a5a;
+  left: 34%;
+  top: 29%;
+}
+.headerlogos {
+  position: relative;
+  left: 0;
+  width: 188px;
+  height: 62px;
+  object-fit: contain;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10%;
+  top: -100px;
+  z-index: 10;
+}
+
+.mainContaine1 {
+  background-color: darkturquoise;
+}
+.ant-form-item {
+  margin: 0;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+
+  line-height: 1.5715;
+  list-style: none;
+
+  /* margin-bottom: 24px; */
+}
+
+.main{
+  height: 250px;
+  width: 460px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.Login{
+  position: relative;
+  left: 2%;
+  top:-5%;
+  width: 50px;
+  height: 27px;
+  font-size: 20px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.35;
+  letter-spacing: normal;
+  text-align: left;
+  color: #5a5a5a;
+}
+.enterYourEmailId{
+font-size: 14px;
+font-weight: normal;
+font-stretch: normal;
+font-style: normal;
+line-height: 1.43;
+letter-spacing: normal;
+text-align: left;
+color: #707070;
+}
+.ant-form-item-label > label {
+  position: fixed;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 32px;
+  top: 10px;
+}
+
+.progrees
+{
+  background-color:transparent;
+  position: absolute;
+  left: 83%;
+  top: 15px;
+}
+
+.otpResendDivStyle{
+
+  background-color:transparent;
+  align-content: center;
+  padding: 0,0,30px,0;
+  padding: 0 0 30 0;
+  padding: 0px 0px 0px px;
+  position: absolute;
+  left: 14%;
+
+}
+
+.Didntreceivetext-style-1{
+  font-weight: normal;
+  color: #707070;
+}
+
+.Didntreceivetext-style-2 {
+  font-weight: normal;
+  color: #e4500e;
+}
+
+.Didntreceivetext-style-1,.Didntreceivetext-style-2 {
+  font-family: Avenir;
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: normal;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  display: inline;
+}
+
+.emailCheck
+{
+  width: 393px;
+  height: 38px;
+  border-radius: 4px;
+  background-color: #b7b7b7;
+  margin: 18px;
+  font-family: Avenir;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.otpBtn
+{
+  width: 393px;
+  height: 38px;
+  border-radius: 4px;
+  background-color: #e4500e;
+  margin: 18px;
+  font-family: Avenir;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.emailSuccess
+{
+  width: 393px;
+  height: 38px;
+  border-radius: 4px;
+  background-color: #e4500e;
+  margin: 18px;
+  font-family: Avenir;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+// .ant-btn-primary {
+//   position: absolute;
+//   width: 393px;
+//   left: 5%;
+//   color: #fff;
+//   background-color: #1890ff;
+//   border-color: #1890ff;
+//   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+//   -webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+//   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+// }
+// .ant-btn-primary[disabled]{
+//   position: absolute;
+//   width: 393px;
+//   left: 0%;
+// }
+
+
+
+// .ant-btn-primary {
+//   color: #fff;
+//   background-color: #1890ff;
+//   border-color: #1890ff;
+//   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+//   -webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+//   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+//   width: 393px;
+//   position: absolute;
+//   margin: 18px;
+// }

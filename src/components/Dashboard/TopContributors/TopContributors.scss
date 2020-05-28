@@ -1,0 +1,121 @@
+.top-contributor-container {
+  .ant-table-content {
+    border-radius: 12px;
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    overflow: hidden;
+    height: 291px;
+  }
+  .ant-table-container {
+    border-radius: 12px;
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    overflow: hidden;
+    height: 291px;
+  }
+  .ant-table {
+    border-radius: 12px;
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    overflow: hidden;
+    height: 291px;
+    padding-top: 6px;
+  }
+  .ant-table {
+    .ant-table-tbody {
+      .ant-table-row {
+        .ant-table-cell {
+          border-bottom: none;
+          padding: 9px 0 9px 20px;
+        }
+      }
+      .ant-table-row:hover {
+        .ant-table-cell {
+          background: white;
+        }
+      }
+      .ant-table-placeholder {
+        .ant-table-cell {
+          border-bottom: none;
+          height: 291px;
+        }
+      }
+    }
+  }
+}
+
+.txt-div {
+  height: 18px;
+}
+
+.name-designation {
+  font-stretch: normal;
+  letter-spacing: normal;
+  text-align: left;
+}
+
+.name-color {
+  font-size: 14px;
+  color: #333333;
+}
+
+.designation-color {
+  font-size: 12px;
+  color: #6a6a6a;
+}
+
+.ant-avatar {
+  .ant-avatar-string {
+    font-size: 12px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #ffffff;
+  }
+}
+
+.edit-interface {
+  object-fit: contain;
+  margin-right: 7px;
+}
+
+.edit-tools {
+  width: 18px;
+  height: 20px;
+  position: absolute;
+  padding-top: 2px;
+}
+
+.edit-tools path {
+  fill: #6a205f;
+}
+
+.interface {
+  width: 17px;
+  height: 20px;
+  position: absolute;
+  padding-top: 2px;
+}
+
+.interface path {
+  fill: #1aaf3c;
+}
+
+.edit-interface-count {
+  font-size: 14px;
+  font-stretch: normal;
+  letter-spacing: normal;
+  text-align: left;
+}
+
+.edit-count-color {
+  color: #6a205f;
+  padding-left: 26px;
+}
+
+.interface-count-color {
+  color: #1aaf3c;
+  padding-left: 26px;
+}
