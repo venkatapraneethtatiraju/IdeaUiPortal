@@ -183,7 +183,7 @@ class MyIdeas extends Component {
         this.setState({ status: data.code ,isSubmitted:true});
         //  this.setItem(data.result);
         this.buttonActionHandler();
-        // this.getIdeaDetails();
+         //this.getIdeaDetails();
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -251,6 +251,8 @@ class MyIdeas extends Component {
           saveandSubmit={this.state.saveandSubmit}
           btnColor={this.state.btnColor}
           onEditHandler={this.state.selectedRow}
+          isAddEditIdea="true"
+          isViewIdea="false"
         /> : null}
 
       </div>

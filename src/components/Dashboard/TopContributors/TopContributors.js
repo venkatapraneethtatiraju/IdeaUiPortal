@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import "./TopContributors.scss";
-import { Col, Table, Avatar } from 'antd';
-import { TOP_CONSTRIBUTORS } from '../../../Config/Constants';
+import { Col, Table, Avatar, Tooltip } from 'antd';
+import { TOP_CONSTRIBUTORS, TOTAL_IDEAS, COMPLETED_IDEAS } from '../../../Config/Constants';
 import { ReactComponent as EditToolsIcon } from '../../../images/edit-tools.svg'
 import { ReactComponent as InterfaceIcon } from '../../../images/interface.svg'
 import { getTopContributors } from '../../../services/AppService';
@@ -40,7 +40,9 @@ export class TopContributors extends Component {
                     width: '15%',
                     render: (totalIdeas) =>
                         <div>
-                            <EditToolsIcon className="edit-interface edit-tools" alt="Edit-Tools" />
+                            <Tooltip title={`${TOTAL_IDEAS} : ${totalIdeas}`}>
+                                <EditToolsIcon className="edit-interface edit-tools" alt="Edit-Tools" />
+                            </Tooltip>
                             <span className="edit-interface-count edit-count-color">{totalIdeas}</span>
                         </div>,
                 },
@@ -50,7 +52,9 @@ export class TopContributors extends Component {
                     width: '20%',
                     render: (completedIdeas) =>
                         <div>
-                            <InterfaceIcon className="edit-interface interface" alt="Interface" />
+                            <Tooltip title={`${COMPLETED_IDEAS} : ${completedIdeas}`}>
+                                <InterfaceIcon className="edit-interface interface" alt="Interface" />
+                            </Tooltip>
                             <span className="edit-interface-count interface-count-color">{completedIdeas}</span>
                         </div>,
                 }

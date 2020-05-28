@@ -9,7 +9,7 @@ import {
     LIKES
 } from '../../../Config/Constants';
 import { addNewProperty } from '../../../Utility/CommonFunctions';
-import PopUpModel1 from '../../PopUpModel/PopUpModel1';
+import PopUpModel from '../../PopUpModel/PopUpModel';
 
 //Top trending ideas column 
 const topTrendingColumn = [
@@ -44,6 +44,7 @@ export class TopTrendingIdeas extends Component {
             showModal: false,
             btnColor: '#e4500e',
             ideaId: '',
+            selectedRow:[]
         }
     }
 
@@ -64,8 +65,8 @@ export class TopTrendingIdeas extends Component {
             })
     }
 
-    onRowClick = (ideaId) => {
-        this.setState({ visible: true, showModal: true, ideaId: ideaId });
+    onRowClick = (record,ideaId) => {
+        this.setState({ visible: true, showModal: true, ideaId: ideaId, selectedRow : record });
     }
 
     buttonActionHandler = (event) => {
@@ -84,15 +85,18 @@ export class TopTrendingIdeas extends Component {
                     columns={this.state.columns}
                     dataSource={this.state.toptrendingdata}
                     onRow={(record) => ({
-                        onClick: () => this.onRowClick(record.key)
+                        onClick: () => this.onRowClick(record,record.key)
                     }
                     )}>
                 </Table>
-                {this.state.showModal ? <PopUpModel1
+                {this.state.showModal ? <PopUpModel
                     visible={this.state.visible}
                     onCancel={this.buttonActionHandler}
                     onOk={this.buttonActionHandler}
                     btnColor={this.state.btnColor}
+                    isAddEditIdea="false"
+                    isViewIdea="true"
+                    selectedRow ={this.state.selectedRow}
                 /> : null}
             </Col>
         )

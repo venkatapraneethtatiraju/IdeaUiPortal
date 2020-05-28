@@ -13,6 +13,7 @@ import PopUpModel from '../PopUpModel/PopUpModel'
 import Login from '../login/Login';
 import { getToken } from '../Auth/Auth';
 import AlertBox from '../Alert/Alert.js'
+import AllIdea from '../AllIdea/AllIdea';
 
 export default class HomePage extends PureComponent {
   constructor(props) {
@@ -155,6 +156,8 @@ export default class HomePage extends PureComponent {
           saveandSubmitHandler={this.saveandSubmitHandler}
           saveandSubmit={this.state.saveandSubmit}
           btnColor={this.state.btnColor}
+          isAddEditIdea="true"
+          isViewIdea="false"
           />
         }
         <Switch>
@@ -164,6 +167,7 @@ export default class HomePage extends PureComponent {
           <Route path="/myIdeas" >
           <MyIdeas myIdeaData={this.state.myIdeaData} />
           </Route>
+          <Route path="/allIdeas" component={AllIdea} />
         </Switch>
       </div>
     );

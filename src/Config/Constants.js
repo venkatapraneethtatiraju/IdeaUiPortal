@@ -4,3 +4,6 @@ export const TOP_CONSTRIBUTORS = 'Top Contributors';
 export const IDEA_SUBJECT = 'Idea Subject';
 export const SUBMITTED_BY = 'Submitted by';
 export const LIKES = 'Likes';
+export const TOTAL_IDEAS = 'Total Ideas';
+export const COMPLETED_IDEAS = 'Completed Ideas';
+

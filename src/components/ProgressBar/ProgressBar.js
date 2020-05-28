@@ -17,7 +17,7 @@ export default function ProgressBar() {
 
   return (
     <div className={classes.root}>
-      <CircularProgress />
+      <CircularProgress className="" />
     </div>
   );
 }
