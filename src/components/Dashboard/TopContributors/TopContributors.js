@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import "./TopContributors.scss";
 import { Col, Table, Avatar, Tooltip } from 'antd';
-import { TOP_CONSTRIBUTORS, TOTAL_IDEAS, COMPLETED_IDEAS } from '../../../Config/Constants';
+import { TOP_CONSTRIBUTORS, SUBMITTED_IDEAS, APPROVED_IDEAS } from '../../../Config/Constants';
 import { ReactComponent as EditToolsIcon } from '../../../images/edit-tools.svg'
 import { ReactComponent as InterfaceIcon } from '../../../images/interface.svg'
 import { getTopContributors } from '../../../services/AppService';
@@ -40,22 +40,22 @@ export class TopContributors extends Component {
                     width: '15%',
                     render: (totalIdeas) =>
                         <div>
-                            <Tooltip title={`${TOTAL_IDEAS} : ${totalIdeas}`}>
+                            <Tooltip title={`${SUBMITTED_IDEAS} : ${totalIdeas}`}>
                                 <EditToolsIcon className="edit-interface edit-tools" alt="Edit-Tools" />
+                                <span className="edit-interface-count edit-count-color">{totalIdeas}</span>
                             </Tooltip>
-                            <span className="edit-interface-count edit-count-color">{totalIdeas}</span>
                         </div>,
                 },
                 {
-                    dataIndex: 'completedIdeas',
+                    dataIndex: 'approvedIdeas',
                     ellipsis: true,
                     width: '20%',
-                    render: (completedIdeas) =>
+                    render: (approvedIdeas) =>
                         <div>
-                            <Tooltip title={`${COMPLETED_IDEAS} : ${completedIdeas}`}>
+                            <Tooltip title={`${APPROVED_IDEAS} : ${approvedIdeas}`}>
                                 <InterfaceIcon className="edit-interface interface" alt="Interface" />
+                                <span className="edit-interface-count interface-count-color">{approvedIdeas}</span>
                             </Tooltip>
-                            <span className="edit-interface-count interface-count-color">{completedIdeas}</span>
                         </div>,
                 }
             ],

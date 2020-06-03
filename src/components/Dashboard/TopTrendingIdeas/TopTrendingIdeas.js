@@ -15,7 +15,7 @@ import PopUpModel from '../../PopUpModel/PopUpModel';
 const topTrendingColumn = [
     {
         title: IDEA_SUBJECT,
-        dataIndex: 'subject',
+        dataIndex: 'title',
         ellipsis: true,
         width: '55%',
     },
@@ -44,7 +44,7 @@ export class TopTrendingIdeas extends Component {
             showModal: false,
             btnColor: '#e4500e',
             ideaId: '',
-            selectedRow:[]
+            selectedRow: []
         }
     }
 
@@ -65,8 +65,8 @@ export class TopTrendingIdeas extends Component {
             })
     }
 
-    onRowClick = (record,ideaId) => {
-        this.setState({ visible: true, showModal: true, ideaId: ideaId, selectedRow : record });
+    onRowClick = (record) => {
+        this.setState({ visible: true, showModal: true, ideaId: record.ideaId, selectedRow: record });
     }
 
     buttonActionHandler = (event) => {
@@ -85,7 +85,7 @@ export class TopTrendingIdeas extends Component {
                     columns={this.state.columns}
                     dataSource={this.state.toptrendingdata}
                     onRow={(record) => ({
-                        onClick: () => this.onRowClick(record,record.key)
+                        onClick: () => this.onRowClick(record)
                     }
                     )}>
                 </Table>
@@ -96,7 +96,7 @@ export class TopTrendingIdeas extends Component {
                     btnColor={this.state.btnColor}
                     isAddEditIdea="false"
                     isViewIdea="true"
-                    selectedRow ={this.state.selectedRow}
+                    selectedRow={this.state.selectedRow}
                 /> : null}
             </Col>
         )

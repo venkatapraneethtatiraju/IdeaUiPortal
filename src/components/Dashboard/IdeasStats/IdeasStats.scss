@@ -1,0 +1,44 @@
+.idea-stats-container {
+  .ant-tabs-bar {
+    margin: 0px;
+    border-radius: 4px;
+    border: solid 1px #e2e2e2;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+    .ant-tabs-tab {
+      padding: 6px 1.89vw;
+      font-size: 14px;
+      font-weight: 500;
+      font-stretch: normal;
+      letter-spacing: normal;
+      color: #5a5a5a;
+      margin: 0;
+    }
+    .ant-tabs-ink-bar {
+      height: 33px;
+      border-radius: 4px;
+      border: solid 1px #e45017;
+      background-color: #ffffff00;
+    }
+    .ant-tabs-tab-active {
+      color: #e45017;
+    }
+  }
+
+  //Start.............Chart Style...............
+  .highcharts-credits {
+    display: none;
+  }
+  .highcharts-tick {
+    display: none;
+  }
+
+  .highcharts-tooltip-box {
+    fill: #ffffff;
+    fill-opacity: 0.85;
+    stroke-width: 1;
+    stroke: #e6e6e6;
+    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.1);
+  }
+  //End.............Chart Style...............
+}
