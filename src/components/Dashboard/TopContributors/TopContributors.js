@@ -70,6 +70,7 @@ export class TopContributors extends Component {
     getTopContributorRecord = () => {
         getTopContributors()
             .then(response => {
+                console.log("response",response)
                 const contributorsData = addNewProperty(response.data, TOP_CONSTRIBUTORS);
                 this.setState({ topcontributordata: contributorsData })
             })

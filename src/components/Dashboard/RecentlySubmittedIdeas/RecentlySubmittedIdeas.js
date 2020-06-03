@@ -111,7 +111,6 @@ class RecentlySubmittedIdeas extends Component {
                    }
         }
     
-       
     render() {
 
         var topRecords =[];

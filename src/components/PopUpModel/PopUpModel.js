@@ -157,11 +157,7 @@ class PopUpModel extends Component {
           this.setState({ideaCategoryValue : event})
       }
       
-    
-
     onLikeIconClicked = (ideaId) => {
-        console.log("onlike")
-        debugger;
         const token = getToken();
         const requestOptions = { 
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }}

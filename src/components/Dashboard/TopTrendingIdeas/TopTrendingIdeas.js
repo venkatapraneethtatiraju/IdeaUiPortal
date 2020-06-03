@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "./TopTrendingIdeas.scss"
 import { Col, Table } from 'antd';
-import { getTopTrendingIdeas } from '../../../services/AppService';
+import { getTopTrendingIdeas,getIdeaDetailsById } from '../../../services/AppService';
 import {
     TOP_TRENDING_IDEAS,
     IDEA_SUBJECT,
@@ -57,6 +57,7 @@ export class TopTrendingIdeas extends Component {
     getTopTrendingRecord = () => {
         getTopTrendingIdeas()
             .then(response => {
+                debugger;
                 const trendingData = addNewProperty(response.data, TOP_TRENDING_IDEAS);
                 this.setState({ toptrendingdata: trendingData })
             })
@@ -65,9 +66,18 @@ export class TopTrendingIdeas extends Component {
             })
     }
 
-    onRowClick = (record) => {
-        this.setState({ visible: true, showModal: true, ideaId: record.ideaId, selectedRow: record });
-    }
+    onRowClick = (ideaId) => {
+        if(ideaId){
+         getIdeaDetailsById(ideaId)
+         .then(response => {
+             if (response.data.message === 'success') {
+                 this.setState({selectedRow : response.data.result,visible: true, showModal: true,})
+             }
+         })
+         .catch(error => {
+         });
+        }
+     }
 
     buttonActionHandler = (event) => {
         this.setState(prevstate => ({

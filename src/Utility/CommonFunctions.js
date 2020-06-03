@@ -13,7 +13,7 @@ export const addNewProperty = (newResult, actionname) => {
     switch (actionname) {
         case TOP_TRENDING_IDEAS:
             newResult.forEach((element, index) => {
-                element.key = `${index + 1}`
+                element.key =`${index + 1}`
             });
             return newResult.sort(compareValues('likeCount', 'desc'));
 
