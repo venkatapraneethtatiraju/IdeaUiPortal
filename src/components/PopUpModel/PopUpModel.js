@@ -9,6 +9,9 @@ import { ReactComponent as DownloadIcon } from '../../images/download.svg'
 import { ReactComponent as GestureIcon } from '../../images/gestures.svg'
 import { BoldOutlined, ItalicOutlined, UnderlineOutlined, UnorderedListOutlined, OrderedListOutlined } from '@ant-design/icons';
 import TextArea from 'antd/lib/input/TextArea';
+import { getToken } from '../Auth/Auth';
+import Axios from '../Axios/Axios';
+import { postIdeaLike } from '../../services/AppService';
 
 class PopUpModel extends Component {
     constructor(props) {
@@ -18,6 +21,7 @@ class PopUpModel extends Component {
              ideaId :'',
              ideaSubject : '',
              subject : '',
+             subjectCategoryName :'',
              ideaType : 1,
              ideaCategory : {},
              ideaCategoryValue : 0,
@@ -32,34 +36,13 @@ class PopUpModel extends Component {
              ideaColorNonTech : "rgb(177, 177, 177)",
              selectedRow : [],
              currentState : "",
+             ideaStatusHistories : [],
+             likeIdeaDetailList : [],
              ids :"",
              isAddEditIdea:this.props.isAddEditIdea,
-             isViewIdea:this.props.isViewIdea,             
-             likesThumbnailData: [
-                { name: 'AS' },
-                { name: 'DF' },
-                { name: 'AG' },
-                { name: 'SD' },
-                { name: 'BE' },
-                { name: 'PL' },
-                { name: 'FR' },
-                { name: 'KP' },
-                { name: 'KD' },
-                { name: 'DO' },
-                { name: 'SD' },
-                { name: 'NG' },
-                { name: 'FG' },
-            ],
-            timeLineData: [
-                { date: '12 April, 2020', status: 'Approved', comment: '', statusBy: 'Ajay' },
-                { date: '25 March, 2020', status: 'Submitted', comment: 'This is a good idea but work on the other use cases which are essentials to kick start this project', statusBy: 'you with comment' },
-                { date: '22 March, 2020', status: 'Review', comment: 'This is a good idea but work on the other use cases which are essentials to kick start this project', statusBy: 'Ajay with comment ' },
-                { date: '04 March, 2020', status: 'Submitted', comment: '', statusBy: 'you' },
-                { date: '20 February, 2020', status: 'Submitted', comment: '', statusBy: 'you' },
-                { date: '10 February, 2020', status: 'Submitted', comment: '', statusBy: 'you' },
-                { date: '1 February, 2020', status: 'Submitted', comment: 'Initial posted.', statusBy: 'you' },
-            ],
-
+             isViewIdea: this.props.isViewIdea,
+             selectedId : this.props.selectedId,          
+             isLike : false
         }
         if(this.props.onEditHandler){
         console.log("const...",this.props.onEditHandler.ideaDescription);
@@ -72,7 +55,9 @@ class PopUpModel extends Component {
         // this.state.isAddEditIdea = this.props.isAddEditIdea;
         // this.state.isViewIdea = this.state.isViewIdea;
         }
-        
+       if(this.props.isViewIdea === "true") {
+           this.state.selectedId = this.props.selectedId;
+       }
         
     }
 
@@ -156,7 +141,6 @@ class PopUpModel extends Component {
              this.setState({ideaCategory : ideaCategory,
                 ideaColorTech : 'rgb(247, 148, 29)', 
                 ideaColorNonTech : 'rgb(177, 177, 177)'})
-                console.log(this.state.ideaCategory)
             }  
          else if (event.target.textContent ==="Non Technical"){
              this.setState({ideaType : 2});
@@ -173,9 +157,28 @@ class PopUpModel extends Component {
           this.setState({ideaCategoryValue : event})
       }
       
-    componentDidUpdate () {
-       // console.log("comp",this.props.selectedRow)
+    
+
+    onLikeIconClicked = (ideaId) => {
+        console.log("onlike")
+        debugger;
+        const token = getToken();
+        const requestOptions = { 
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }}
+        Axios.post('/ideas/'+ideaId,{
+            headers: {
+                'Authorization': `Bearer ${token}`
+              }
+        })
+        .then(response => {
+            debugger;
+            this.setState({ isLike: true })
+        })
+        .catch(error => {
+            console.log(error);
+        })
     }
+   
     render() {
         // var aIdea  = this.props.selectedRow;
          console.log('this.state.isAddEditIdea : ' + this.state.isAddEditIdea)
@@ -183,22 +186,23 @@ class PopUpModel extends Component {
 
         if(this.props.selectedRow)
         {            
-            console.log("cons",this.props.selectedRow);
-            let datas1 = this.props.selectedRow;
+            let datas = this.props.selectedRow;
             this.state.currentState = 'ápproved';
-
-            if(datas1.hasOwnProperty('ideaSubject')){
-                console.log('fsdfsdfsfsdf');
-                this.state.ideaSubject = datas1.ideaSubject;
-            }else if(datas1.hasOwnProperty('subject')){
-                this.state.ideaSubject = datas1.subject;
-            }else if(datas1.hasOwnProperty('title')){
-                this.state.ideaSubject = datas1.title;
+            if(datas.hasOwnProperty('ideaSubject')){
+                this.state.ideaSubject = datas.ideaSubject;
+            }else if(datas.hasOwnProperty('subject')){
+                this.state.ideaSubject = datas.subject;
+            }else if(datas.hasOwnProperty('title')){
+                this.state.ideaSubject = datas.title;
             }
-            
-            this.state.ideaType = datas1.ideaType;
-             this.state.ideaSubmittedBy = datas1.submittedBy;
-            this.state.ideaDetails = datas1.ideaDescription;
+            this.state.ideaId = datas.id;
+            this.state.ideaSubject = datas.categoryName;
+            this.state.subjectCategoryName = datas.subcategoryName;
+            this.state.ideaType = datas.ideaType;
+            this.state.ideaSubmittedBy = datas.submittedBy;
+            this.state.ideaDetails = datas.ideaDescription;
+            this.state.ideaStatusHistories = datas.ideaStatusHistories;
+            this.state.likeIdeaDetailList = datas.likeIdeaDetailList;
 
         }
         const { TextArea } = Input;
@@ -301,7 +305,7 @@ class PopUpModel extends Component {
                                      placeholder="---select category from here---"
                                      style={{ width: "100%" }}
                                      onChange={this.onCategoryChanged}>
-                                     {optionTemplate}
+                                         {optionTemplate}
                                  </Select>
                                  {this.state.ideaCategoryValueError ? <div className="errorMessage">
                                      {this.state.ideaCategoryValueError}</div> : null}
@@ -354,51 +358,32 @@ class PopUpModel extends Component {
                                 </Row>
                             </Col>
                         </Col> : null}
-{this.state.isViewIdea === "true" ? <Col style={{ paddingRight: '0px'}} className="column-left-view-idea">
+                            {this.state.isViewIdea === "true" ? <Col style={{ paddingRight: '0px'}} className="column-left-view-idea">
                             <Col style={{ paddingLeft: '20px' }} className="column-left-top">
                                 <Row>
                                     <label className="timeline-header">Idea Subject</label>
-                                    <p>Innovative Idea</p>
+                                    <p>{this.state.ideaSubject}</p>
                                 </Row>
                                 <Row>
                                     <label className="timeline-header">Idea Category</label>
-                                    <p>Big Data</p>
+                                    <p>{this.state.subjectCategoryName}</p>
                                 </Row>
                                 <Row>
                                     <label className="timeline-header">Idea Details</label>
-                                    <p><b>Aliquam erat volutpat.Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</b>
-                                        <ul>
-                                            <li>Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a,
-                                            ultricies in, diam. Sed arcu. Cras consequat.</li>
-                                            <li>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate
-                                            magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan
-                                             porttitor, facilisis luctus, metus.</li>
-                                            <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula
-                                            vulputate sem tristique cursus. Nam nulla quam, gravida non, commodo a, sodales
-                                            sit amet, nisi.</li>
-                                            <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis auctor, ultrices ut,
-                                            elementum vulputate, nunc.</li>
-                                        </ul>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
-                                     egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
-                                     Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris
-                                     placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum
-                                     erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum,
-                                     elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui.
-                                      Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus
-                                      faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.</p>
+                                    <p>{this.state.ideaDetails}</p>
                                 </Row>
                             </Col>
                             <Row className="column-left-bottom">
                                 <Row className="like-container">
-                                    <LikeIcon className="like-hands" alt="Edit-Tools" />
+                                    <LikeIcon className="like-hands" alt="Edit-Tools" onClick={this.onLikeIconClicked} />
                                     <Col className="gesture-middle">
                                         <Col className="gesture-container">
-                                            <GestureIcon className="gesture" />
+                                            <GestureIcon className="gesture" onClick={() =>this.onLikeIconClicked(this.state.ideaId)} />
                                         </Col>
                                     </Col>
                                 </Row>
                                 <Row style={{ marginRight: '10px', position: 'relative' }}>
-                                    {this.state.likesThumbnailData.map((data, index) => (
+                                    {this.state.likeIdeaDetailList.map((data, index) => (
                                         <>
                                             {index < 8 ? <Col className="imageIcon">
                                                 <Avatar style={{ backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }} size={35}>
@@ -406,15 +391,15 @@ class PopUpModel extends Component {
                                                 </Avatar>
                                             </Col> : index === 8 ? <Col className="imageIcon">
                                                 <Avatar style={{ backgroundColor: '#7fa2c4' }} size={35}>
-                                                    {`+${this.state.likesThumbnailData.length - 8}`}
+                                                    {`+${this.state.likeIdeaDetailList.length - 8}`}
                                                 </Avatar>
                                             </Col> : null}
                                         </>
                                     ))}
                                 </Row>
-                                <Row style={{ position: 'relative', width: '60px' }}>
+                                {/* <Row style={{ position: 'relative', width: '60px' }}>
                                     <p className="like-p">Likes this</p>
-                                </Row>
+                                </Row> */}
                             </Row>
                         </Col> : null}
 
@@ -444,19 +429,19 @@ class PopUpModel extends Component {
                                 <Row>
                                     <label style={{ marginBottom: '25px' }} className="timeline-header">Timeline</label>
                                     <Timeline>
-                                        {this.state.timeLineData.map((timeline) => (
+                                        {this.state.ideaStatusHistories.map((timeline) => (
                                             <Timeline.Item>
                                                 <Col>
-                                                    <p>{timeline.date}</p>
+                                                    <p>{timeline.creationTime}</p>
                                                     <Row>
-                                                        {timeline.status === 'Approved' ?
+                                                        {timeline.ideaStatus === 'Approved' ?
                                                             <Tag className="display-status-tag" color="#0C5CC9" >Approved</Tag> :
-                                                            timeline.status === 'Submitted' ?
+                                                            timeline.ideaStatus === 'Submitted' ?
                                                                 <Tag className="display-status-tag" color="#A5AAD9" >Submitted</Tag> :
-                                                                timeline.status === 'Review' ?
+                                                                timeline.ideaStatus === 'Review' ?
                                                                     <Tag className="display-status-tag" color="#F7C51D" >Review</Tag> :
                                                                     null}
-                                                        <p>by {timeline.statusBy}</p>
+                                                        <p>by {timeline.name}</p>
                                                     </Row>
                                                     {timeline.comment !== '' ? <Row className="comment">
                                                         <p style={{ padding: '5px 5px 0 10px' }}>{timeline.comment}</p>

@@ -4,6 +4,7 @@ import { Table, Row, Col, Button } from 'antd';
 import Axios from '../Axios/Axios';
 import { Link } from 'react-router-dom';
 import {ReactComponent as BackLogo} from '../../images/return.svg'
+import {getIdeaDetailsById } from '../../services/AppService';
 
 
 import PopUpModel from '../PopUpModel/PopUpModel';
@@ -91,31 +92,24 @@ export class AllIdea extends Component {
     }
 
     onSelectedRowAction = (record, rowIndex) => {
-        console.log("selectedRowAction", record, rowIndex)
         if(record) {
-            //this.setState({selectedRow : record,showModal : true})
-            //this.showModal()
             this.getAllIdeaDetailsById(record.key)
         }
     }
 
-    getAllIdeaDetailsById(id) {
-
-        const token = getToken();
-        Axios.get('/ideas/'+id,{
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then(response => {
-                console.log('getAllIdeaDetails', response)
-                if (response.data.message === 'success') {
-                    this.setState({selectedRow : response.data.result,showModal : true})
+    getAllIdeaDetailsById(ideaId) {
+                if(ideaId){
+                    getIdeaDetailsById(ideaId)
+                    .then(response => {
+                        console.log('getAllIdeaDetails', response)
+                        if (response.data.message === 'success') {
+                            this.setState({selectedRow : response.data.result,showModal : true})
+                        }
+                    })
+                    .catch(error => {
+                    });
                 }
-            })
-            .catch(error => {
-            });
-    }
+        }
 
       buttonActionHandler = (event) => {
         this.setState(prevstate => ({

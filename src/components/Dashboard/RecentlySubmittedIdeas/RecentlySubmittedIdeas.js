@@ -5,6 +5,7 @@ import { getToken } from '../../Auth/Auth';
 import { Link, Redirect } from 'react-router-dom';
 import Axios from '../../Axios/Axios';
 import PopUpModel from '../../PopUpModel/PopUpModel'
+import {getIdeaDetailsById } from '../../../services/AppService';
 
 class RecentlySubmittedIdeas extends Component {
   
@@ -21,12 +22,12 @@ class RecentlySubmittedIdeas extends Component {
                 {
                   title: 'Idea Subject',
                   dataIndex: 'ideaSubject',
-                 width : '40%',
+                 width : '35%',
                 },
                 {
                   title: 'Submitted by',
                   dataIndex: 'submittedBy',
-                  width : '20%',
+                  width : '25%',
                 },
                 {
                   title: 'Submitted on',
@@ -72,7 +73,7 @@ class RecentlySubmittedIdeas extends Component {
                 index: index,
                 ideaSubject: val.title ? val.title : "- ",
                 ideaType: val.categoryName ? val.categoryName : "-",
-                submittedBy: val.subcategoryName ? val.subcategoryName : "-",
+                submittedBy: val.submittedBy ? val.submittedBy : "-",
                 submittedOn: val.submissionDate ? val.submissionDate : "-",
                 ideaCategory : val.categoryName ? val.categoryName : "-",
                 ideaDescription : val.ideaDescription ? val.ideaDescription :"-"
@@ -90,12 +91,24 @@ class RecentlySubmittedIdeas extends Component {
             }))
           }
 
-        onSelectedRowAction = (record, rowIndex) => {
-            console.log("selectedRowAction", record, rowIndex)
+          onSelectedRowAction = (record, rowIndex) => {
             if(record) {
-                this.setState({selectedRow : record,showModal : true})
-                //this.showModal()
+                this.getAllIdeaDetailsById(record.key)
             }
+        }
+    
+        getAllIdeaDetailsById(ideaId) {
+                if(ideaId){
+                    getIdeaDetailsById(ideaId)
+                    .then(response => {
+                        console.log('getAllIdeaDetails', response)
+                        if (response.data.message === 'success') {
+                            this.setState({selectedRow : response.data.result,showModal : true})
+                        }
+                    })
+                    .catch(error => {
+                    });
+                   }
         }
     
        
@@ -108,9 +121,9 @@ class RecentlySubmittedIdeas extends Component {
 
 
         return (
-            < >
+            <div className="recentSubmitted-container">
               
-                <Col span={15} className="recentSubmitted-container">
+                <Col>
                     <h2>{this.state.cardName}</h2>
                     <Table    
                     {...this.state}              
@@ -135,7 +148,7 @@ class RecentlySubmittedIdeas extends Component {
              isViewIdea="true"     
             /> : null}
             
-             </>
+             </div>
         );
     }
 }
