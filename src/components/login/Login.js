@@ -30,7 +30,7 @@ class Login extends PureComponent {
       emailStatus: false,
       emailInputView: true,
       buttonEnabled: true,
-      email: "",
+      email: "bikrant.singh@xebia.com",
       otpSuccess: false,
       otpResendEnabled: false,
       resendTextStyle: "Didntreceivetext-style-1",

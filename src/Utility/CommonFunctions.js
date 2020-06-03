@@ -14,9 +14,8 @@ export const addNewProperty = (newResult, actionname) => {
         case TOP_TRENDING_IDEAS:
             newResult.forEach((element, index) => {
                 element.key = `${index + 1}`
-                element.likeCount = Math.floor((Math.random() * 100) + 1)
             });
-            return newResult.sort(compareValues('likeCount', 'desc'));;
+            return newResult.sort(compareValues('likeCount', 'desc'));
 
         case TOP_CONSTRIBUTORS:
             newResult.forEach((element, index) => {
