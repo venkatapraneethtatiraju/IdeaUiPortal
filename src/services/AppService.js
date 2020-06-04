@@ -7,7 +7,6 @@ import {
     IDEA_LIKE_URL
 } from '../Config/ServiceUrl';
 import { getHeaders } from '../Utility/CommonFunctions';
-import { getToken } from '../components/Auth/Auth';
 
 //Service call to get top trending ideas to display in dashboard
 export const getTopTrendingIdeas = () => {
@@ -30,15 +29,12 @@ export const getIdeaStats = (Key) => {
 //Service call to get all details to display in popup
 export const getIdeaDetailsById = (ideaId) => {
     const headers = getHeaders();
-    console.log(headers.Authorization)
     return Axios.get(`${IDEADETAILS_BYID_URL}${ideaId}`, { headers });
 }
 
 //Service call to post idea like from display in popup
 export const postIdeaLike = (ideaId) => {
-    const token = getToken();
-    return Axios.post(`${IDEA_LIKE_URL}${ideaId}` + '/like', {
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-    });
+    const headers = getHeaders();
+    return Axios.post(`${IDEA_LIKE_URL}${ideaId}/like`, '', { headers });
 }
 
