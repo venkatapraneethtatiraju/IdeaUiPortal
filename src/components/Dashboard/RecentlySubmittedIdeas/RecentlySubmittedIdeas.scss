@@ -5,7 +5,6 @@
     background-color: #ffffff;
     overflow: hidden;
     min-height: 291px;
-    min-width: 700px;
   }
   .ant-table-container {
     border-radius: 12px;
@@ -22,7 +21,6 @@
     height: 291px;
   }
   .viewData {
-   
     text-decoration: none;
     background-color: transparent;
     outline: none;
@@ -31,7 +29,7 @@
     top: 290px;
     right: 0;
     width: 110px;
-    height: 19px;    
+    height: 19px;
     font-size: 14px;
     font-weight: 500;
     font-stretch: normal;
@@ -47,7 +45,7 @@
       tr {
         th {
           background: white;
-          border-bottom: 2px solid #eeeeee;          
+          border-bottom: 2px solid #eeeeee;
           font-size: 14px;
           font-weight: 500;
           font-stretch: normal;
@@ -64,7 +62,7 @@
     .ant-table-tbody {
       tr.ant-table-row {
         td {
-          border-bottom: none;          
+          border-bottom: none;
           font-size: 14px;
           font-weight: normal;
           font-stretch: normal;
@@ -79,6 +77,12 @@
         td {
           background: #cccccc26;
           color: #333333;
+        }
+      }
+      .ant-table-placeholder {
+        .ant-table-cell {
+          border-bottom: none;
+          height: 230px;
         }
       }
     }
