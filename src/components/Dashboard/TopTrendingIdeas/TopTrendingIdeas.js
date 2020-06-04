@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import "./TopTrendingIdeas.scss"
 import { Col, Table } from 'antd';
-import { getTopTrendingIdeas,getIdeaDetailsById } from '../../../services/AppService';
+import { getTopTrendingIdeas, getIdeaDetailsById } from '../../../services/AppService';
 import {
     TOP_TRENDING_IDEAS,
     IDEA_SUBJECT,
     SUBMITTED_BY,
-    LIKES
+    LIKES,
+    SUCCESS
 } from '../../../Config/Constants';
 import { addNewProperty } from '../../../Utility/CommonFunctions';
 import PopUpModel from '../../PopUpModel/PopUpModel';
@@ -57,7 +58,6 @@ export class TopTrendingIdeas extends Component {
     getTopTrendingRecord = () => {
         getTopTrendingIdeas()
             .then(response => {
-                debugger;
                 const trendingData = addNewProperty(response.data, TOP_TRENDING_IDEAS);
                 this.setState({ toptrendingdata: trendingData })
             })
@@ -66,18 +66,19 @@ export class TopTrendingIdeas extends Component {
             })
     }
 
+    //Open Popupmodal to view idea
     onRowClick = (ideaId) => {
-        if(ideaId){
-         getIdeaDetailsById(ideaId)
-         .then(response => {
-             if (response.data.message === 'success') {
-                 this.setState({selectedRow : response.data.result,visible: true, showModal: true,})
-             }
-         })
-         .catch(error => {
-         });
+        if (ideaId) {
+            getIdeaDetailsById(ideaId)
+                .then(response => {
+                    if (response.data.message === SUCCESS) {
+                        this.setState({ selectedRow: response.data.result, visible: true, showModal: true, })
+                    }
+                })
+                .catch(error => {
+                });
         }
-     }
+    }
 
     buttonActionHandler = (event) => {
         this.setState(prevstate => ({
@@ -95,7 +96,7 @@ export class TopTrendingIdeas extends Component {
                     columns={this.state.columns}
                     dataSource={this.state.toptrendingdata}
                     onRow={(record) => ({
-                        onClick: () => this.onRowClick(record)
+                        onClick: () => this.onRowClick(record.ideaId)
                     }
                     )}>
                 </Table>
