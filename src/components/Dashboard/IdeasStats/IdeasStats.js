@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import "./IdeasStats.scss"
-import { Col, Card, Tabs, Row } from 'antd';
+import { Col, Card, Tabs } from 'antd';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { getIdeaStats } from '../../../services/AppService';
@@ -171,12 +171,13 @@ export class IdeasStats extends Component {
         let approvedArr = [];
         let developmentArr = [];
         let completedArr = [];
-        responseResult.map((idea) => {
+
+        for (let idea of responseResult) {
             submittedArr.push(idea.submittedCount);
             approvedArr.push(idea.approvedCount);
             developmentArr.push(idea.developmentCount);
             completedArr.push(idea.completedCount);
-        })
+        }
 
         const newSeriesData = seriesData;
         newSeriesData.forEach((idea) => {
@@ -196,9 +197,9 @@ export class IdeasStats extends Component {
     //Create the X axis categories
     createXaxisCategory = (responseResult) => {
         let categotyArr = [];
-        responseResult.map((idea) => {
+        for (let idea of responseResult) {
             categotyArr.push(idea.location);
-        })
+        }
         return categotyArr;
     }
 
