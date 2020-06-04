@@ -10,6 +10,7 @@ import HomePage from '../HomePage/HomePage';
 import ProgressBar from '../ProgressBar/ProgressBar'
 import { red } from '@material-ui/core/colors';
 import Alertbox from '../Alert/Alert';
+import { isAuthenticated } from '../Auth/Auth';
 
 class Login extends PureComponent {
 
@@ -220,7 +221,6 @@ class Login extends PureComponent {
   }
 
 
-
   componentWillUnmount() {
     clearTimeout(this.typingTimer);
   }
@@ -263,7 +263,7 @@ class Login extends PureComponent {
 
 
   render() {
-    if (this.state.isLogin) {
+    if (this.state.isLogin || isAuthenticated()) {
       return <HomePage />
     }
     const alertName = "OTP send successfully!";
