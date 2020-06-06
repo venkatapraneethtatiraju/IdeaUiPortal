@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import "./TopContributors.scss";
 import { Col, Table, Avatar, Tooltip } from 'antd';
 import { TOP_CONSTRIBUTORS, SUBMITTED_IDEAS, APPROVED_IDEAS } from '../../../Config/Constants';
@@ -7,7 +7,7 @@ import { ReactComponent as InterfaceIcon } from '../../../images/interface.svg'
 import { getTopContributors } from '../../../services/AppService';
 import { addNewProperty } from '../../../Utility/CommonFunctions';
 
-export class TopContributors extends Component {
+export class TopContributors extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -62,15 +62,21 @@ export class TopContributors extends Component {
         };
     }
 
+    //Called the service when component is mount
     componentDidMount() {
         this.getTopContributorRecord();
+    }
+
+    //Unmount the component
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     //To get the top contributors
     getTopContributorRecord = () => {
         getTopContributors()
             .then(response => {
-                console.log("response",response)
+                console.log("response", response)
                 const contributorsData = addNewProperty(response.data, TOP_CONSTRIBUTORS);
                 this.setState({ topcontributordata: contributorsData })
             })
@@ -86,7 +92,8 @@ export class TopContributors extends Component {
                 <Table
                     {...this.state}
                     columns={this.state.columns}
-                    dataSource={this.state.topcontributordata}>
+                    dataSource={this.state.topcontributordata}
+                    rowKey="username">
                 </Table>
             </Col>
         )

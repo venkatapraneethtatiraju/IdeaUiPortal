@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import "./TopTrendingIdeas.scss"
 import { Col, Table } from 'antd';
 import { getTopTrendingIdeas, getIdeaDetailsById } from '../../../services/AppService';
@@ -9,7 +9,6 @@ import {
     LIKES,
     SUCCESS
 } from '../../../Config/Constants';
-import { addNewProperty } from '../../../Utility/CommonFunctions';
 import PopUpModel from '../../PopUpModel/PopUpModel';
 
 //Top trending ideas column 
@@ -34,7 +33,7 @@ const topTrendingColumn = [
     }
 ]
 
-export class TopTrendingIdeas extends Component {
+export class TopTrendingIdeas extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -49,9 +48,14 @@ export class TopTrendingIdeas extends Component {
         }
     }
 
-    //Called when component is mount
+    //Called the service when component is mount
     componentDidMount() {
         this.getTopTrendingRecord();
+    }
+
+    //Unmount the component
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     //To get the top trending ideas
