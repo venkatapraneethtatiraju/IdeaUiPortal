@@ -58,8 +58,7 @@ export class TopTrendingIdeas extends Component {
     getTopTrendingRecord = () => {
         getTopTrendingIdeas()
             .then(response => {
-                const trendingData = addNewProperty(response.data, TOP_TRENDING_IDEAS);
-                this.setState({ toptrendingdata: trendingData })
+                this.setState({ toptrendingdata: response.data })
             })
             .catch(error => {
                 console.log(error);
@@ -95,6 +94,7 @@ export class TopTrendingIdeas extends Component {
                     {...this.state}
                     columns={this.state.columns}
                     dataSource={this.state.toptrendingdata}
+                    rowKey="ideaId"
                     onRow={(record) => ({
                         onClick: () => this.onRowClick(record.ideaId)
                     }

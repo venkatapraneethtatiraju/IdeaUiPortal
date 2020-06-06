@@ -1,5 +1,5 @@
 import { getToken } from "../components/Auth/Auth";
-import { TOP_TRENDING_IDEAS, TOP_CONSTRIBUTORS } from '../Config/Constants'
+import { TOP_CONSTRIBUTORS } from '../Config/Constants'
 
 //Get headers for request
 export const getHeaders = () => {
@@ -11,19 +11,11 @@ export const getHeaders = () => {
 //To set the new property in array of object
 export const addNewProperty = (newResult, actionname) => {
     switch (actionname) {
-        case TOP_TRENDING_IDEAS:
-            newResult.forEach((element, index) => {
-                element.key =`${index + 1}`
-            });
-            return newResult.sort(compareValues('likeCount', 'desc'));
-
         case TOP_CONSTRIBUTORS:
             newResult.forEach((element, index) => {
-                element.key = `${index + 1}`
                 element.iconName = createIconShortName(element.user.username)
             });
             return newResult.sort(compareValues('totalIdeas', 'desc'));
-
         default:
             return newResult;
     }

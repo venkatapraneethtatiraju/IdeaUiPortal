@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import "./IdeasStats.scss"
 import { Col, Card, Tabs } from 'antd';
 import Highcharts from 'highcharts'
@@ -12,7 +12,7 @@ import {
 
 const { TabPane } = Tabs;
 
-export class IdeasStats extends Component {
+export class IdeasStats extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -143,6 +143,11 @@ export class IdeasStats extends Component {
     //Load Idea stats data on page load for All time
     componentDidMount() {
         this.getIdeaStatsRecord(ALL);
+    }
+
+    //Unmount the component
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     //Get the Idea stats based on Key
