@@ -16,4 +16,7 @@ export const QUARTER = 'Quarter';
 export const ALL = 'All';
 export const SUCCESS = 'success';
 
+export const DEFAULT_PAGE_SIZE = 1;
+
+
 

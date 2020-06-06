@@ -1,192 +1,70 @@
-// .my-ideas-container {
-//     padding: 24px 0px;
-//     .ant-table {
-//         display: block;
-//         .ant-table-cell:not(:first-child) {
-//             width: 15%;
-//         }
-//         .ant-table-thead {
-//           tr {
-//             span {
-//               // color: #5a5a5a;
-//               font-size: 14px;
-//               font-weight: 500;
-//               font-stretch: normal;
-//               font-style: normal;
-//             }
-//           }
-//         }
-
-//         @media screen and (max-width: 600px) {
-//           &-thead {
-//             display: none;
-//           }
-
-//           &-thead>tr,
-//           &-tbody>tr {
-
-//             th,
-//             td {
-//               &:first-of-type {
-//                 padding-top: 1rem;
-//               }
-
-//               &:last-of-type {
-//                 padding-bottom: 1rem;
-//               }
-//             }
-
-//             >th,
-//             >td {
-//               display: block;
-//               width: auto !important;
-//               border: none;
-//               padding: 0 1rem;
-//               font-size: 1.1rem;
-
-//               &:last-child {
-//                 border-bottom: 1px solid #eee;
-//               }
-//             }
-//           }
-//         }
-//       }
-// }
-
-// .Submitted{
-
-//   width: 96px;
-//   height: 22px;
-//   border-radius: 4px;
-//   background-color: #a5aad9;
-//   font-family: Avenir;
-//   font-size: 12px;
-//   font-weight: 500;
-//   font-style: normal;
-//   line-height: 1.17;
-//   letter-spacing: normal;
-//   text-align: center;
-//   color: #ffffff;
-
-// }
-
-// .Completed{
-//   width: 96px;
-//   height: 22px;
-//   border-radius: 4px;
-//   background-color: #1a8b45;
-//   font-family: Avenir;
-//   font-size: 12px;
-//   font-weight: 500;
-//   font-style: normal;
-//   line-height: 1.17;
-//   letter-spacing: normal;
-//   text-align: center;
-//   color: #ffffff;
-
-// }
-
-// .Draft{
-
-//   width: 96px;
-//   height: 22px;
-//   border-radius: 4px;
-//   background-color: #f7941d;
-//   font-family: Avenir;
-//   font-size: 12px;
-//   font-weight: 500;
-//   font-style: normal;
-//   line-height: 1.17;
-//   letter-spacing: normal;
-//   text-align: center;
-//   color: #ffffff;
-
-// }
-
-// .Reviewed{
-
-//   width: 96px;
-//   height: 22px;
-//   border-radius: 4px;
-//   background-color: #0c5cc9;
-//   font-family: Avenir;
-//   font-size: 12px;
-//   font-weight: 500;
-//   font-style: normal;
-//   line-height: 1.17;
-//   letter-spacing: normal;
-//   text-align: center;
-//   color: #ffffff;
-
-// }
-
 .my-ideas-container {
-  padding: 24px 0px;
-  overflow: hidden;
   .ant-table-content {
     border-radius: 12px;
-    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
     overflow: hidden;
+    min-height: 291px;
+    min-width: 700px;
   }
   .ant-table-container {
     border-radius: 12px;
-    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
     overflow: hidden;
   }
+
   .ant-table {
     border-radius: 12px;
-    box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
     overflow: hidden;
-  }
-  .ant-table {
-    display: block;
-    .ant-table-cell:not(:first-child) {
-      width: 15%;
-    }
+    text-align: left;
+    position: relative;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-style: hidden;
     .ant-table-thead {
+      background-color: #ffffff;
       tr {
-        span {
-          // color: #5a5a5a;
+        th {
+          background: #ffffff;
+          border-bottom: 2px solid #eeeeee;
           font-size: 14px;
           font-weight: 500;
           font-stretch: normal;
           font-style: normal;
+          line-height: 1.43;
+          letter-spacing: normal;
+          color: #5a5a5a;
         }
       }
     }
 
-    @media screen and (max-width: 600px) {
-      &-thead {
-        display: none;
-      }
-
-      &-thead > tr,
-      &-tbody > tr {
-        th,
+    .ant-table-tbody {
+      tr.ant-table-row {
         td {
-          &:first-of-type {
-            padding-top: 1rem;
-          }
-
-          &:last-of-type {
-            padding-bottom: 1rem;
-          }
+          border-bottom: none;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          letter-spacing: normal;
+          color: #5a5a5a;
+          padding: 5px 0 5px 20px;
+          cursor: pointer;
         }
-
-        > th,
-        > td {
-          display: block;
-          width: auto !important;
-          border: none;
-          padding: 0 1rem;
-          font-size: 1.1rem;
-
-          &:last-child {
-            border-bottom: 1px solid #eee;
-          }
+      }
+      tr.ant-table-row:hover {
+        td {
+          background: #cccccc26;
+          color: #333333;
+        }
+      }
+      .ant-table-placeholder {
+        .ant-table-cell {
+          border-bottom: none;
+          height: 230px;
         }
       }
     }
@@ -195,79 +73,77 @@
 
 .Submitted {
   width: 96px;
-  height: 22px;
+  height: auto;
   border-radius: 4px;
   background-color: #a5aad9;
-  font-family: Avenir;
   font-size: 12px;
   font-weight: 500;
-  font-style: normal;
   line-height: 1.17;
   letter-spacing: normal;
-  text-align: center;
   color: #ffffff;
 }
 
 .Completed {
   width: 96px;
-  height: 22px;
+  height: auto;
   border-radius: 4px;
   background-color: #1a8b45;
-  font-family: Avenir;
   font-size: 12px;
   font-weight: 500;
-  font-style: normal;
   line-height: 1.17;
   letter-spacing: normal;
-  text-align: center;
   color: #ffffff;
 }
 
 .Draft {
   width: 96px;
-  height: 22px;
+  height: auto;
   border-radius: 4px;
   background-color: #f7941d;
-  font-family: Avenir;
   font-size: 12px;
   font-weight: 500;
-  font-style: normal;
   line-height: 1.17;
   letter-spacing: normal;
-  text-align: center;
   color: #ffffff;
 }
 
 .Reviewed {
   width: 96px;
-  height: 22px;
+  height: auto;
   border-radius: 4px;
   background-color: #0c5cc9;
-  font-family: Avenir;
   font-size: 12px;
   font-weight: 500;
-  font-style: normal;
   line-height: 1.17;
   letter-spacing: normal;
-  text-align: center;
   color: #ffffff;
 }
 
 .Approved {
   width: 96px;
-  height: 22px;
+  height: auto;
   border-radius: 4px;
-  background-color:#0c5cc9;
-  font-family: Avenir;
+  background-color: #0c5cc9;
   font-size: 12px;
   font-weight: 500;
-  font-style: normal;
   line-height: 1.17;
   letter-spacing: normal;
-  text-align: center;
   color: #ffffff;
 }
 
-.ant-pagination-item {
-  display: none !important;
+.ant-pagination {
+  color: #212121 !important;
+  .ant-pagination-item-link {
+    border-radius: 4px;
+    background-color: #d0d0d0;
+  }
+  .ant-pagination-item {
+    border-radius: 4px;
+    background-color: #d0d0d0;
+  }
+  .ant-pagination-options-quick-jumper input {
+    border-radius: 4px;
+    background-color: #d0d0d0;
+    border: 1px solid #a0a0a0;
+  }
 }

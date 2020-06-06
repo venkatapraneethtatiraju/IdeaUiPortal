@@ -3,22 +3,29 @@ import './MyIdeas.scss';
 import { Table, Row, Col, Button } from 'antd';
 import PopUpModel from '../PopUpModel/PopUpModel'
 import { getToken } from '../Auth/Auth';
+import { DEFAULT_PAGE_SIZE } from '../../Config/Constants';
 
 class MyIdeas extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isSubmitted: false,
-      currentPage:0,
-      lastPage:0,
-      hitApi:false,
+      lastPage: 1,
+      hitApi: false,
       showModal: false,
       btnColor: '#e4500e',
       saveandSubmit: "Save & Submit",
+      pagination: {
+        current: 1,
+        pageSize: DEFAULT_PAGE_SIZE,
+        showTotal: (total, range) => ``,
+        position: ['topRight'],
+        total: 0,
+        showQuickJumper: true,
+      },
+      collectedIdeaList: { content: [] },
       selectedRow: [],
-      data: [
-
-      ],
+      data: [],
       columns: [
         {
           title: 'Idea Subject',
@@ -30,8 +37,8 @@ class MyIdeas extends Component {
         {
           title: 'Idea Type',
           dataIndex: 'ideaType',
-          defaultSortOrder: 'descend',
           sorter: (a, b) => a.ideaType.length - b.ideaType.length,
+          sortDirections: ['descend', 'ascend'],
           ellipsis: true
         },
         {
@@ -89,49 +96,61 @@ class MyIdeas extends Component {
   }
 
   componentDidMount() {
-    this.mounted=true
-    this.getIdeaDetails();
-
+    this.mounted = true;
+    this.getIdeaDetails(this.state.pagination);
   }
 
   componentWillUnmount() {
-    this.mounted = false; 
- }
+    this.mounted = false;
+  }
 
   componentDidUpdate(prevProps, prevState) {
     //this.getIdeaDetails()
 
-    if(this.mounted && this.state.isSubmitted) {
+    if (this.mounted && this.state.isSubmitted) {
       console.log('pokemons state has changed.')
       //this.setState({data:[]});
-      this.getIdeaDetails();
+      this.getIdeaDetails(this.state.pagination);
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.myIdeaData!== this.props.myIdeaData && Object. keys(nextProps.myIdeaData).length >=1)
-    {
-        this.getIdeaDetails();
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.myIdeaData !== this.props.myIdeaData && Object.keys(nextProps.myIdeaData).length >= 1) {
+      this.getIdeaDetails(this.state.pagination);
     }
   }
 
-  
-  
-  getIdeaDetails(pageNum) {
+
+
+  getIdeaDetails(pagination) {
     const token = getToken();
     const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-    let pageNumber = 0;
-    let pageSize = 15
-    console.log(pageNumber,"Page");
-    fetch('https://cors-anywhere.herokuapp.com/http://iportal.herokuapp.com/innovation-portal/api/v1/ideas?pageNumber=' + pageNumber + '&pageSize=' + pageSize, { headers })
-      .then(response => response.json()).
-      then(result => this.setItem(result));
-  }
- 
-  setItem = (result) => {
-      console.log('getIdeaDetails', JSON.stringify(result['content']))
+    fetch(`https://cors-anywhere.herokuapp.com/http://iportal.herokuapp.com/innovation-portal/api/v1/ideas?pageNumber=${Number(pagination.current) - 1}&pageSize=${pagination.pageSize}`, { headers })
+      .then(response => response.json())
+      .then(result => {
+        const newArr = this.setItem(result.result);
+        const { currentPage, totalRecords } = result.result.page;
 
-      let newArr = Object.values(result.result.content).map((val, index) => {
+        this.setState({
+          data: newArr,
+          isSubmitted: false,
+          lastPage: Number(currentPage) + 1,
+          pagination: {
+            ...this.state.pagination,
+            current: Number(currentPage) + 1,
+            total: totalRecords,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+          }
+        });
+        console.log('Service Call');
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+  setItem = (result) => {
+    let newArr = Object.values(result.content).map((val, index) => {
       return {
         key: val.id,
         index: index,
@@ -143,16 +162,16 @@ class MyIdeas extends Component {
         status: val.ideaStatus ? val.ideaStatus : "-"
       };
     })
-
-   
-    // if(this.state.data){
-    // let v = [...this.state.data,...newArr];
-    // this.setState({ data:v,isSubmitted:false});
-    // }
-    // else{
-      this.setState({ data:newArr,isSubmitted:false});
-   // }
+    return newArr;
   };
+
+  addToIdeaList = (contentList) => {
+    let ideaList = this.state.collectedIdeaList.content;
+    for (let idea of contentList) {
+      ideaList.push(idea);
+    }
+    return ideaList;
+  }
 
   saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId, ideaId) {
     console.log("myidea")
@@ -180,10 +199,10 @@ class MyIdeas extends Component {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data.code);
-        this.setState({ status: data.code ,isSubmitted:true});
+        this.setState({ status: data.code, isSubmitted: true });
         //  this.setItem(data.result);
         this.buttonActionHandler();
-         //this.getIdeaDetails();
+        //this.getIdeaDetails();
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -192,59 +211,29 @@ class MyIdeas extends Component {
 
   }
 
-  async onChange(pageNumber) {
-    
-    let data = pageNumber;
-    console.log(data.current,"Change");
-    if(this.state.lastPage < data.current)
-    {
+  handlePageChange(pagination) {
+    console.log(pagination);
 
-      await this.setState({currentPage:data.current-1,lastPage:data.current});
-
-      //this.getIdeaDetails();
-    }
-    else
-    {
-      console.log(this.state.lastPage,"less");
+    if (this.state.lastPage !== pagination.current) {
+      this.getIdeaDetails(pagination);
     }
   }
 
- 
-
   render() {
-
     return (
       <div className="my-ideas-container">
         <Row justify="center">
           <Col xs={20} sm={20} md={20} lg={20} xl={20}>
             <Table
-              pagination={{ position: ['topRight'] }}
+              pagination={this.state.pagination}
               columns={this.state.columns}
               dataSource={this.state.data}
-              onChange={e =>(this.onChange(e))}
-              itemRender={this.itemRender}
-              
-            // rowSelection={
-            //   {onSelect: this.selectedRowAction}
-            // }
-            >
+              onChange={pagination => (this.handlePageChange(pagination))}
+              itemRender={this.itemRender}>
             </Table>
           </Col>
         </Row>
-        {/* <Row>
-                <Table
-                pagination={{position: ['topRight']}}
-                columns={this.state.columns} 
-                dataSource={this.state.data}
-                // rowSelection={
-                //   {onSelect: this.selectedRowAction}
-                // }
-                >
-                </Table>
-              </Row> */}
-
         {this.state.showModal ? <PopUpModel
-
           onOk={this.buttonActionHandler}
           onCancel={this.buttonActionHandler}
           saveandSubmitHandler={this.saveandSubmitHandler}
@@ -254,7 +243,6 @@ class MyIdeas extends Component {
           isAddEditIdea="true"
           isViewIdea="false"
         /> : null}
-
       </div>
     );
   }
