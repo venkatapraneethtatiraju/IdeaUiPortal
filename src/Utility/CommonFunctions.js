@@ -26,7 +26,7 @@ export const addNewProperty = (newResult, actionname) => {
                 element.ideaType = element.categoryName ? element.categoryName : "-"
                 element.ideaCategory = element.subcategoryName ? element.subcategoryName : "-"
                 element.ideaDescription = element.ideaDescription ? element.ideaDescription : "-"
-                element.submittedOn = "-"
+                element.submissionDate = element.submissionDate ? element.submissionDate : "-"
                 element.status = element.ideaStatus ? element.ideaStatus : "-"
                 element.attachment = ''
             });

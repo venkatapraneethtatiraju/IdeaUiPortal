@@ -50,8 +50,8 @@ const myIdeasColumn = [
   },
   {
     title: SUBMITTED_ON,
-    dataIndex: 'submittedOn',
-    sorter: (a, b) => a.submittedOn.length - b.submittedOn.length,
+    dataIndex: 'submissionDate',
+    sorter: (a, b) => a.submissionDate.length - b.submissionDate.length,
     sortDirections: ['descend', 'ascend'],
     ellipsis: true,
     width: '12%'
