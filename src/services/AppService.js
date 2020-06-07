@@ -3,8 +3,8 @@ import {
     TOPTRENDING_IDEAS_URL,
     TOPCONTRIBUTORS_URL,
     IDEASTATS_URL,
-    IDEADETAILS_BYID_URL,
-    IDEA_LIKE_URL
+    IDEAS_URL,
+    GET_MYIDEADS_URL
 } from '../Config/ServiceUrl';
 import { getHeaders } from '../Utility/CommonFunctions';
 
@@ -29,12 +29,23 @@ export const getIdeaStats = (Key) => {
 //Service call to get all details to display in popup
 export const getIdeaDetailsById = (ideaId) => {
     const headers = getHeaders();
-    return Axios.get(`${IDEADETAILS_BYID_URL}${ideaId}`, { headers });
+    return Axios.get(`${IDEAS_URL}${ideaId}`, { headers });
 }
 
 //Service call to post idea like from display in popup
 export const postIdeaLike = (ideaId) => {
     const headers = getHeaders();
-    return Axios.post(`${IDEA_LIKE_URL}${ideaId}/like`, '', { headers });
+    return Axios.post(`${IDEAS_URL}${ideaId}/like`, '', { headers });
 }
 
+//Service call to get my ideas in myideas page
+export const getMyIdeas = (pagination) => {
+    const headers = getHeaders();
+    return Axios.get(`${GET_MYIDEADS_URL}?pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}`, { headers });
+}
+
+//Service call to save and submit idea
+export const saveAndSubmitIdeaById = (requestParam, ideaId) => {
+    const headers = getHeaders();
+    return Axios.put(`${IDEAS_URL}${ideaId}`, JSON.stringify(requestParam), { headers });
+}

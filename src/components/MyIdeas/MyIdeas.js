@@ -1,9 +1,99 @@
 import React, { Component } from 'react';
 import './MyIdeas.scss';
-import { Table, Row, Col, Button } from 'antd';
+import { Table, Row, Col, Tag } from 'antd';
 import PopUpModel from '../PopUpModel/PopUpModel'
-import { getToken } from '../Auth/Auth';
-import { DEFAULT_PAGE_SIZE } from '../../Config/Constants';
+import {
+  DEFAULT_PAGE_SIZE,
+  SUCCESS,
+  GET_MYIDEAS_DETAIL,
+  SUBMITTED,
+  APPROVED,
+  DEVELOPMENT,
+  COMPLETED,
+  DRAFT,
+  REVIEW,
+  CLOSED,
+  IDEA_SUBJECT,
+  IDEA_TYPE,
+  IDEA_CATEGORY,
+  SUBMITTED_ON,
+  IDEA_STATUS
+} from '../../Config/Constants';
+import { getMyIdeas, saveAndSubmitIdeaById } from '../../services/AppService';
+import { addNewProperty } from '../../Utility/CommonFunctions';
+import { ReactComponent as AttachmentIcon } from '../../images/attach.svg'
+
+const myIdeasColumn = [
+  {
+    title: IDEA_SUBJECT,
+    dataIndex: 'ideaSubject',
+    sorter: (a, b) => a.ideaSubject.length - b.ideaSubject.length,
+    sortDirections: ['descend', 'ascend'],
+    ellipsis: true,
+    width: '43%'
+  },
+  {
+    title: IDEA_TYPE,
+    dataIndex: 'ideaType',
+    sorter: (a, b) => a.ideaType.length - b.ideaType.length,
+    sortDirections: ['descend', 'ascend'],
+    ellipsis: true,
+    width: '12%'
+  },
+  {
+    title: IDEA_CATEGORY,
+    dataIndex: 'ideaCategory',
+    sorter: (a, b) => a.ideaCategory.length - b.ideaCategory.length,
+    sortDirections: ['descend', 'ascend'],
+    ellipsis: true,
+    width: '12%'
+  },
+  {
+    title: SUBMITTED_ON,
+    dataIndex: 'submittedOn',
+    sorter: (a, b) => a.submittedOn.length - b.submittedOn.length,
+    sortDirections: ['descend', 'ascend'],
+    ellipsis: true,
+    width: '12%'
+  },
+  {
+    title: '',
+    dataIndex: 'attachment',
+    width: '6%',
+    ellipsis: true,
+    render: (attachment) =>
+      <div className="attach-container">
+        <div className="attach-middle"><AttachmentIcon className="attach" alt="Attach" /></div>
+      </div>
+  },
+  {
+    title: IDEA_STATUS,
+    dataIndex: 'status',
+    sorter: (a, b) => a.status.length - b.status.length,
+    sortDirections: ['descend', 'ascend'],
+    ellipsis: true,
+    width: '15%',
+    render: (ideaStatus) => {
+      let color = '';
+      if (ideaStatus === SUBMITTED) {
+        color = '#A5AAD9';
+      } else if (ideaStatus === APPROVED) {
+        color = '#0C5CC9';
+      } else if (ideaStatus === DEVELOPMENT) {
+        color = '#9B6496';
+      } else if (ideaStatus === COMPLETED) {
+        color = '#1A8B45';
+      } else if (ideaStatus === DRAFT) {
+        color = '#F7941D';
+      } else if (ideaStatus === REVIEW) {
+        color = '#F7C51D';
+      } else if (ideaStatus === CLOSED) {
+        color = '#7A8083';
+      }
+      return (<Tag className="display-status-tag" color={color} >{ideaStatus}</Tag>)
+    }
+  }
+]
 
 class MyIdeas extends Component {
   constructor(props) {
@@ -23,76 +113,19 @@ class MyIdeas extends Component {
         total: 0,
         showQuickJumper: true,
       },
-      collectedIdeaList: { content: [] },
       selectedRow: [],
       data: [],
-      columns: [
-        {
-          title: 'Idea Subject',
-          dataIndex: 'ideaSubject',
-          sorter: (a, b) => a.ideaSubject.length - b.ideaSubject.length,
-          sortDirections: ['descend', 'ascend'],
-          ellipsis: true
-        },
-        {
-          title: 'Idea Type',
-          dataIndex: 'ideaType',
-          sorter: (a, b) => a.ideaType.length - b.ideaType.length,
-          sortDirections: ['descend', 'ascend'],
-          ellipsis: true
-        },
-        {
-          title: 'Idea Category',
-          dataIndex: 'ideaCategory',
-          sorter: (a, b) => a.ideaCategory.length - b.ideaCategory.length,
-          sortDirections: ['descend', 'ascend'],
-          ellipsis: true
-        },
-        {
-          title: 'Submitted on',
-          dataIndex: 'submittedOn',
-          sorter: (a, b) => a.submittedOn.length - b.submittedOn.length,
-          sortDirections: ['descend', 'ascend'],
-          ellipsis: true
-        },
-        {
-          title: 'Status',
-          dataIndex: 'status',
-          sorter: (a, b) => a.status.length - b.status.length,
-          sortDirections: ['descend', 'ascend'],
-          ellipsis: true,
-          render: (status, rowData) => <Button onClick={(e) => this.handleStatus(rowData)} className={status} >  {status}</Button>
-        }
-      ]
+      columns: myIdeasColumn
     }
     this.saveandSubmitHandler = this.saveandSubmitHandler.bind(this)
   }
 
-  handleStatus = (rowData) => {
-
-    if (rowData.status === "Draft") {
-
-      this.openModel(rowData);
-    }
-
-  }
-
-  openModel = (rowData) => {
-
-    this.setState({ showModal: true, selectedRow: rowData })
-
-
-  }
-
+  //To close popup model
   buttonActionHandler = (event) => {
     this.setState(prevstate => ({
       ...prevstate,
       showModal: !prevstate.showModal
     }))
-  }
-
-  selectedRowAction = (event) => {
-    debugger;
   }
 
   componentDidMount() {
@@ -105,11 +138,7 @@ class MyIdeas extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    //this.getIdeaDetails()
-
     if (this.mounted && this.state.isSubmitted) {
-      console.log('pokemons state has changed.')
-      //this.setState({data:[]});
       this.getIdeaDetails(this.state.pagination);
     }
   }
@@ -120,61 +149,33 @@ class MyIdeas extends Component {
     }
   }
 
-
-
-  getIdeaDetails(pagination) {
-    const token = getToken();
-    const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-    fetch(`https://cors-anywhere.herokuapp.com/http://iportal.herokuapp.com/innovation-portal/api/v1/ideas?pageNumber=${Number(pagination.current) - 1}&pageSize=${pagination.pageSize}`, { headers })
-      .then(response => response.json())
-      .then(result => {
-        const newArr = this.setItem(result.result);
-        const { currentPage, totalRecords } = result.result.page;
-
-        this.setState({
-          data: newArr,
-          isSubmitted: false,
-          lastPage: Number(currentPage) + 1,
-          pagination: {
-            ...this.state.pagination,
-            current: Number(currentPage) + 1,
-            total: totalRecords,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
-          }
-        });
-        console.log('Service Call');
+  //Get my ideas list
+  getIdeaDetails = (pagination) => {
+    getMyIdeas(pagination)
+      .then(response => {
+        if (response.data.message === SUCCESS) {
+          const myIdeasList = addNewProperty(response.data.result.content, GET_MYIDEAS_DETAIL);
+          const { currentPage, totalRecords } = response.data.result.page;
+          this.setState({
+            data: myIdeasList,
+            isSubmitted: false,
+            lastPage: Number(currentPage) + 1,
+            pagination: {
+              ...this.state.pagination,
+              current: Number(currentPage) + 1,
+              total: totalRecords,
+              showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+            }
+          });
+        }
       })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+      .catch(error => {
+        console.log(error);
+      })
   }
 
-  setItem = (result) => {
-    let newArr = Object.values(result.content).map((val, index) => {
-      return {
-        key: val.id,
-        index: index,
-        ideaSubject: val.title ? val.title : "- ",
-        ideaType: val.categoryName ? val.categoryName : "-",
-        ideaCategory: val.subcategoryName ? val.subcategoryName : "-",
-        ideaDescription: val.ideaDescription ? val.ideaDescription : "-",
-        submittedOn: "-",
-        status: val.ideaStatus ? val.ideaStatus : "-"
-      };
-    })
-    return newArr;
-  };
-
-  addToIdeaList = (contentList) => {
-    let ideaList = this.state.collectedIdeaList.content;
-    for (let idea of contentList) {
-      ideaList.push(idea);
-    }
-    return ideaList;
-  }
-
+  //Save and submit handler
   saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId, ideaId) {
-    console.log("myidea")
     let requestParam = {
       title: ideaSubject,
       ideaDescription: ideaDetails,
@@ -182,40 +183,32 @@ class MyIdeas extends Component {
       subCategoryId: ideaCategoryValue,
       ideaStatusId: ideaStatusId
     }
-    this.createPutReq(requestParam, ideaId);
+    this.saveAndSubmitIdea(requestParam, ideaId);
   }
 
-
-  createPutReq(requestParam, ideaId) {
-    const token = getToken();
-    const requestOptions = {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify(requestParam)
-    };
-
-    console.log("requestOptions", requestOptions, ideaId)
-    fetch('https://cors-anywhere.herokuapp.com/http://iportal.herokuapp.com/innovation-portal/api/v1/ideas/' + ideaId, requestOptions)
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data.code);
-        this.setState({ status: data.code, isSubmitted: true });
-        //  this.setItem(data.result);
+  //Save and submit the idea
+  saveAndSubmitIdea(requestParam, ideaId) {
+    saveAndSubmitIdeaById(requestParam, ideaId)
+      .then(response => {
+        this.setState({ status: response.data.code, isSubmitted: true });
         this.buttonActionHandler();
-        //this.getIdeaDetails();
       })
-      .catch((error) => {
-        console.error('Error:', error);
+      .catch(error => {
         this.setState({ status: error.code })
-      });
-
+      })
   }
 
+  //Handle pagination
   handlePageChange(pagination) {
-    console.log(pagination);
-
     if (this.state.lastPage !== pagination.current) {
       this.getIdeaDetails(pagination);
+    }
+  }
+
+  //Open Popupmodal to View/Add/Edit idea
+  onRowClick = (record) => {
+    if (record.status === DRAFT) {
+      this.setState({ showModal: true, selectedRow: record })
     }
   }
 
@@ -229,7 +222,10 @@ class MyIdeas extends Component {
               columns={this.state.columns}
               dataSource={this.state.data}
               onChange={pagination => (this.handlePageChange(pagination))}
-              itemRender={this.itemRender}>
+              onRow={(record) => ({
+                onClick: () => this.onRowClick(record)
+              }
+              )}>
             </Table>
           </Col>
         </Row>

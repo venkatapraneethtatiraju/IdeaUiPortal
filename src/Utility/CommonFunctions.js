@@ -1,5 +1,5 @@
 import { getToken } from "../components/Auth/Auth";
-import { TOP_CONSTRIBUTORS } from '../Config/Constants'
+import { TOP_CONSTRIBUTORS, GET_MYIDEAS_DETAIL } from '../Config/Constants'
 
 //Get headers for request
 export const getHeaders = () => {
@@ -10,12 +10,28 @@ export const getHeaders = () => {
 
 //To set the new property in array of object
 export const addNewProperty = (newResult, actionname) => {
+
     switch (actionname) {
         case TOP_CONSTRIBUTORS:
             newResult.forEach((element, index) => {
                 element.iconName = createIconShortName(element.user.username)
             });
             return newResult.sort(compareValues('totalIdeas', 'desc'));
+
+        case GET_MYIDEAS_DETAIL:
+            newResult.forEach((element, index) => {
+                element.key = element.id
+                element.index = index
+                element.ideaSubject = element.title ? element.title : "- "
+                element.ideaType = element.categoryName ? element.categoryName : "-"
+                element.ideaCategory = element.subcategoryName ? element.subcategoryName : "-"
+                element.ideaDescription = element.ideaDescription ? element.ideaDescription : "-"
+                element.submittedOn = "-"
+                element.status = element.ideaStatus ? element.ideaStatus : "-"
+                element.attachment = ''
+            });
+            return newResult;
+
         default:
             return newResult;
     }

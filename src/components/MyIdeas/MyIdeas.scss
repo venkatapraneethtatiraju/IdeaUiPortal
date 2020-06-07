@@ -24,6 +24,9 @@
     margin: 0 auto;
     border-collapse: collapse;
     border-style: hidden;
+    table {
+      margin-bottom: 15px;
+    }
     .ant-table-thead {
       background-color: #ffffff;
       tr {
@@ -71,68 +74,39 @@
   }
 }
 
-.Submitted {
-  width: 96px;
-  height: auto;
-  border-radius: 4px;
-  background-color: #a5aad9;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.17;
-  letter-spacing: normal;
-  color: #ffffff;
+.display-status-tag {
+  width: 96px !important;
+  cursor: pointer !important;
 }
 
-.Completed {
-  width: 96px;
-  height: auto;
-  border-radius: 4px;
-  background-color: #1a8b45;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.17;
-  letter-spacing: normal;
-  color: #ffffff;
+.attach-container {
+  position: relative;
+  width: 25px;
+  display: flex;
 }
 
-.Draft {
-  width: 96px;
-  height: auto;
-  border-radius: 4px;
-  background-color: #f7941d;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.17;
-  letter-spacing: normal;
-  color: #ffffff;
+.attach-middle {
+  position: relative;
+  height: 18.2px;
 }
 
-.Reviewed {
-  width: 96px;
-  height: auto;
-  border-radius: 4px;
-  background-color: #0c5cc9;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.17;
-  letter-spacing: normal;
-  color: #ffffff;
+.attach {
+  object-fit: contain;
+  width: 16.8px;
+  height: 18.2px;
+  top: 50%;
+  left: 50%;
+  transform: rotate(45deg);
 }
 
-.Approved {
-  width: 96px;
-  height: auto;
-  border-radius: 4px;
-  background-color: #0c5cc9;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.17;
-  letter-spacing: normal;
-  color: #ffffff;
+.attach path {
+  fill: #848484;
+  transform: rotate(-45 100 100);
 }
 
 .ant-pagination {
   color: #212121 !important;
+  margin: 16px -8px 16px 0 !important;
   .ant-pagination-item-link {
     border-radius: 4px;
     background-color: #d0d0d0;
