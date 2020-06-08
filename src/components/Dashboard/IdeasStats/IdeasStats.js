@@ -81,28 +81,32 @@ export class IdeasStats extends PureComponent {
                     }
                 },
                 series: [{
-                    name: SUBMITTED,
+                    name: '',
+                    title: SUBMITTED,
                     color: '#A5AAD9',
                     data: [],
                     pointPadding: 0,
                     pointPlacement: 0
                 },
                 {
-                    name: APPROVED,
+                    name: '',
+                    title: APPROVED,
                     color: '#0C5CC9',
                     data: [],
                     pointPadding: 0.2,
                     pointPlacement: 0
                 },
                 {
-                    name: DEVELOPMENT,
+                    name: '',
+                    title: DEVELOPMENT,
                     color: '#9B6496',
                     data: [],
                     pointPadding: 0.2,
                     pointPlacement: 0
                 },
                 {
-                    name: COMPLETED,
+                    name: '',
+                    title: COMPLETED,
                     color: '#1A8B45',
                     data: [],
                     pointPadding: 0.2,
@@ -186,14 +190,18 @@ export class IdeasStats extends PureComponent {
 
         const newSeriesData = seriesData;
         newSeriesData.forEach((idea) => {
-            if (idea.name === SUBMITTED) {
+            if (idea.title === SUBMITTED) {
                 idea.data = submittedArr;
-            } else if (idea.name === APPROVED) {
+                idea.name = SUBMITTED;
+            } else if (idea.title === APPROVED) {
                 idea.data = approvedArr;
-            } else if (idea.name === DEVELOPMENT) {
+                idea.name = APPROVED;
+            } else if (idea.title === DEVELOPMENT) {
                 idea.data = developmentArr;
-            } else if (idea.name === COMPLETED) {
+                idea.name = DEVELOPMENT;
+            } else if (idea.title === COMPLETED) {
                 idea.data = completedArr;
+                idea.name = COMPLETED;
             }
         });
         return newSeriesData;
