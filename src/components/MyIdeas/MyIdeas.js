@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
 import './MyIdeas.scss';
-import { Table, Row, Col, Tag } from 'antd';
+import { Table, Row, Col } from 'antd';
 import PopUpModel from '../PopUpModel/PopUpModel'
 import {
   DEFAULT_PAGE_SIZE,
   SUCCESS,
   GET_MYIDEAS_DETAIL,
-  SUBMITTED,
-  APPROVED,
-  DEVELOPMENT,
-  COMPLETED,
   DRAFT,
-  REVIEW,
-  CLOSED,
   IDEA_SUBJECT,
   IDEA_TYPE,
   IDEA_CATEGORY,
@@ -22,6 +16,7 @@ import {
 import { getMyIdeas, saveAndSubmitIdeaById } from '../../services/AppService';
 import { addNewProperty } from '../../Utility/CommonFunctions';
 import { ReactComponent as AttachmentIcon } from '../../images/attach.svg'
+import StatusTag from '../StatusTag/StatusTag';
 
 const myIdeasColumn = [
   {
@@ -73,25 +68,7 @@ const myIdeasColumn = [
     sortDirections: ['descend', 'ascend'],
     ellipsis: true,
     width: '15%',
-    render: (ideaStatus) => {
-      let color = '';
-      if (ideaStatus === SUBMITTED) {
-        color = '#A5AAD9';
-      } else if (ideaStatus === APPROVED) {
-        color = '#0C5CC9';
-      } else if (ideaStatus === DEVELOPMENT) {
-        color = '#9B6496';
-      } else if (ideaStatus === COMPLETED) {
-        color = '#1A8B45';
-      } else if (ideaStatus === DRAFT) {
-        color = '#F7941D';
-      } else if (ideaStatus === REVIEW) {
-        color = '#F7C51D';
-      } else if (ideaStatus === CLOSED) {
-        color = '#7A8083';
-      }
-      return (<Tag className="display-status-tag" color={color} >{ideaStatus}</Tag>)
-    }
+    render: (ideaStatus) => <StatusTag ideaStatus={ideaStatus} />
   }
 ]
 
