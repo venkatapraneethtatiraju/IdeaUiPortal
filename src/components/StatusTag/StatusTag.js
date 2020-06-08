@@ -14,7 +14,7 @@ import {
 export class StatusTag extends Component {
 
     render() {
-        const { ideaStatus } = this.props;
+        const { ideaStatus, styleName } = this.props;
         let color = '';
         if (ideaStatus === SUBMITTED) {
             color = '#A5AAD9';
@@ -34,7 +34,9 @@ export class StatusTag extends Component {
 
         return (
             <>
-                <Tag className="status-tag" color={color} >
+                <Tag className="status-tag"
+                    style={styleName}
+                    color={color}>
                     {ideaStatus}
                 </Tag>
             </>
