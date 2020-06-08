@@ -64,6 +64,7 @@ div.ant-modal-content {
       overflow: auto;
       padding-top: 26px;
       padding-bottom: 0px;
+      height: 488px;
       .idea-input {
         background-color: #ffffff;
         margin-top: 5px;
@@ -205,11 +206,23 @@ div.ant-modal-content {
         left: 50%;
         height: 16.3px;
         object-fit: contain;
-        cursor: pointer;
+       cursor: pointer;
         path {
           fill: #6a205f;
-        }
+          
+       }
       }
+       .gestureLike {
+        top: 50%;
+        left: 50%;
+        height: 16.3px;
+        object-fit: contain;
+      //   path {
+      //     fill: #6a205f;
+      //  }
+      //fill: #6a205f;
+      }
+
       .like-container:hover .gesture-middle {
         display: block;
         cursor: pointer;

@@ -38,6 +38,13 @@ export const postIdeaLike = (ideaId) => {
     return Axios.post(`${IDEAS_URL}${ideaId}/like`, '', { headers });
 }
 
+
+//Service call to post idea dislike from display in popup
+export const postIdeaDisLike = (ideaId) => {
+    const headers = getHeaders();
+    return Axios.post(`${IDEAS_URL}${ideaId}/dislike`, '', { headers });
+}
+
 //Service call to get my ideas in myideas page
 export const getMyIdeas = (pagination) => {
     const headers = getHeaders();
@@ -49,3 +56,4 @@ export const saveAndSubmitIdeaById = (requestParam, ideaId) => {
     const headers = getHeaders();
     return Axios.put(`${IDEAS_URL}${ideaId}`, JSON.stringify(requestParam), { headers });
 }
+

@@ -69,7 +69,6 @@ export class TopTrendingIdeas extends PureComponent {
             })
     }
 
-    //Open Popupmodal to view idea
     onRowClick = (ideaId) => {
         if (ideaId) {
             getIdeaDetailsById(ideaId)
@@ -81,6 +80,10 @@ export class TopTrendingIdeas extends PureComponent {
                 .catch(error => {
                 });
         }
+    }
+
+    updateLikes = (isLike) => {
+        this.getTopTrendingRecord();
     }
 
     buttonActionHandler = (event) => {
@@ -112,6 +115,7 @@ export class TopTrendingIdeas extends PureComponent {
                     isAddEditIdea="false"
                     isViewIdea="true"
                     selectedRow={this.state.selectedRow}
+                    updateLikes={this.updateLikes}
                 /> : null}
             </Col>
         )
