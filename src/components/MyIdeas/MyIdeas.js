@@ -62,8 +62,8 @@ const myIdeasColumn = [
     width: '6%',
     ellipsis: true,
     render: (attachment) =>
-      <div className="attach-container">
-        <div className="attach-middle"><AttachmentIcon className="attach" alt="Attach" /></div>
+      <div className="attach-div">
+        <div className="attach-middle"><AttachmentIcon className="attach" alt="Attachment" /></div>
       </div>
   },
   {
