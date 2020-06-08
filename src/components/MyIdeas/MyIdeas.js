@@ -68,7 +68,7 @@ const myIdeasColumn = [
     sortDirections: ['descend', 'ascend'],
     ellipsis: true,
     width: '15%',
-    render: (ideaStatus) => <StatusTag ideaStatus={ideaStatus} />
+    render: (ideaStatus) => <StatusTag ideaStatus={ideaStatus} styleName={{ width: '96px', cursor: 'pointer' }} />
   }
 ]
 
