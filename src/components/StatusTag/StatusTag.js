@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import './StatusTag.scss';
 import { Tag } from 'antd';
 import {
@@ -14,7 +14,7 @@ import {
 export class StatusTag extends Component {
 
     render() {
-        const { ideaStatus, styleName } = this.props;
+        const { ideaStatus, statusWidth, statusCursor } = this.props;
         let color = '';
         if (ideaStatus === SUBMITTED) {
             color = '#A5AAD9';
@@ -35,7 +35,7 @@ export class StatusTag extends Component {
         return (
             <>
                 <Tag className="status-tag"
-                    style={styleName}
+                    style={{ width: statusWidth, cursor: statusCursor }}
                     color={color}>
                     {ideaStatus}
                 </Tag>

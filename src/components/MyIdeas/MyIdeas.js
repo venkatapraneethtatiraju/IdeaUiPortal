@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import './MyIdeas.scss';
 import { Table, Row, Col } from 'antd';
 import PopUpModel from '../PopUpModel/PopUpModel'
@@ -68,11 +68,11 @@ const myIdeasColumn = [
     sortDirections: ['descend', 'ascend'],
     ellipsis: true,
     width: '15%',
-    render: (ideaStatus) => <StatusTag ideaStatus={ideaStatus} styleName={{ width: '96px', cursor: 'pointer' }} />
+    render: (ideaStatus) => <StatusTag ideaStatus={ideaStatus} statusWidth="96px" statusCursor="pointer" />
   }
 ]
 
-class MyIdeas extends Component {
+class MyIdeas extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,0 +1,38 @@
+.status-button-main {
+  height: 46px;
+  min-width: 45px;
+  position: relative;
+  text-align: -webkit-center;
+  cursor: pointer;
+}
+.status-button-inner {
+  width: 30px;
+  height: 30px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -2px;
+}
+.status-svg-icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+.status-svg-icon path {
+  fill: #ffffff;
+}
+
+.status-svg-icon circle {
+  fill: #ffffff;
+}
+.status-button-label {
+  font-size: 11px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #333333 !important;
+  cursor: pointer;
+}

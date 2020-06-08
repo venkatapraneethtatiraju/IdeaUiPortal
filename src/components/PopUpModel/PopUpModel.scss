@@ -39,7 +39,13 @@ div.ant-modal-content {
     }
     .right-display {
       position: absolute;
-      right: 65px;
+      right: 75px;
+    }
+    .split-line {
+      width: 0;
+      height: 46px;
+      border: solid 1px #e2e2e2;
+      margin: 0 7px;
     }
   }
 
@@ -206,21 +212,20 @@ div.ant-modal-content {
         left: 50%;
         height: 16.3px;
         object-fit: contain;
-       cursor: pointer;
+        cursor: pointer;
         path {
           fill: #6a205f;
-          
-       }
+        }
       }
-       .gestureLike {
+      .gestureLike {
         top: 50%;
         left: 50%;
         height: 16.3px;
         object-fit: contain;
-      //   path {
-      //     fill: #6a205f;
-      //  }
-      //fill: #6a205f;
+        //   path {
+        //     fill: #6a205f;
+        //  }
+        //fill: #6a205f;
       }
 
       .like-container:hover .gesture-middle {
