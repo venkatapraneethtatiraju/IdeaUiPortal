@@ -8,9 +8,7 @@ export class AdminPopUpModel extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ModalText: 'Content of the modal',
             visible: true,
-            confirmLoading: false,
         };
     }
 
