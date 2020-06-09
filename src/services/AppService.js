@@ -23,7 +23,7 @@ export const getTopContributors = () => {
 //Service call to get Idea Stats to display in dashboard
 export const getIdeaStats = (Key) => {
     const headers = getHeaders();
-    return Axios.get(`${IDEASTATS_URL}${Key}`, { headers });
+    return Axios.get(`${IDEASTATS_URL}?duration=${Key}`, { headers });
 }
 
 //Service call to get all details to display in popup
