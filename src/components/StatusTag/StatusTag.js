@@ -8,7 +8,9 @@ import {
     COMPLETED,
     DRAFT,
     REVIEW,
-    CLOSED
+    CLOSED,
+    ACTIVE,
+    DEACTIVATED
 } from '../../Config/Constants';
 
 export class StatusTag extends Component {
@@ -18,7 +20,7 @@ export class StatusTag extends Component {
         let color = '';
         if (ideaStatus === SUBMITTED) {
             color = '#A5AAD9';
-        } else if (ideaStatus === APPROVED) {
+        } else if (ideaStatus === APPROVED || ideaStatus === ACTIVE) {
             color = '#0C5CC9';
         } else if (ideaStatus === DEVELOPMENT) {
             color = '#9B6496';
@@ -28,7 +30,7 @@ export class StatusTag extends Component {
             color = '#F7941D';
         } else if (ideaStatus === REVIEW) {
             color = '#F7C51D';
-        } else if (ideaStatus === CLOSED) {
+        } else if (ideaStatus === CLOSED || ideaStatus === DEACTIVATED) {
             color = '#7A8083';
         }
 

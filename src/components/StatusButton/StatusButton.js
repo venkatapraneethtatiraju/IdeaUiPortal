@@ -11,7 +11,7 @@ import { ReactComponent as CloseIcon } from '../../images/signs.svg';
 import { ReactComponent as ReviewIcon } from '../../images/round.svg';
 import { ReactComponent as CompleteIcon } from '../../images/flag.svg';
 import { ReactComponent as ApprovedIcon } from '../../images/approved.svg';
-import { ReactComponent as DevelopmentIcon } from '../../images/flag.svg';
+import { ReactComponent as DevelopmentIcon } from '../../images/development.svg';
 import './StatusButton.scss';
 
 export class StatusButton extends Component {

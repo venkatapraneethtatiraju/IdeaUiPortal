@@ -25,6 +25,8 @@ export const QUARTER = 'Quarter';
 export const ALL = 'All';
 export const SUCCESS = 'success';
 export const GET_MYIDEAS_DETAIL = 'Get My Ideas';
+export const ACTIVE = 'Active';
+export const DEACTIVATED = 'Deactivated';
 
 export const DEFAULT_PAGE_SIZE = 10;
 

@@ -1,6 +1,6 @@
 div.ant-modal-content {
-  height: 550px;
-  width: 760px;
+  //height: 550px;
+  //width: 760px;
   border-radius: 12px;
   box-shadow: 0 4px 3px 0 rgba(0, 0, 0, 0.1);
 }
@@ -36,10 +36,11 @@ div.ant-modal-content {
       color: #5a5a5a;
       width: 27.4%;
       height: 5.5%;
+      margin-right: 5px;
     }
     .right-display {
       position: absolute;
-      right: 75px;
+      right: 70px;
     }
     .split-line {
       width: 0;
@@ -71,45 +72,6 @@ div.ant-modal-content {
       padding-top: 26px;
       padding-bottom: 0px;
       height: 488px;
-      .idea-input {
-        background-color: #ffffff;
-        margin-top: 5px;
-      }
-      .errorInput {
-        border: 1px solid #cc0000;
-        margin-top: 5px;
-      }
-      .errorMessage {
-        width: 351px;
-        height: 16px;
-        font-size: 12px;
-        font-stretch: normal;
-        line-height: 1.67;
-        letter-spacing: normal;
-        text-align: left;
-        color: #cc0000;
-      }
-      .type-tag {
-        width: 120px;
-        height: 30px;
-        border-radius: 8px;
-        font-size: 14px;
-        font-stretch: normal;
-        line-height: 1.43;
-        letter-spacing: normal;
-        color: #ffffff;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .tag-div {
-        align-content: center;
-        height: 30px;
-      }
-      .cat-dropdown {
-        background-color: #ffffff;
-        margin-top: 5px;
-      }
       .content-format-container {
         width: 100%;
         margin-top: 6px;
@@ -145,7 +107,7 @@ div.ant-modal-content {
   .column-left-view-idea {
     flex: 1;
     .column-left-top {
-      height: 390px;
+      height: 405px;
       overflow: auto;
       padding-top: 26px;
       padding-bottom: 0px;
@@ -162,7 +124,7 @@ div.ant-modal-content {
     }
 
     .column-left-bottom {
-      height: 80px;
+      height: 65px;
       padding: 20px;
       .imageIcon {
         position: relative;
@@ -246,7 +208,7 @@ div.ant-modal-content {
       padding-top: 24px;
       .attachment-title-container {
         border: 1px dashed #dedede;
-        width: 100%;
+        width: 85%;
         margin-top: 5px;
         height: 60px;
         display: inline-flex;
@@ -376,6 +338,91 @@ div.ant-modal-content {
   .attachment-label {
     color: #a7a7a7;
   }
+}
+
+.idea-input {
+  background-color: #ffffff;
+  margin-top: 5px;
+}
+.errorInput {
+  border: 1px solid #cc0000;
+  margin-top: 5px;
+}
+
+.errorMessage {
+  width: 351px;
+  height: 16px;
+  font-size: 12px;
+  font-stretch: normal;
+  line-height: 1.67;
+  letter-spacing: normal;
+  text-align: left;
+  color: #cc0000;
+}
+.cat-dropdown {
+  background-color: #ffffff;
+  margin-top: 5px;
+}
+
+.admin-content-main {
+  padding: 25px !important;
+}
+
+.type-tag {
+  width: 120px;
+  height: 30px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-stretch: normal;
+  line-height: 1.43;
+  letter-spacing: normal;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.tag-div {
+  align-content: center;
+  height: 30px;
+}
+
+.admin-p {
+  color: #333333 !important;
+}
+
+.switch-div {
+  display: flex;
+  align-items: center;
+}
+
+.ant-switch {
+  height: 6px;
+  border-radius: 8px;
+  background-color: #d5d5d5;
+}
+
+.ant-switch::after {
+  width: 16px;
+  height: 16px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: #b1b1b1;
+  top: -6px;
+  left: -2px;
+}
+
+.ant-switch-checked {
+  height: 6px;
+  border-radius: 8px;
+  background-color: #f49a72;
+}
+
+.ant-switch-checked::after {
+  width: 16px;
+  height: 16px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: #e4500e;
+  top: -6px;
+  left: 30px;
 }
 
 .ant-tag-has-color {
