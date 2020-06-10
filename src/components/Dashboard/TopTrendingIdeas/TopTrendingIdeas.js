@@ -71,14 +71,7 @@ export class TopTrendingIdeas extends PureComponent {
 
     onRowClick = (ideaId) => {
         if (ideaId) {
-            getIdeaDetailsById(ideaId)
-                .then(response => {
-                    if (response.data.message === SUCCESS) {
-                        this.setState({ selectedRow: response.data.result, visible: true, showModal: true, })
-                    }
-                })
-                .catch(error => {
-                });
+            this.setState({ ideaId: ideaId, visible: true, showModal: true, })
         }
     }
 
@@ -114,7 +107,7 @@ export class TopTrendingIdeas extends PureComponent {
                     btnColor={this.state.btnColor}
                     isAddEditIdea="false"
                     isViewIdea="true"
-                    selectedRow={this.state.selectedRow}
+                    ideaId ={this.state.ideaId}
                     updateLikes={this.updateLikes}
                 /> : null}
             </Col>

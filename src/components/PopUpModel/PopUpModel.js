@@ -11,11 +11,11 @@ import { BoldOutlined, ItalicOutlined, UnderlineOutlined, UnorderedListOutlined,
 import TextArea from 'antd/lib/input/TextArea';
 import { getToken } from '../Auth/Auth';
 import Axios from '../Axios/Axios';
-import { postIdeaLike, postIdeaDisLike } from '../../services/AppService';
+import { postIdeaLike, postIdeaDisLike, getIdeaDetailsById } from '../../services/AppService';
 import Editor from '../Editor/Editor';
 import { SUCCESS, CLOSE, REVIEW, APPROVED, COMPLETE, DEVELOPMENT } from '../../Config/Constants';
 import ReactHtmlParser from 'react-html-parser';
-import { createIconShortName } from '../../Utility/CommonFunctions';
+import { createIconShortName, getFormatttedDate } from '../../Utility/CommonFunctions';
 import StatusButton from '../StatusButton/StatusButton';
 import AdminPopUpModel from './AdminPopUpModel';
 
@@ -50,7 +50,8 @@ class PopUpModel extends Component {
             isAddEditIdea: this.props.isAddEditIdea,
             isViewIdea: this.props.isViewIdea,
             selectedId: this.props.selectedId,
-            isLike: false
+            isLike: false,
+            ideaDetailsListView : []
         }
         if (this.props.onEditHandler) {
             console.log("const...", this.props.onEditHandler.ideaDescription);
@@ -191,7 +192,7 @@ class PopUpModel extends Component {
                 .then(response => {
                     if (response.data.message === SUCCESS) {
                         this.setState({ isLike: false })
-                        this.props.updateLikes(this.state.isLike)
+                       // this.props.updateLikes(this.state.isLike)
                     }
                 })
                 .catch(error => {
@@ -200,35 +201,27 @@ class PopUpModel extends Component {
         }
     }
 
-    render() {
-        // var aIdea  = this.props.selectedRow;
-        console.log('this.state.isAddEditIdea : ' + this.state.isAddEditIdea)
-        console.log('this.state.isViewIdea : ' + this.state.isViewIdea)
-
-        if (this.props.selectedRow) {
-            let datas = this.props.selectedRow;
-            this.state.currentState = 'ápproved';
-            if (datas.hasOwnProperty('ideaSubject')) {
-                this.state.ideaSubject = datas.ideaSubject;
-            } else if (datas.hasOwnProperty('subject')) {
-                this.state.ideaSubject = datas.subject;
-            } else if (datas.hasOwnProperty('title')) {
-                this.state.ideaSubject = datas.title;
-            }
-            this.state.ideaId = datas.id;
-            this.state.ideaSubject = datas.categoryName;
-            this.state.subjectCategoryName = datas.subcategoryName;
-            this.state.ideaType = datas.ideaType;
-            this.state.ideaSubmittedBy = datas.submittedBy;
-            this.state.ideaDetails = datas.ideaDescription;
-            this.state.ideaStatusHistories = datas.ideaStatusHistories;
-            this.state.likeIdeaDetailList = datas.likeIdeaDetailList;
-            if (datas.likeCount !== 0) {
-                this.state.isLike = true;
-            }
-
-
+    selectedRow = () => {
+        debugger;
+    }
+    componentDidMount () {
+        if(this.state.isViewIdea && this.props.ideaId){
+            getIdeaDetailsById(this.props.ideaId)
+                .then(response => {
+                    if (response.data.message === SUCCESS) {
+                        this.setState({ideaDetailsListView : response.data.result})
+                    }
+                })
+                .catch(error => {
+                });
         }
+        console.log(this.state.ideaDetailsListView)
+    }
+
+
+    render() {
+        const {title,categoryName,subcategoryName,ideaType,submittedBy,ideaStatus,
+              ideaDescription,ideaStatusHistories,likeIdeaDetailList,likeCount} = this.state.ideaDetailsListView;
         const { TextArea } = Input;
         let optionTemplate = "";
         let count = 0;
@@ -237,22 +230,19 @@ class PopUpModel extends Component {
                 <option value={count = count + 1}>{value}</option>
             ));
         }
-        const { ideaSubject, ideaType, ideaCategoryValue, ideaDetails } = this.state;
-        //() =>this.props.saveandSubmitHandler({ideaSubject,ideaType,ideaCategoryValue,ideaDetails})
-
 
         return (
             <div className="modal-content">
-                {false ? <AdminPopUpModel /> :
+                {/* {true ? <AdminPopUpModel /> : */}
                     <Modal
                         title={
                             <Row className="popup-header-title" gutter={2}>
                                 <Col className="label-div" style={{ maxWidth: '38%' }}>
                                     <label className="header-label">
-                                        {this.state.isViewIdea === "true" && (this.state.ideaId || this.state.currentState === "ápproved") ? this.state.ideaSubject : 'Add an Idea'}
+                                        {this.state.isViewIdea === "true" ? title : 'Add an Idea'}
                                     </label>
                                 </Col>
-                                {this.state.currentState === "ápproved" ?
+                                {ideaStatus === "Approved" && this.state.isViewIdea === "true" ?
                                     <Col>
                                         <Tag className="display-status-tag" color="#0C5CC9" >Approved</Tag>
                                     </Col> : null}
@@ -389,20 +379,20 @@ class PopUpModel extends Component {
                             {this.state.isViewIdea === "true" ? <Col style={{ paddingRight: '0px' }} className="column-left-view-idea">
                                 <Col style={{ paddingLeft: '20px' }} className="column-left-top">
                                     <Row>
-                                        <label className="timeline-header">Idea Subject</label>
-                                        <p>{this.state.ideaSubject}</p>
+                                        <label className="timeline-header">Idea Type</label>
+                                        <p>{categoryName}</p>
                                     </Row>
                                     <Row>
                                         <label className="timeline-header">Idea Category</label>
-                                        <p>{this.state.subjectCategoryName}</p>
+                                        <p>{subcategoryName}</p>
                                     </Row>
                                     <Row>
                                         <label className="timeline-header">Idea Details</label>
-                                        <p>{ReactHtmlParser(this.state.ideaDetails)}</p>
+                                        <p>{ReactHtmlParser(ideaDescription)}</p>
                                     </Row>
                                 </Col>
                                 <Row className="column-left-bottom">
-                                    {this.state.isLike ?
+                                    {likeCount ?
                                         <Row className="like-container">
                                             <GestureIcon className="like-hands"
                                                 onClick={() => this.onLikeIconClicked(this.state.ideaId)} />
@@ -418,7 +408,7 @@ class PopUpModel extends Component {
                                         </Row>}
 
                                     <Row style={{ marginRight: '10px', position: 'relative' }}>
-                                        {this.state.likeIdeaDetailList.map((data, index) => (
+                                        {likeIdeaDetailList && likeIdeaDetailList.map((data, index) => (
                                             <>
                                                 {index < 8 ? <Col className="imageIcon">
                                                     <Avatar style={{ backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }} size={35}>
@@ -426,7 +416,7 @@ class PopUpModel extends Component {
                                                     </Avatar>
                                                 </Col> : index === 8 ? <Col className="imageIcon">
                                                     <Avatar style={{ backgroundColor: '#7fa2c4' }} size={35}>
-                                                        {`+${this.state.likeIdeaDetailList.length - 8}`}
+                                                        {`+${likeIdeaDetailList.length - 8}`}
                                                     </Avatar>
                                                 </Col> : null}
                                             </>
@@ -464,10 +454,10 @@ class PopUpModel extends Component {
                                     <Row>
                                         <label style={{ marginBottom: '25px' }} className="timeline-header">Timeline</label>
                                         <Timeline>
-                                            {this.state.ideaStatusHistories.map((timeline) => (
+                                            {ideaStatusHistories && ideaStatusHistories.map((timeline) => (
                                                 <Timeline.Item>
                                                     <Col>
-                                                        <p>{timeline.creationTime}</p>
+                                                        <p>{getFormatttedDate(timeline.creationTime)}</p>
                                                         <Row>
                                                             {timeline.ideaStatus === 'Approved' ?
                                                                 <Tag className="display-status-tag" color="#0C5CC9" >Approved</Tag> :

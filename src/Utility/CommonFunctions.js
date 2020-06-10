@@ -1,5 +1,6 @@
 import { getToken } from "../components/Auth/Auth";
-import { TOP_CONSTRIBUTORS, GET_MYIDEAS_DETAIL, RECENTLY_SUBMITTED_IDEAS } from '../Config/Constants'
+import { TOP_CONSTRIBUTORS, GET_MYIDEAS_DETAIL, 
+    RECENTLY_SUBMITTED_IDEAS, ALL_IDEAS } from '../Config/Constants'
 
 const months = [
     'Jan',
@@ -57,6 +58,18 @@ export const addNewProperty = (newResult, actionname) => {
                 element.submittedOn = element.submissionDate ? getFormatttedDate(element.submissionDate) : "-"
                 element.ideaCategory = element.categoryName ? element.categoryName : "-"
                 element.ideaDescription = element.ideaDescription ? element.ideaDescription : "-"
+            });
+            return newResult;
+
+            case ALL_IDEAS:
+            newResult.forEach((element, index) => {
+                element.key= element.id
+                element.index= index
+                element.ideaSubject= element.title ? element.title : "- "
+                element.ideaType= element.categoryName ? element.categoryName : "-"
+                element.submittedBy= element.subcategoryName ? element.subcategoryName : "-"
+                element.submittedOn= element.submissionDate ? getFormatttedDate(element.submissionDate) : "-"
+                element.ideaDescription= element.ideaDescription ? element.ideaDescription :"-"
             });
             return newResult;
 

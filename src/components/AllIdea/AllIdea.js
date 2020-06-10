@@ -9,6 +9,8 @@ import {getIdeaDetailsById } from '../../services/AppService';
 
 import PopUpModel from '../PopUpModel/PopUpModel';
 import { getToken } from '../Auth/Auth';
+import { ALL_IDEAS } from '../../Config/Constants';
+import { addNewProperty } from '../../Utility/CommonFunctions';
 export class AllIdea extends Component {
 
     constructor(props) {
@@ -19,6 +21,7 @@ export class AllIdea extends Component {
             data: [
             ],
             selectedRow : [],
+            ideaId : '',
             columns: [
                 {
                     title: 'Idea Subject',
@@ -67,50 +70,19 @@ export class AllIdea extends Component {
             .then(response => {
                 console.log('getAllIdeaDetails', response)
                 if (response.data.message === 'success') {
-
-                    this.setItemItem(response.data.result);
+                    const newArr = addNewProperty(response.data.result, ALL_IDEAS);
+                    this.setState({ data: newArr });
                 }
             })
             .catch(error => {
             });
-    }
-    setItemItem = (result) => {
-        let newArr = result.map((val, index) => {
-            return {
-                key: val.id,
-                index: index,
-                ideaSubject: val.title ? val.title : "- ",
-                ideaType: val.categoryName ? val.categoryName : "-",
-                submittedBy: val.subcategoryName ? val.subcategoryName : "-",
-                submittedOn: val.submissionDate ? val.submissionDate : "-",
-                ideaDescription : val.ideaDescription ? val.ideaDescription :"-"
-
-            };
-        })
-        this.setState({ data: newArr });
-
-    }
+    }    
 
     onSelectedRowAction = (record, rowIndex) => {
-        if(record) {
-            this.getAllIdeaDetailsById(record.key)
+        if (record) {
+            this.setState({ ideaId: record.key, showModal: true, })
         }
     }
-
-    getAllIdeaDetailsById(ideaId) {
-                if(ideaId){
-                    getIdeaDetailsById(ideaId)
-                    .then(response => {
-                        console.log('getAllIdeaDetails', response)
-                        if (response.data.message === 'success') {
-                            this.setState({selectedRow : response.data.result,showModal : true})
-                        }
-                    })
-                    .catch(error => {
-                    });
-                }
-        }
-
       buttonActionHandler = (event) => {
         this.setState(prevstate => ({
           ...prevstate,
@@ -142,9 +114,9 @@ export class AllIdea extends Component {
             {this.state.showModal ? <PopUpModel 
              onOk={this.buttonActionHandler}
              onCancel={this.buttonActionHandler}
-             selectedRow ={this.state.selectedRow}  
              isAddEditIdea="false"
-             isViewIdea="true"      
+             isViewIdea="true"
+             ideaId ={this.state.ideaId}      
             /> : null}
              
             </div>

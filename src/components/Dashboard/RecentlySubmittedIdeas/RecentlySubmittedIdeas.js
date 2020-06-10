@@ -5,7 +5,6 @@ import { getToken } from '../../Auth/Auth';
 import { Link } from 'react-router-dom';
 import Axios from '../../Axios/Axios';
 import PopUpModel from '../../PopUpModel/PopUpModel'
-import { getIdeaDetailsById } from '../../../services/AppService';
 import { addNewProperty } from '../../../Utility/CommonFunctions';
 import { RECENTLY_SUBMITTED_IDEAS } from '../../../Config/Constants';
 
@@ -20,6 +19,7 @@ class RecentlySubmittedIdeas extends Component {
             cardName: 'Recently Submitted Ideas',
             showViewAll: false,
             selectedRow: [],
+            ideaId : '',
             columns: [
                 {
                     title: 'Idea Subject',
@@ -80,21 +80,7 @@ class RecentlySubmittedIdeas extends Component {
 
     onSelectedRowAction = (record, rowIndex) => {
         if (record) {
-            this.getAllIdeaDetailsById(record.key)
-        }
-    }
-
-    getAllIdeaDetailsById(ideaId) {
-        if (ideaId) {
-            getIdeaDetailsById(ideaId)
-                .then(response => {
-                    console.log('getAllIdeaDetails', response)
-                    if (response.data.message === 'success') {
-                        this.setState({ selectedRow: response.data.result, showModal: true })
-                    }
-                })
-                .catch(error => {
-                });
+            this.setState({ ideaId: record.key, showModal: true, })
         }
     }
 
@@ -126,9 +112,9 @@ class RecentlySubmittedIdeas extends Component {
                 {this.state.showModal ? <PopUpModel
                     onOk={this.buttonActionHandler}
                     onCancel={this.buttonActionHandler}
-                    selectedRow={this.state.selectedRow}
                     isAddEditIdea="false"
                     isViewIdea="true"
+                    ideaId ={this.state.ideaId}
                 /> : null}
             </Col>
         );
