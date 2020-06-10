@@ -3,8 +3,49 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    
     h2 {
         margin-top: 0.5em;
         font-size: 24px;
     }
+
+    .Categories,.UserText{
+
+        display: inline;
+    
+    }
+
+    .textBody{
+
+        padding: 10px 10px 10px 10px;
+
+    }
 }
+
+.Categories{
+
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.UserText{
+
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.activeTxt
+{
+
+
+}
+
+.inactiveTxt
+{
+
+}
+
+
+
+
+

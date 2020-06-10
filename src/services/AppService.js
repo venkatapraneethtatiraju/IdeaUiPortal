@@ -6,6 +6,9 @@ import {
     IDEAS_URL,
     GET_MYIDEADS_URL
 } from '../Config/ServiceUrl';
+import {ALLRECENTREQUEST_URL,MYIDEA_URL,ALLUSERS_URL,CATEGORIES_URL,SEARCH_USERSBY_NAME_URL,
+    SEARCH_USERSBY_EMAILID_URL,
+    RECENTREQUEST_URL } from '../Config/ServiceUrl';
 import { getHeaders } from '../Utility/CommonFunctions';
 
 //Service call to get top trending ideas to display in dashboard
@@ -56,4 +59,52 @@ export const saveAndSubmitIdeaById = (requestParam, ideaId) => {
     const headers = getHeaders();
     return Axios.put(`${IDEAS_URL}${ideaId}`, JSON.stringify(requestParam), { headers });
 }
+
+//Service call to GET recent request to display in dashboard
+export const getRecentRequest = () => {
+    const headers = getHeaders();
+    return Axios.get(`${RECENTREQUEST_URL}`, { headers });
+}
+
+//Service call to GET my idea to display in dashboard
+export const getMyIdeaRequest = () => {
+    const headers = getHeaders();
+    return Axios.get(`${MYIDEA_URL}`, { headers });
+}
+
+//Service call to GET my idea to display in dashboard
+export const getAllRecentRequest = () => {
+    const headers = getHeaders();
+    return Axios.get(`${ALLRECENTREQUEST_URL}`, { headers });
+}
+
+//Service call to get all users i.e registered
+
+export const getAllRegisteredUsers = () => {
+    const headers = getHeaders();
+    return Axios.get(`${ALLUSERS_URL}page=0&size=15`, { headers });
+}
+
+//Service call to get all Categories
+
+export const getAllCategories = () => {
+    const headers = getHeaders();
+    return Axios.get(`${CATEGORIES_URL}`, { headers });
+}
+
+
+//Service call to get all user by name search
+
+export const getUsersByName = (name) => {
+    const headers = getHeaders();
+    return Axios.get(`${SEARCH_USERSBY_NAME_URL}${name}`, { headers });
+}
+
+//Service call to get all user by emailId search
+
+export const getUsersByEmailID = (emailID) => {
+    const headers = getHeaders();
+    return Axios.get(`${SEARCH_USERSBY_EMAILID_URL}${emailID}`, { headers });
+}
+
 
