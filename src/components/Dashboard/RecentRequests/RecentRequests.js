@@ -1,36 +1,36 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import "./RecentRequests.scss";
-import { Table, Col, Button } from 'antd';
+import { Table, Col } from 'antd';
 import {
     SUBMITTED_ON,
     IDEA_SUBJECT,
     SUBMITTED_BY,
-    STATUS
-    
+    STATUS,
+    SUCCESS,
+    RECENT_REQUEST
 } from '../../../Config/Constants';
-import { Link } from 'react-router-dom';
 import { getRecentRequest } from '../../../services/AppService';
-import {ReactComponent as BackLogo} from '../../../images/return.svg';
+import { addNewProperty } from '../../../Utility/CommonFunctions';
+import StatusTag from '../../StatusTag/StatusTag';
+import PopUpModel from '../../PopUpModel/PopUpModel';
 
-
-
-
-
-
-class RecentRequests extends Component {
-
+class RecentRequests extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             pagination: false,
+            isible: false,
+            showModal: false,
+            btnColor: '#e4500e',
+            ideaId: '',
             recentRequestdata: [],
+            showViewAll: false,
             columns: [
                 {
                     title: IDEA_SUBJECT,
                     dataIndex: 'title',
                     ellipsis: true,
-                    width: '35%',
-            
+                    width: '50%',
                 },
                 {
                     title: SUBMITTED_BY,
@@ -42,76 +42,79 @@ class RecentRequests extends Component {
                     title: SUBMITTED_ON,
                     dataIndex: 'submittedOn',
                     ellipsis: true,
-                    width: '20%',
+                    width: '15%',
                 },
                 {
                     title: STATUS,
                     dataIndex: 'status',
                     ellipsis: true,
                     width: '15%',
-                    render: (status, rowData) => <Button onClick={(e) => this.handleStatus(rowData)} className={status} >  {status}</Button>
+                    render: (ideaStatus) => <StatusTag ideaStatus={ideaStatus} statusWidth="96px" statusCursor="pointer" />
                 }
-                
             ],
-           
         }
     }
 
-     //Called when component is mount
-     componentDidMount() {
+    //Called when component is mount
+    componentDidMount() {
         this.getRecentRequestRecord();
     }
 
-      //To get the top trending ideas
-      getRecentRequestRecord = () => {
+    //To get the top trending ideas
+    getRecentRequestRecord = () => {
         getRecentRequest()
             .then(response => {
-                const RequestData = this.setRecentItem(response.data.result);
-                this.setState({ recentRequestdata:RequestData});
-                console.log(this.state.recentRequestdata,"mani")
+                if (response.data.message === SUCCESS) {
+                    const newArr = addNewProperty(response.data.result.content, RECENT_REQUEST);
+                    this.setState({ recentRequestdata: newArr, showViewAll: true });
+                }
             })
             .catch(error => {
                 console.log(error);
             })
     }
 
-    setRecentItem = (result) => {
-        
-        let newArr = result.content.map((val, index) => {
-        return {
-          key: val.id,
-          title: val.title ? val.title : "- ",
-          submittedBy:val.submittedBy? val.submittedBy:"-",
-          submittedOn: val.submissionDate? val.submissionDate:"-",
-          status: val.ideaStatus ? val.ideaStatus : "-"
-        };
-      })
-        return newArr;
-    };
-  
+    onRowClick = (ideaId) => {
+        if (ideaId) {
+            this.setState({ ideaId: ideaId, visible: true, showModal: true })
+        }
+    }
 
+    buttonActionHandler = (event) => {
+        this.setState(prevstate => ({
+            ...prevstate,
+            showModal: !prevstate.showModal
+        }))
+    }
 
     render() {
-
-        const recentReuestData= this.state.recentRequestdata.filter((el,index)=> index<5);
-                               
-
+        const recentReuestData = this.state.recentRequestdata.filter((el, index) => index < 5);
         return (
-            <>
-                <Col   className="recent-request-container " >
-                    <h2>Recent Requests</h2>
-                    <Table
+            <Col className="recent-request-container " >
+                <h2>Recent Requests</h2>
+                <Table
                     {...this.state}
                     columns={this.state.columns}
                     dataSource={recentReuestData}
-                    >
+                    rowKey="id"
+                    onRow={(record) => ({
+                        onClick: () => this.onRowClick(record.id)
+                    }
+                    )}>
                 </Table>
-            
-                <div className="viewDatas"  onClick={(e )=>this.props.onClick("request")}
-                visible={this.state.showViewAll}>View all requests</div>  
-                </Col>
-              
-            </>
+                <div className="viewDatas" onClick={(e) => this.props.onClick("request")}
+                    visible={this.state.showViewAll}>View all requests</div>
+                {this.state.showModal ? <PopUpModel
+                    visible={this.state.visible}
+                    onCancel={this.buttonActionHandler}
+                    onOk={this.buttonActionHandler}
+                    btnColor={this.state.btnColor}
+                    isAddEditIdea="false"
+                    isViewIdea="true"
+                    ideaId={this.state.ideaId}
+                    updateLikes={this.updateLikes}
+                /> : null}
+            </Col>
         )
     }
 }

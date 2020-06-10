@@ -31,9 +31,10 @@ export const RECENTLY_SUBMITTED_IDEAS = 'Recently Submitted Ideas';
 export const ALL_IDEAS = 'All Ideas';
 export const DEFAULT_PAGE_SIZE = 10;
 export const STATUS = 'Status';
-export const USERS ="Users";
-export const XEBIAOFFICE ="Xebia Office";
-export const ROLE ="Role";
-export const JOINEDON ="Joined On";
+export const USERS = "Users";
+export const XEBIAOFFICE = "Xebia Office";
+export const ROLE = "Role";
+export const JOINEDON = "Joined On";
+export const RECENT_REQUEST = "Recent Request";
 
 

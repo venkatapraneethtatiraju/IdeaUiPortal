@@ -1,22 +1,17 @@
-import React, { PureComponent, useState } from 'react';
-
+import React, { PureComponent } from 'react';
 import './Login.scss';
 import { Form, Input, Button } from 'antd';
-//import XebiaLogo from './image/Logo.svg';
-import XebiaLogo from '../../images/Logo2.svg';
+import XebiaLogo from '../../images/Logo.svg';
 import axios from 'axios';
 import { login } from '../Auth/Auth';
 import HomePage from '../HomePage/HomePage';
-import ProgressBar from '../ProgressBar/ProgressBar'
-import { red } from '@material-ui/core/colors';
+import ProgressBar from '../ProgressBar/ProgressBar';
 import Alertbox from '../Alert/Alert';
 import { isAuthenticated } from '../Auth/Auth';
 
 class Login extends PureComponent {
-
   constructor(props) {
     super(props)
-
     this.state = {
       buttonStatus: "emailCheck",
       messageStatus: "",
@@ -42,29 +37,19 @@ class Login extends PureComponent {
     }
   }
 
-
-
-  onButtonClicked1 = () => {
-
+  onButtonClicked = () => {
     this.setState({ isLogin: true, buttonEnabled: true })
-
   }
 
-
-
-  onButtonClicked = () => {
-
+  onButtonClicked1 = () => {
     if (this.state.otpSendEnabled) {
       this.getOTP();
     }
 
     if (this.state.otpSuccess) {
-
       this.getOTPVerify(this.state.otpText);
-
     }
     else {
-
       this.setState({
         email: "",
         loginBtnName: "Login",
@@ -91,7 +76,6 @@ class Login extends PureComponent {
     if (email)
       axios.post(`https://cors-anywhere.herokuapp.com/http://iportal.herokuapp.com/innovation-portal/api/v1/otp`, { email })
         .then(res => {
-          const emailStatus = res.data;
           this.setAlertName = "OTP send successfully!";
           this.setState({ showAlert: true, alertText: 'OTP send successfully!', otpSuccess: true, emailStatus: true });
           this.AlertShow("OTP send successfully!");
@@ -105,7 +89,6 @@ class Login extends PureComponent {
   getOTPVerify(otp) {
     if (otp) {
       const otpAPI = 'https://cors-anywhere.herokuapp.com/http://iportal.herokuapp.com/innovation-portal/api/v1/otp/verify';
-
       axios.get(otpAPI,
         {
           params: {
@@ -118,13 +101,10 @@ class Login extends PureComponent {
             this.setState({ isLogin: true })
             login(response.data.token);
           }
-
-
         })
         .catch(error => {
           console.log(error)
           this.setState({ email: "", isLogin: false });
-
         });
     }
     else {
@@ -132,51 +112,33 @@ class Login extends PureComponent {
     }
   }
 
-
-
-
-
   handleChange = (evt) => {
-
-    this.setState(
-      { email: evt.target.value });
-
+    this.setState({ email: evt.target.value });
     if (this.state.emailInputView) {
       const val = evt.target.value;
       console.log(val);
       clearTimeout(this.typingTimer);
-
       let ve = this.validateEmail(val);
       if (ve) {
         this.typingTimer = setTimeout(() => {
           this.setState({ emailRegister: true })
         }, 0);
-
         //api call to check email register
-
         this.emailRegisteredCheck(val);
-
         this.setState({ emailIDText: val, otpSendEnabled: true, emailRegister: false, buttonEnabled: false })
-
       }
       else {
         this.setState({ otpSendEnabled: false, buttonEnabled: true, emailRegister: false, buttonStatus: "emailCheck", loginInfo: null })
       }
     }
     else {
-
       const valOTP = evt.target.value;
       console.log(valOTP, "otp");
       // check otp 
-
       if (valOTP) {
-
         this.setState({ otpText: valOTP });
-
       }
-
     }
-
   }
 
   validateEmail = (email) => {
@@ -192,7 +154,6 @@ class Login extends PureComponent {
   }
 
   emailRegisteredCheck = (email) => {
-
     axios.get('http://iportal.herokuapp.com/innovation-portal/api/v1/token/verify?emailId=' + email)
       .then(response => {
         console.log(response.data.result);
@@ -220,35 +181,24 @@ class Login extends PureComponent {
       });
   }
 
-
   componentWillUnmount() {
     clearTimeout(this.typingTimer);
   }
 
   componentDidUpdate(prevState) {
-
-    if (this.prevState != this.state) {
-
+    if (this.prevState !== this.state) {
       console.log(prevState);
-
     }
-
   }
 
   resendTextOnMouseover(e) {
-
     console.log(e);
     if (e === "In") {
-
       this.setState({ resendTextStyle: "Didntreceivetext-style-2" });
-
     }
     else {
-
       this.setState({ resendTextStyle: "Didntreceivetext-style-1" });
-
     }
-
   }
 
   resendOTPClick() {
@@ -268,7 +218,6 @@ class Login extends PureComponent {
     }
     const alertName = "OTP send successfully!";
     return (
-
       <div className="App">
         {this.state.showAlert ?
           <Alertbox alertName={alertName} alertText={this.state.alertText} /> : null
@@ -305,13 +254,11 @@ class Login extends PureComponent {
               }
             </Form>
           </div>
-
         </div>
       </div>
-
     );
-
   }
 }
+
 export default Login;
 

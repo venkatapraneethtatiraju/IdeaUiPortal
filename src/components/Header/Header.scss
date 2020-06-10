@@ -1,51 +1,65 @@
 .app-header {
-    padding: 0px 15px;
+  padding: 0px 15px;
+  display: flex;
+  background-color: #6a205f;
+  // height: 35px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  .left-nav-content {
     display: flex;
-    background-color: #6a205f;
-    // height: 35px;
-    justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
-    .left-nav-content{
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        flex: 1;
-        .header-nav-titles {
-            color: white;
-            margin-left: 5.4px;
-            font-size: 18px;
-            font-weight: 500;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: 1.11;
-            letter-spacing: normal;
-            display: inline-block;
-            vertical-align: middle;
-        }
-        .header-logos {
-            min-width: 112px;
-            max-height: 67px;
-        }
-        .nav-logos {
-            height: 24.2px;
-            width: 24.2px;
-        }
-        .nav-list-items {
-            padding: 21px;
-            cursor: pointer;
-            &.active {
-                background-color: #53154a;
-            }
-        }
+    align-items: center;
+    flex: 1;
+    .header-nav-titles {
+      color: white;
+      margin-left: 5.4px;
+      font-size: 18px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.11;
+      letter-spacing: normal;
+      display: inline-block;
+      vertical-align: middle;
     }
-    .right-nav-content {
-        .nav-logos {
-            height: 24.2px;
-            width: 24.2px;
-        }
-        .ant-avatar {
-            margin: 0px 20px;
-        }
+    .header-logos {
+      min-width: 112px;
+      max-height: 67px;
+      path {
+        fill: #ffffff;
+      }
     }
+    .nav-logos {
+      height: 24.2px;
+      width: 24.2px;
+    }
+    .nav-list-items {
+      padding: 21px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      &.active {
+        background-color: #53154a;
+      }
+    }
+  }
+  .right-nav-content {
+    .right-inner-nav {
+      display: flex;
+      align-items: center;
+      width: 97px;
+      height: 50px;
+      .nav-logos {
+        height: 24.2px;
+        width: 24.2px;
+        path {
+          fill: #ffffff;
+        }
+      }
+    }
+    .ant-avatar {
+      margin: 0px 20px;
+    }
+  }
 }

@@ -1,6 +1,11 @@
 import { getToken } from "../components/Auth/Auth";
-import { TOP_CONSTRIBUTORS, GET_MYIDEAS_DETAIL, 
-    RECENTLY_SUBMITTED_IDEAS, ALL_IDEAS } from '../Config/Constants'
+import {
+    TOP_CONSTRIBUTORS,
+    GET_MYIDEAS_DETAIL,
+    RECENTLY_SUBMITTED_IDEAS,
+    ALL_IDEAS,
+    RECENT_REQUEST
+} from '../Config/Constants'
 
 const months = [
     'Jan',
@@ -61,15 +66,25 @@ export const addNewProperty = (newResult, actionname) => {
             });
             return newResult;
 
-            case ALL_IDEAS:
+        case ALL_IDEAS:
             newResult.forEach((element, index) => {
-                element.key= element.id
-                element.index= index
-                element.ideaSubject= element.title ? element.title : "- "
-                element.ideaType= element.categoryName ? element.categoryName : "-"
-                element.submittedBy= element.subcategoryName ? element.subcategoryName : "-"
-                element.submittedOn= element.submissionDate ? getFormatttedDate(element.submissionDate) : "-"
-                element.ideaDescription= element.ideaDescription ? element.ideaDescription :"-"
+                element.key = element.id
+                element.index = index
+                element.ideaSubject = element.title ? element.title : "- "
+                element.ideaType = element.categoryName ? element.categoryName : "-"
+                element.submittedBy = element.subcategoryName ? element.subcategoryName : "-"
+                element.submittedOn = element.submissionDate ? getFormatttedDate(element.submissionDate) : "-"
+                element.ideaDescription = element.ideaDescription ? element.ideaDescription : "-"
+            });
+            return newResult;
+
+        case RECENT_REQUEST:
+            newResult.forEach((element, index) => {
+                element.key = element.id
+                element.title = element.title ? element.title : "- "
+                element.submittedBy = element.submittedBy ? element.submittedBy : "-"
+                element.submittedOn = element.submissionDate ? getFormatttedDate(element.submissionDate) : "-"
+                element.status = element.ideaStatus ? element.ideaStatus : "-"
             });
             return newResult;
 

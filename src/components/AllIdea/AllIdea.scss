@@ -1,143 +1,135 @@
 .allideas-container {
-   
-    .ant-table-content {
-        border-radius: 12px;
-        box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
-        background-color: #ffffff;
-        overflow: hidden;
-        min-height: 291px;
-        min-width: 700px;
-      }
-      .ant-table-container {
-        border-radius: 12px;
-        box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
-        background-color: #ffffff;
-        overflow: hidden;
-       // height: 291px;
-       
-      }
-      .ant-table-thead {
-        background-color: #ffffff;
-      }
-      .ant-table {
-        border-radius: 12px;
-        box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
-        background-color: #ffffff;
-        overflow: hidden;
-        text-align: left;
-            position: relative;
-            
-            margin: 0 auto;
-            border-collapse: collapse;
-            border-style: hidden;
-      //  height: 291px;
-      }
-      .ant-table {
-        .ant-table-thead {
-          background-color: white;
-          tr {
-            th {
-              background: white;
-              border-bottom: 2px solid #eeeeee;              
-              font-size: 14px;
-              font-weight: 500;
-              font-stretch: normal;
-              font-style: normal;
-              line-height: 1.43;
-              letter-spacing: normal;
-              color: #5a5a5a;
-              
-            }
-          }
+  .ant-table-content {
+    border-radius: 12px;
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    overflow: hidden;
+    min-height: 291px;
+    min-width: 700px;
+  }
+  .ant-table-container {
+    border-radius: 12px;
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    overflow: hidden;
+    // height: 291px;
+  }
+  .ant-table-thead {
+    background-color: #ffffff;
+  }
+  .ant-table {
+    border-radius: 12px;
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    overflow: hidden;
+    text-align: left;
+    position: relative;
+
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-style: hidden;
+    //  height: 291px;
+  }
+  .ant-table {
+    .ant-table-thead {
+      background-color: white;
+      tr {
+        th {
+          background: white;
+          border-bottom: 2px solid #eeeeee;
+          font-size: 14px;
+          font-weight: 500;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.43;
+          letter-spacing: normal;
+          color: #5a5a5a;
         }
-    
-        .ant-table-tbody {
-          tr.ant-table-row {
-            td {
-              border-bottom: none;              
-              font-size: 14px;
-              font-weight: normal;
-              font-stretch: normal;
-              font-style: normal;
-              letter-spacing: normal;
-              color: #5a5a5a;
-              padding: 5px 0 5px 20px;
-              cursor: pointer;
-            }
-          }
-          tr.ant-table-row:hover {
-            td {
-              background: #cccccc26;
-              color: #333333;
-            }
-          }
-        }
+      }
     }
+
+    .ant-table-tbody {
+      tr.ant-table-row {
+        td {
+          border-bottom: none;
+          font-size: 14px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          letter-spacing: normal;
+          color: #5a5a5a;
+          padding: 5px 0 5px 20px;
+          cursor: pointer;
+        }
+      }
+      tr.ant-table-row:hover {
+        td {
+          background: #cccccc26;
+          color: #333333;
+        }
+      }
+      .ant-table-placeholder {
+        .ant-table-cell {
+          border-bottom: none;
+          height: 230px;
+        }
+      }
+    }
+  }
 }
 
 .backtoDash {
-    text-decoration: none;
-    background-color: transparent;
-    outline: none;
-    position: fixed;
-    cursor: pointer !important;
-    // top: 140px;
-    // left: 120px;
-    width: 34px;
-    height: 22px;    
-    font-size: 16px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.38;
-    letter-spacing: normal;
-    text-align: center;
-    color: #212121;
-    margin-left: 40px;
-    margin-top: 3px;
-  
-
+  text-decoration: none;
+  background-color: transparent;
+  outline: none;
+  position: fixed;
+  cursor: pointer !important;
+  width: 34px;
+  height: 22px;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.38;
+  letter-spacing: normal;
+  text-align: center;
+  color: #212121;
+  margin-left: 40px;
+  margin-top: 3px;
 }
 
-// a.label {
-//     cursor: pointer;
-// }
+.backtoDash:hover {
+  color: #212121;
+  cursor: pointer;
+}
 
-.backtoDash:hover { color: #212121;
-   // text-decoration: none; 
-    cursor: pointer;
-    }
- 
 .backlogos {
   width: 26px;
   height: 26px;
   opacity: 0.38;
   background-color: currentColor;
   border-radius: 50%;
-    
-  }   
-  
-  .backlogoDesign{
-    width: 26px;
+}
+
+.backlogoDesign {
+  width: 26px;
   height: 26px;
   opacity: 0.38;
   background-color: #000000;
   border-radius: 50%;
   fill: white;
+}
 
- }
-
- .back-interface {
+.back-interface {
   object-fit: contain;
   margin-right: 7px;
-  
   cursor: pointer;
 }
 
-.back-interface:hover{
+.back-interface:hover {
   cursor: pointer;
-} 
- 
+}
+
 .back-tools {
   width: 26px;
   height: 26px;
@@ -146,50 +138,25 @@
   background-color: #000000;
   position: absolute;
   border-radius: 50%;
-  svg{
+  svg {
     width: 6.1px;
     height: 5.6px;
   }
 }
+
 .back-tools path {
   cursor: pointer;
   fill: #ffffff;
 }
- .block  { 
-//    display: inline-block; text-align: right; 
 
-// height: 20px;
-
-position: absolute;
-//     text-align: right;
-//     height: 20px;
-    /* padding-top: 23px; */
-    // left: 88px;
-    // margin-top: 20px;
-    // margin-left: 27px;
-    // padding-left: -73px;
-
-    // cursor: pointer;
-        /* position: absolute; */
-        // text-align: right;
-        // height: 20px;
-        /* padding-top: 23px; */
-        /* left: 88px; */
-        // margin-top: 20px;
-        // margin-left: 6%;
-
-
-        position: absolute;
-    /* padding-top: 23px; */
-    cursor: pointer;
-    /* position: absolute; */
-    text-align: right;
-    height: 20px;
-    /* padding-top: 23px; */
-    /* left: 88px; */
-    margin-top: 20px;
-    margin-left: 6%;
-    top: 126px;
-    left: 30px;
-        
-  }
+.block {
+  position: absolute;
+  position: absolute;
+  cursor: pointer;
+  text-align: right;
+  height: 20px;
+  margin-top: 20px;
+  margin-left: 6%;
+  top: 126px;
+  left: 30px;
+}

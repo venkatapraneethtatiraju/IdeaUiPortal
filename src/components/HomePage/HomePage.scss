@@ -1,5 +1,16 @@
 .home-page {
-    .sub-header-wrapper{
-        background: #ffffff;
-    }
+  .sub-header-wrapper {
+    background: #ffffff;
+  }
+}
+
+.header-icon {
+  height: 29.2px;
+  width: 24.2px;
+  path {
+    fill: #ffffff;
+  }
+  polygon {
+    fill: #ffffff;
+  }
 }

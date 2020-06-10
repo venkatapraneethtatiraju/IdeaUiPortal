@@ -165,16 +165,16 @@ div.ant-modal-content {
         margin-right: 20px;
         position: relative;
         width: 30px;
+        display: flex;
         svg {
           width: 30px;
         }
       }
       .gesture {
-        top: 50%;
-        left: 50%;
         height: 16.3px;
         object-fit: contain;
         cursor: pointer;
+        transform: translateY(27%);
         path {
           fill: #6a205f;
         }
