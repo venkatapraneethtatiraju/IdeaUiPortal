@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import Axios from '../../Axios/Axios';
 import PopUpModel from '../../PopUpModel/PopUpModel'
 import { getIdeaDetailsById } from '../../../services/AppService';
+import { addNewProperty } from '../../../Utility/CommonFunctions';
+import { RECENTLY_SUBMITTED_IDEAS } from '../../../Config/Constants';
 
 class RecentlySubmittedIdeas extends Component {
 
@@ -61,27 +63,12 @@ class RecentlySubmittedIdeas extends Component {
             .then(response => {
                 console.log('getRecentIdeaDetails', response)
                 if (response.data.message === 'success') {
-                    this.setItemItem(response.data.result);
+                    const newArr = addNewProperty(response.data.result, RECENTLY_SUBMITTED_IDEAS);
+                    this.setState({ ideaData: newArr, showViewAll: true });
                 }
             })
             .catch(error => {
             });
-    }
-
-    setItemItem = (result) => {
-        let newArr = result.map((val, index) => {
-            return {
-                key: val.id,
-                index: index,
-                ideaSubject: val.title ? val.title : "- ",
-                ideaType: val.categoryName ? val.categoryName : "-",
-                submittedBy: val.submittedBy ? val.submittedBy : "-",
-                submittedOn: val.submissionDate ? val.submissionDate : "-",
-                ideaCategory: val.categoryName ? val.categoryName : "-",
-                ideaDescription: val.ideaDescription ? val.ideaDescription : "-"
-            };
-        })
-        this.setState({ ideaData: newArr, showViewAll: true });
     }
 
     buttonActionHandler = (event) => {

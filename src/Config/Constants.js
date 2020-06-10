@@ -27,6 +27,7 @@ export const SUCCESS = 'success';
 export const GET_MYIDEAS_DETAIL = 'Get My Ideas';
 export const ACTIVE = 'Active';
 export const DEACTIVATED = 'Deactivated';
+export const RECENTLY_SUBMITTED_IDEAS = 'Recently Submitted Ideas';
 
 export const DEFAULT_PAGE_SIZE = 10;
 

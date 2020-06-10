@@ -1,5 +1,20 @@
 import { getToken } from "../components/Auth/Auth";
-import { TOP_CONSTRIBUTORS, GET_MYIDEAS_DETAIL } from '../Config/Constants'
+import { TOP_CONSTRIBUTORS, GET_MYIDEAS_DETAIL, RECENTLY_SUBMITTED_IDEAS } from '../Config/Constants'
+
+const months = [
+    'Jan',
+    'Feb',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+]
 
 //Get headers for request
 export const getHeaders = () => {
@@ -26,9 +41,22 @@ export const addNewProperty = (newResult, actionname) => {
                 element.ideaType = element.categoryName ? element.categoryName : "-"
                 element.ideaCategory = element.subcategoryName ? element.subcategoryName : "-"
                 element.ideaDescription = element.ideaDescription ? element.ideaDescription : "-"
-                element.submissionDate = element.submissionDate ? element.submissionDate : "-"
+                element.submissionDate = element.submissionDate ? getFormatttedDate(element.submissionDate) : "-"
                 element.status = element.ideaStatus ? element.ideaStatus : "-"
                 element.attachment = ''
+            });
+            return newResult;
+
+        case RECENTLY_SUBMITTED_IDEAS:
+            newResult.forEach((element, index) => {
+                element.key = element.id
+                element.index = index
+                element.ideaSubject = element.title ? element.title : "- "
+                element.ideaType = element.categoryName ? element.categoryName : "-"
+                element.submittedBy = element.submittedBy ? element.submittedBy : "-"
+                element.submittedOn = element.submissionDate ? getFormatttedDate(element.submissionDate) : "-"
+                element.ideaCategory = element.categoryName ? element.categoryName : "-"
+                element.ideaDescription = element.ideaDescription ? element.ideaDescription : "-"
             });
             return newResult;
 
@@ -73,4 +101,12 @@ export const compareValues = (field, order = 'asc') => {
             (order === 'desc') ? (comparison * -1) : comparison
         );
     };
+}
+//Convert date into "DD MMM, YYYY" format
+export const getFormatttedDate = (dateString) => {
+    const actualDate = new Date(dateString);
+    const year = actualDate.getFullYear();
+    const date = ('0' + actualDate.getDate()).slice(-2);
+    const monthName = months[actualDate.getMonth()];
+    return `${date} ${monthName}, ${year}`
 }
