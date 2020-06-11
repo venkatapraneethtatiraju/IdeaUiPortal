@@ -51,15 +51,14 @@ class PopUpModel extends Component {
             ideaDetailsListView: []
         }
         if (this.props.onEditHandler) {
-            console.log("const...", this.props.onEditHandler.ideaDescription);
+            console.log("const...", this.props.onEditHandler);
             let datas = this.props.onEditHandler;
             this.state.ideaId = datas.key;
             this.state.ideaSubject = datas.ideaSubject;
             this.state.ideaDetails = datas.ideaDescription;
             this.state.ideaType = datas.ideaType === 'TECHNICAL' ? this.state.ideaType = 1 : this.state.ideaType = 2;
             this.state.ideaCategoryValue = datas.ideaCategory;
-            // this.state.isAddEditIdea = this.props.isAddEditIdea;
-            // this.state.isViewIdea = this.state.isViewIdea;
+            console.log(this.state.ideaDetails, "this.state.ideaDetails");
         }
         if (this.props.isViewIdea === "true") {
             this.state.selectedId = this.props.selectedId;
@@ -339,18 +338,11 @@ class PopUpModel extends Component {
                                 <br />
                                 <Row>
                                     <label className="text-formatter">Idea Details</label>
-                                    {/* <div className="content-format-container"> */}
-
                                     <Editor name="ideaDetails" value={this.state.ideaDetails}
-                                        onEditChanged={this.onEditChanged} handleChange={this.state.ideaDetails}
+                                        onEditChanged={this.onEditChanged}
                                         ref="ideaDetails" />
-
                                 </Row>
-
                             </Col>
-
-
-
                         </Col> : null}
                         {this.state.isAddEditIdea === "true" ? <Col style={{ paddingRight: '0px' }} className="column-right-idea">
                             <Col className="column-addidea-right">

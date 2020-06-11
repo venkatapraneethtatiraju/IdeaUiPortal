@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
 import "./TopTrendingIdeas.scss"
 import { Col, Table } from 'antd';
-import { getTopTrendingIdeas, getIdeaDetailsById } from '../../../services/AppService';
+import { getTopTrendingIdeas } from '../../../services/AppService';
 import {
     TOP_TRENDING_IDEAS,
     IDEA_SUBJECT,
     SUBMITTED_BY,
-    LIKES,
-    SUCCESS
+    LIKES
 } from '../../../Config/Constants';
 import PopUpModel from '../../PopUpModel/PopUpModel';
 
@@ -107,7 +106,7 @@ export class TopTrendingIdeas extends PureComponent {
                     btnColor={this.state.btnColor}
                     isAddEditIdea="false"
                     isViewIdea="true"
-                    ideaId ={this.state.ideaId}
+                    ideaId={this.state.ideaId}
                     updateLikes={this.updateLikes}
                 /> : null}
             </Col>
