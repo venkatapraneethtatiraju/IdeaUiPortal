@@ -1,31 +1,31 @@
 import React, { Component } from 'react';
-import ReactQuill from 'react-quill'; 
+import ReactQuill from 'react-quill';
 import './Editor.scss';
 import '../../../node_modules/react-quill/dist/quill.snow.css'
 
 
 class Editor extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
-    this.state = { editorHtml: '', theme: 'snow' }
+    this.state = { editorHtml: this.props.value, theme: 'snow' }
     this.handleChange = this.handleChange.bind(this)
   }
-  
-  handleChange (html) {
+
+  handleChange(html) {
     this.setState({ editorHtml: html });
     this.props.onEditChanged(this.state.editorHtml)
   }
 
-  
-  handleThemeChange (newTheme) {
+
+  handleThemeChange(newTheme) {
     if (newTheme === "core") newTheme = null;
     this.setState({ theme: newTheme })
   }
-  
-  render () {
+
+  render() {
     return (
       <div className="app">
-        <ReactQuill 
+        <ReactQuill
           theme={this.state.theme}
           onChange={this.handleChange}
           value={this.state.editorHtml}
@@ -33,9 +33,9 @@ class Editor extends React.Component {
           formats={Editor.formats}
           bounds={'.app'}
           placeholder=''
-         />        
-       </div>
-     )
+        />
+      </div>
+    )
   }
 }
 
@@ -44,9 +44,9 @@ class Editor extends React.Component {
  * See https://quilljs.com/docs/modules/ for complete options
  */
 Editor.modules = {
-  toolbar: [   
+  toolbar: [
     ['bold', 'italic', 'underline'],
-    [{'list': 'ordered'}, {'list': 'bullet'}],    
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
   ],
   clipboard: {
     // toggle to add extra line breaks when pasting HTML:
