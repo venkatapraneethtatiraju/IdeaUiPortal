@@ -16,7 +16,7 @@ import Loader from '../../components/Loader/Loader';
 import DropDown from '../DropDownComponent/DropDownComponent'
 import SearchBox from '.././/SearchBarComponent/SearchBar'
 import {getUserData,getCategoriesData} from './Management/UserColumnAndData';
-
+import  AdminPopUpModel from '../PopUpModel/AdminPopUpModel';
 // User Table Column
 const userColumn = [
   {
@@ -133,6 +133,8 @@ class AllRecentRequest extends Component{
                 isCategoriesSelected:false,
                 selectedStatus:"",
                 isLoading:false,
+                showModal : false,
+                adminRecentData : [],
                 data: [
           
                 ],
@@ -414,8 +416,18 @@ class AllRecentRequest extends Component{
       }
     }
   }
-
-
+  buttonActionHandler = (event) => {
+    this.setState(prevstate => ({
+        ...prevstate,
+        showModal: !prevstate.showModal
+    }))
+}
+onSelectedRowAction = (record) => {
+  debugger;
+  if (record) {
+      this.setState({ adminRecentData: record, showModal: true, })
+  }
+}
   render() {
 
     const tabelData= this.state.data;
@@ -435,13 +447,16 @@ class AllRecentRequest extends Component{
               pagination={{ position: ['topRight'] }}
               columns={this.state.columns}
               dataSource={selectedStatusData}
+              onRow={(record) => ({
+                onClick: () => this.onSelectedRowAction(record)
+            })}
             >
             </Table>
           </Col>
         
         </Row>
-        {this.props.value.subHeaderTextTitle ==="Users" && this.props.title !=='request' ?
         
+        {this.props.title !=="request"?
         <div className="searchUserTypeMainLyout" >
         <SearchBox value={this.props} onChange={(evt)=> this.SearchTextHandle(evt)} />
         </div>
@@ -450,6 +465,14 @@ class AllRecentRequest extends Component{
         <div className="searchMainLyout" >
          <DropDown subHeaderTextTitle={this.props.value.subHeaderTextTitle} placeholder={this.state.dropDownDefaultValue}  title={this.props.title} value={this.state} onSelect={(value)=> this.dropDownHandleChange(value)}  />
         </div>
+
+        {this.state.showModal ? <AdminPopUpModel
+                        onOk={this.buttonActionHandler}
+                        onCancel={this.buttonActionHandler}
+                        isAddEditIdea="false"
+                        isViewIdea="true"
+                        adminRecentData={this.state.adminRecentData}
+                    /> : null}
       </div>
       </div> 
     );

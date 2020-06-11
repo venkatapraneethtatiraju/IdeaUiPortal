@@ -37,6 +37,7 @@
           font-weight: 500;
           font-stretch: normal;
           font-style: normal;
+           cursor: pointer;
         }
       }
     }
@@ -66,6 +67,7 @@
           border: none;
           padding: 0 1rem;
           font-size: 1.1rem;
+          cursor: pointer;
 
           &:last-child {
             border-bottom: 1px solid #eee;
