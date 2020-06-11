@@ -15,13 +15,14 @@ import PopUpModel from '../PopUpModel/PopUpModel'
 import { getToken } from '../Auth/Auth';
 import AlertBox from '../Alert/Alert.js'
 import AllIdea from '../AllIdea/AllIdea';
+import { grey } from '@material-ui/core/colors';
 
 export default class HomePage extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      subHeaderTextTitle: 'User',
+      subHeaderTextTitle: 'Users',
       userClickColor: "gray",
       categoriesClickColor: "gray",
       myIdeaData: {},
@@ -74,10 +75,10 @@ export default class HomePage extends PureComponent {
 
   clickActionHandler = async (event) => {
     if (event === "management") {
-      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black', })
+      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black',categoriesClickColor:'grey'})
     }
     else {
-      await this.setState({ buttonName: "Add Idea", userClickColor: 'gray' });
+      await this.setState({ buttonName: "Add Idea", userClickColor: 'gray',categoriesClickColor:'grey' });
     }
     await this.setState(prevState => ({
       ...prevState,

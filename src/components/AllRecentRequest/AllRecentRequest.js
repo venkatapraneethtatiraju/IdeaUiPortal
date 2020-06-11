@@ -154,9 +154,15 @@ class AllRecentRequest extends Component{
                   "Employee",
                   "Manager"
                 ]
+                ,
+                allType:
+                [
+                  "All Type",
+                  "Technical",
+                  "Non-Technical",
+                ]
 
         }
-
     }
 
     // mount first time lifeCycle
@@ -239,7 +245,7 @@ class AllRecentRequest extends Component{
       this.setState({isLoading:true,columns:[],data:[]})   
       await getCategoriesData().then(response =>
       {
-        this.setState({selectedStatus:'', dropDownDefaultValue:"All Roles",isLoading:false, columns:categoriesColumn, data:response});
+        this.setState({selectedStatus:'', dropDownDefaultValue:"All Type",isLoading:false, columns:categoriesColumn, data:response});
       })
     }
 
@@ -298,17 +304,35 @@ class AllRecentRequest extends Component{
       }
     }
     else{
-      if(this.state.selectedStatus === "All Roles"){
+      if(this.props.value.subHeaderTextTitle ==="Categories"){
+
+        
+
+
+         if(this.state.selectedStatus === "All Type"){
           return tabelData;
-      }
-      else if(this.state.selectedStatus){
-        return tabelData.filter((el)=> el.role === this.state.selectedStatus)
-       }
+         }
+         else if(this.state.selectedStatus){
+            return tabelData.filter((el)=> el.type === this.state.selectedStatus)
+         }
        else{
          return tabelData;
+        }
+    }
+    else{
+
+      if(this.state.selectedStatus === "All Roles"){
+        return tabelData;
        }
+       else if(this.state.selectedStatus){
+          return tabelData.filter((el)=> el.role === this.state.selectedStatus)
+       }
+     else{
+       return tabelData;
+      }
     }
-    }
+  }
+}
    
 
 
@@ -416,13 +440,15 @@ class AllRecentRequest extends Component{
           </Col>
         
         </Row>
-        {this.props.title !=="request"?
+        {this.props.value.subHeaderTextTitle ==="Users" && this.props.title !=='request' ?
+        
         <div className="searchUserTypeMainLyout" >
-        <SearchBox onChange={(evt)=> this.SearchTextHandle(evt)} />
-        </div>:null
+        <SearchBox value={this.props} onChange={(evt)=> this.SearchTextHandle(evt)} />
+        </div>
+        :null
         }
         <div className="searchMainLyout" >
-         <DropDown placeholder={this.state.dropDownDefaultValue}  title={this.props.title} value={this.state} onSelect={(value)=> this.dropDownHandleChange(value)}  />
+         <DropDown subHeaderTextTitle={this.props.value.subHeaderTextTitle} placeholder={this.state.dropDownDefaultValue}  title={this.props.title} value={this.state} onSelect={(value)=> this.dropDownHandleChange(value)}  />
         </div>
       </div>
       </div> 

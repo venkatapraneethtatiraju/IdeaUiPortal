@@ -13,6 +13,7 @@ import { getRecentRequest } from '../../../services/AppService';
 import { addNewProperty } from '../../../Utility/CommonFunctions';
 import StatusTag from '../../StatusTag/StatusTag';
 import PopUpModel from '../../PopUpModel/PopUpModel';
+import { Link } from 'react-router-dom';
 
 class RecentRequests extends PureComponent {
     constructor(props) {
@@ -102,8 +103,10 @@ class RecentRequests extends PureComponent {
                     }
                     )}>
                 </Table>
-                <div className="viewDatas" onClick={(e) => this.props.onClick("request")}
-                    visible={this.state.showViewAll}>View all requests</div>
+                <div  onClick={(e )=>this.props.onClick("request")}
+                    visible={this.state.showViewAll}>
+                    <Link className="viewDatas" to='/request'>View all requests</Link>
+                    </div>
                 {this.state.showModal ? <PopUpModel
                     visible={this.state.visible}
                     onCancel={this.buttonActionHandler}

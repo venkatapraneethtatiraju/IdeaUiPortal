@@ -13,12 +13,16 @@ export default function DropDown (props){
                 style={{ width: 120 }}
                 onChange={(value)=>props.onSelect(value)}
               >
-              {props.title !=="request"?
-                 props.value.allRoles.map((el)=>(
+              {props.title ==="request"?
+                 props.value.allStatus.map((el)=>(
                  <Option  key={el.key} value={el}>{el}</Option>
                  )):
-                 props.value.allStatus.map((el)=>(
-                    <Option key={el.key} value={el}>{el}</Option>
+                 props.subHeaderTextTitle ==="Categories"?
+                 props.value.allType.map((el)=>(
+                    <Option  key={el.key} value={el}>{el}</Option>
+                    )):
+                    props.value.allRoles.map((el)=>(
+                        <Option  key={el.key} value={el}>{el}</Option>  
                 ))
               }
              </Select>

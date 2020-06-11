@@ -21,8 +21,8 @@ class Dashboard extends Component {
                             <TopContributors />
                             <RecentlySubmittedIdeas />
                         </Row>
-                        <Row gutter={16}>
-                            <RecentRequests />
+                        <Row gutter={16} >
+                            <RecentRequests onClick={this.props.onClick} />
                         </Row>
                     </Col>
                 </Row>
