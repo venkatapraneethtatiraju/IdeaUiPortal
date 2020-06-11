@@ -16,6 +16,8 @@ import Loader from '../../components/Loader/Loader';
 import DropDown from '../DropDownComponent/DropDownComponent'
 import SearchBox from '.././/SearchBarComponent/SearchBar'
 import {getUserData,getCategoriesData} from './Management/UserColumnAndData';
+import StatusTag from '../StatusTag/StatusTag';
+import { getFormatttedDate } from '../../Utility/CommonFunctions';
 
 // User Table Column
 const userColumn = [
@@ -45,7 +47,7 @@ const userColumn = [
     sorter: (a, b) => a.status.length - b.status.length,
     sortDirections: ['descend', 'ascend'],
     ellipsis: true,
-    render: (status, rowData) => <Button onClick={(e) => this.handleStatus(rowData)} className={status} >  {status}</Button>
+    render: (status) => <StatusTag ideaStatus={status} statusWidth="96px" statusCursor="pointer" />
   }
 ]
 
@@ -79,7 +81,7 @@ const requestColumn =[
     sorter: (a, b) => a.status.length - b.status.length,
     sortDirections: ['descend', 'ascend'],
     ellipsis: true,
-    render: (status, rowData) => <Button onClick={(e) => this.handleStatus(rowData)} className={status} >  {status}</Button>
+    render: (status) => <StatusTag ideaStatus={status} statusWidth="96px" statusCursor="pointer" />
   }
 
 ]
@@ -115,7 +117,7 @@ const categoriesColumn =[
     sorter: (a, b) => a.status.length - b.status.length,
     sortDirections: ['descend', 'ascend'],
     ellipsis: true,
-    render: (status, rowData) => <Button onClick={(e) => this.handleStatus(rowData)} className={status} >  {status}</Button>
+    render: (status) => <StatusTag ideaStatus={status} statusWidth="96px" statusCursor="pointer" />
   }
 
 ]
@@ -274,7 +276,7 @@ class AllRecentRequest extends Component{
           key: val.id,
           title: val.title ? val.title : "- ",
           submittedBy:val.submittedBy? val.submittedBy:"-",
-          submittedOn: val.submissionDate? val.submissionDate:"-",
+          submittedOn: val.submissionDate? getFormatttedDate(val.submissionDate):"-",
           status: val.ideaStatus ? val.ideaStatus : "-"
       };
     })
@@ -428,7 +430,7 @@ class AllRecentRequest extends Component{
     <Loader/>
      </div>:null
     }
-      <div className="my-recent-container">
+      <div className="my-ideas-container ">
         <Row justify="center">
           <Col xs={20} sm={20} md={20} lg={20} xl={20}>
             <Table
