@@ -39,7 +39,7 @@ export const getUserData = async()=>{
  };
 
 
- // get user data from api
+ // get Categories data from api
 
 export const getCategoriesData = async()=>{
 

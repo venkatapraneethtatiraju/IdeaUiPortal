@@ -22,8 +22,6 @@ export default class HomePage extends PureComponent {
 
     this.state = {
       subHeaderTextTitle: 'User',
-      isUserSelected: true,
-      isCategoriesSelected: false,
       userClickColor: "gray",
       categoriesClickColor: "gray",
       myIdeaData: {},
@@ -144,7 +142,7 @@ export default class HomePage extends PureComponent {
 
   // user clicked inside Management tap
   async usersClicked(event) {
-    await this.setState({ subHeaderTextTitle: 'Users', isUserSelected: true, isCategoriesSelected: false, userClickColor: "black", categoriesClickColor: "gray" })
+    await this.setState({ subHeaderTextTitle: 'Users', userClickColor: "black", categoriesClickColor: "gray" })
     console.log(this.state.isUserSelected, "monster")
   }
 
@@ -202,10 +200,10 @@ export default class HomePage extends PureComponent {
           </Route>
           <Route exact path="/allIdeas" component={AllIdea} />
           <Route exact to="/request">
-            <AllRecentRequest isCategoriesSelected={this.state.isCategoriesSelected} isUserSelected={this.state.isUserSelected} title={this.state.title} value={this.state} />
+            <AllRecentRequest  title={this.state.title} value={this.state} />
           </Route>
           <Route exact path="/management">
-            <AllRecentRequest isCategoriesSelected={this.state.isCategoriesSelected} isUserSelected={this.state.isUserSelected} title={this.state.title} value={this.state} />
+            <AllRecentRequest  title={this.state.title} value={this.state} />
           </Route>
         </Switch>
       </div>

@@ -162,63 +162,64 @@ class AllRecentRequest extends Component{
     // mount first time lifeCycle
     componentDidMount(){
         
+        console.log("firstTime");
         if(this.props.title ==="request"){
 
           this.getAllRecentRequestRecord();
 
         }
         else{
-
-          this.getUserDataRecord();
+    
+            this.getUserDataRecord();
+         
           
         }
+      }
 
-        if(this.props.value.subHeaderTextTitle ==="Users"){
-              
-          this.getUserDataRecord();
-        }
-
-     
-    }
+       
 
   
 
     async componentDidUpdate(prevState,nextState){
 
       
-      console.log(prevState,"maniP")
-      console.log(this.props,"props");
+      console.log(prevState,"previouspros")
+      console.log(this.props,"presentprops");
       console.log(this.state,"props");
 
-      if(prevState.title !== this.props.title){
+           if(prevState.title !== this.props.title){
 
-          if(this.props.title ==="request"){
-            this.getAllRecentRequestRecord();
+                if(this.props.title ==="request"){
+                  this.getAllRecentRequestRecord();
 
-          }
-          else{
+                }
+                else{
 
-             this.getUserDataRecord();
+                      console.log("Users");
+                      this.getUserDataRecord();
+                  
+                  }
 
-          }
+                }
+       else{
+       
 
           if(prevState.value.subHeaderTextTitle !== this.props.value.subHeaderTextTitle)
           {
+              if(this.props.value.subHeaderTextTitle==="Categories"){
+                
+                this.getCategoriesDataRecord();
+              }
+              else{
+                this.getUserDataRecord();
+               }
 
-            if(this.props.value.subHeaderTextTitle ==="Users"){
-              
-              this.getUserDataRecord();
-            }
-            else
-            {
-              this.getCategoriesDataRecord();
-              
-            }
           }
-    
+        }
+
       }
      
-    }
+    
 
   
 
