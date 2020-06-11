@@ -7,7 +7,7 @@ import { ReactComponent as PptIcon } from '../../images/ppt.svg'
 import { ReactComponent as LikeIcon } from '../../images/hands.svg'
 import { ReactComponent as DownloadIcon } from '../../images/download.svg'
 import { ReactComponent as GestureIcon } from '../../images/gestures.svg'
-import { postIdeaLike, postIdeaDisLike, getIdeaDetailsById } from '../../services/AppService';
+import { postIdeaLike, postIdeaDisLike, getIdeaDetailsById, getActiveCategories } from '../../services/AppService';
 import Editor from '../Editor/Editor';
 import { SUCCESS, CLOSE, REVIEW, APPROVED, COMPLETE, DEVELOPMENT } from '../../Config/Constants';
 import ReactHtmlParser from 'react-html-parser';
@@ -48,8 +48,10 @@ class PopUpModel extends Component {
             isViewIdea: this.props.isViewIdea,
             selectedId: this.props.selectedId,
             isLike: false,
-            ideaDetailsListView: []
+            ideaDetailsListView: [],
+            ideaActiveCategories: []
         }
+
         if (this.props.onEditHandler) {
             console.log("const...", this.props.onEditHandler);
             let datas = this.props.onEditHandler;
@@ -60,10 +62,10 @@ class PopUpModel extends Component {
             this.state.ideaCategoryValue = datas.ideaCategory;
             console.log(this.state.ideaDetails, "this.state.ideaDetails");
         }
+
         if (this.props.isViewIdea === "true") {
             this.state.selectedId = this.props.selectedId;
         }
-
     }
 
     validateInputs = () => {
@@ -197,27 +199,45 @@ class PopUpModel extends Component {
         }
     }
 
-    selectedRow = () => {
-        debugger;
-    }
     componentDidMount() {
         if (this.state.isViewIdea && this.props.ideaId) {
-            getIdeaDetailsById(this.props.ideaId)
-                .then(response => {
-                    if (response.data.message === SUCCESS) {
-                        this.setState({ ideaDetailsListView: response.data.result })
-                    }
-                })
-                .catch(error => {
-                });
+            this.getDetailsByID(this.props.ideaId);
+        } else if (this.state.isAddEditIdea) {
+            this.getCategories();
         }
-        console.log(this.state.ideaDetailsListView)
     }
 
+    getDetailsByID = (ideaId) => {
+        getIdeaDetailsById(ideaId)
+            .then(response => {
+                if (response.data.message === SUCCESS) {
+                    this.setState({ ideaDetailsListView: response.data.result })
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    getCategories = () => {
+        getActiveCategories()
+            .then(response => {
+                this.setState({ ideaActiveCategories: response.data })
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
     render() {
-        const { title, categoryName, subcategoryName, ideaStatus,
-            ideaDescription, ideaStatusHistories, likeIdeaDetailList, likeCount } = this.state.ideaDetailsListView;
+        const {
+            title,
+            categoryName,
+            subcategoryName,
+            ideaStatus, ideaDescription,
+            ideaStatusHistories,
+            likeIdeaDetailList,
+            likeCount } = this.state.ideaDetailsListView;
         let optionTemplate = "";
         let count = 0;
         if (this.state.ideaCategory.length > 0) {
