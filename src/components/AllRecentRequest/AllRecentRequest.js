@@ -229,7 +229,10 @@ class AllRecentRequest extends Component{
      
     
 
-  
+      refreshUserList = () => {
+        this.buttonActionHandler();
+        this.getUserDataRecord();
+      }
 
     // get all users from UserColumnAndData.js file i.e hitting users api
     getUserDataRecord=async()=>
@@ -472,6 +475,7 @@ onSelectedRowAction = (record) => {
                         isAddEditIdea="false"
                         isViewIdea="true"
                         adminRecentData={this.state.adminRecentData}
+                        refreshUserList = {this.refreshUserList}
                     /> : null}
       </div>
       </div> 

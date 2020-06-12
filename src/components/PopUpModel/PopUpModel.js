@@ -49,7 +49,9 @@ class PopUpModel extends Component {
             selectedId: this.props.selectedId,
             isLike: false,
             ideaDetailsListView: [],
-            ideaActiveCategories: []
+            ideaActiveCategories: [],
+            ideaTecCategory : [],
+            ideaCategoryNonTech : []
         }
 
         if (this.props.onEditHandler) {
@@ -135,36 +137,26 @@ class PopUpModel extends Component {
         if (event.target.name === "ideaSubject") {
             this.setState({ ideaSubject: event.target.value })
         }
-        //   else if (event.target.name ==="ideaDetails"){
-        //     this.setState({ideaDetails : event.target.value})
-        //     }
 
     }
 
     ideaTypeChangedHandler = (event) => {
-
-        let ideaCategory = [];
-        let ideaCategoryNonTech = [];
-        if (event.target.textContent === "Technical") {
-            this.setState({ ideaType: 1 });
-            ideaCategory.push('BI COE', 'DEVOPS COE', 'Microsoft COE',
-                'Digital Assurance COE', 'XACT COE', 'Mobility COE');
+        if (event.target.textContent === "Technical") 
+        {
             this.setState({
-                ideaCategory: ideaCategory,
-                ideaColorTech: 'rgb(247, 148, 29)',
-                ideaColorNonTech: 'rgb(177, 177, 177)'
-            })
+                        ideaCategory: this.state.ideaTecCategory,
+                        ideaColorTech: 'rgb(247, 148, 29)',
+                        ideaColorNonTech: 'rgb(177, 177, 177)',
+                        ideaType: 1 
+                    })
         }
         else if (event.target.textContent === "Non Technical") {
-            this.setState({ ideaType: 2 });
-            ideaCategory.push('HR', 'Admin', 'General');
             this.setState({
-                ideaCategory: ideaCategory,
-                ideaColorNonTech: 'rgb(247, 148, 29)',
-                ideaColorTech: 'rgb(177, 177, 177)'
-            })
-            console.log(this.state.ideaCategory)
-
+                        ideaCategory: this.state.ideaCategoryNonTech,
+                        ideaColorNonTech: 'rgb(247, 148, 29)',
+                        ideaColorTech: 'rgb(177, 177, 177)',
+                        ideaType: 2 
+                    })
         }
     }
 
@@ -219,15 +211,34 @@ class PopUpModel extends Component {
             });
     }
 
+
     getCategories = () => {
         getActiveCategories()
             .then(response => {
                 this.setState({ ideaActiveCategories: response.data })
+                this.setCategoriesData(response.data);
             })
             .catch(error => {
                 console.log(error);
             });
     }
+
+    setCategoriesData = (categoriesData) => {
+        let ideaTecCategory = [];
+        let ideaCategoryNonTech = [];
+           if(categoriesData.map(idea => {
+                if(idea.ideaType === 'Technical'){
+                    ideaTecCategory.push(idea.subCategoryName);
+                }
+               if(idea.ideaType === 'Non-Technical'){
+                    ideaCategoryNonTech.push(idea.subCategoryName);
+                }
+            }))
+            this.setState({ideaType : 1, ideaTecCategory : ideaTecCategory, 
+                ideaCategoryNonTech : ideaCategoryNonTech, ideaCategory : ideaTecCategory })
+    }
+
+
 
     render() {
         const {
@@ -319,7 +330,6 @@ class PopUpModel extends Component {
                         {this.state.isAddEditIdea === "true" ? <Col style={{ paddingRight: '11px' }} className="column-left-idea">
                             {/* {this.state.currentState ==="ápproved" ? 
                             ''
-                     
                              :   */}
                             <Col style={{ paddingLeft: '20px' }} className="column-addidea-left">
                                 {this.state.isViewIdea === "true" || this.state.currentState === "ápproved" ? null :
@@ -360,7 +370,9 @@ class PopUpModel extends Component {
                                     <label className="text-formatter">Idea Details</label>
                                     <Editor name="ideaDetails" value={this.state.ideaDetails}
                                         onEditChanged={this.onEditChanged}
-                                        ref="ideaDetails" />
+                                        ref="ideaDetails"/>
+                                        {this.state.ideaDetailsError ? <div className="errorMessage">
+                                    {this.state.ideaDetailsError}</div> : null}
                                 </Row>
                             </Col>
                         </Col> : null}

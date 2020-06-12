@@ -117,7 +117,7 @@ export const getRecentlySubmittedIdeas = () => {
 //Service call to put Activate/Deactivate users role
 export const putChangeUserRole = (userId, roleType, status) => {
     const headers = getHeaders();
-    return Axios.get(`${PUT_CHANGE_USER_ROLE_ADMIN}${userId}/status?roleType?=${roleType}&status=${status}`, { headers });
+    return Axios.put(`${PUT_CHANGE_USER_ROLE_ADMIN}${userId}/status?roleType=${roleType}&status=${status}`,'', { headers });
 }
 //Service call to get active categories 
 export const getActiveCategories = () => {

@@ -37,11 +37,11 @@ class Login extends PureComponent {
     }
   }
 
-  onButtonClicked = () => {
+  onButtonClicked1 = () => {
     this.setState({ isLogin: true, buttonEnabled: true })
   }
 
-  onButtonClicked1 = () => {
+  onButtonClicked = () => {
     if (this.state.otpSendEnabled) {
       this.getOTP();
     }
