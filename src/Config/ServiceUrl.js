@@ -12,3 +12,5 @@ export const SEARCH_USERSBY_NAME_URL = BASE_URL + '/users?page=0&size=15&name=';
 export const SEARCH_USERSBY_EMAILID_URL = BASE_URL + '/users?page=0&size=15&email=';
 export const CATEGORIES_URL = BASE_URL + '/categories';
 export const RECENTLY_SUBMITTED_URL = BASE_URL + '/ideas/recent';
+export const PUT_CHANGE_USER_ROLE_ADMIN = BASE_URL + '/users/';
+

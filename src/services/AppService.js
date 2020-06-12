@@ -12,7 +12,8 @@ import {
     SEARCH_USERSBY_NAME_URL,
     SEARCH_USERSBY_EMAILID_URL,
     RECENTREQUEST_URL,
-    RECENTLY_SUBMITTED_URL
+    RECENTLY_SUBMITTED_URL,
+    PUT_CHANGE_USER_ROLE_ADMIN
 } from '../Config/ServiceUrl';
 import { getHeaders } from '../Utility/CommonFunctions';
 
@@ -112,4 +113,8 @@ export const getRecentlySubmittedIdeas = () => {
     return Axios.get(`${RECENTLY_SUBMITTED_URL}`, { headers });
 }
 
-
+//Service call to put Activate/Deactivate users role
+export const putChangeUserRole = (userId,roleType,status) => {
+    const headers = getHeaders();
+    return Axios.get(`${PUT_CHANGE_USER_ROLE_ADMIN}${userId}/status?roleType?=${roleType}&status=${status}`, { headers });
+}
