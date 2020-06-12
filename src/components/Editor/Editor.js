@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import ReactQuill from 'react-quill';
 import './Editor.scss';
 import '../../../node_modules/react-quill/dist/quill.snow.css'
 
 
-class Editor extends React.Component {
+class Editor extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = { editorHtml: this.props.value, theme: 'snow' }
+    this.state = { editorHtml: this.props.value }
     this.handleChange = this.handleChange.bind(this)
   }
 
@@ -16,17 +16,11 @@ class Editor extends React.Component {
     this.props.onEditChanged(this.state.editorHtml)
   }
 
-
-  handleThemeChange(newTheme) {
-    if (newTheme === "core") newTheme = null;
-    this.setState({ theme: newTheme })
-  }
-
   render() {
     return (
       <div className="app">
         <ReactQuill
-          theme={this.state.theme}
+          theme='snow'
           onChange={this.handleChange}
           value={this.state.editorHtml}
           modules={Editor.modules}

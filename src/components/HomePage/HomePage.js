@@ -78,7 +78,7 @@ export default class HomePage extends PureComponent {
       await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black',categoriesClickColor:'grey'})
     }
     else {
-      await this.setState({ buttonName: "Add Idea", userClickColor: 'gray',categoriesClickColor:'grey' });
+      await this.setState({ buttonName: "Add an Idea", userClickColor: 'gray',categoriesClickColor:'grey' });
     }
     await this.setState(prevState => ({
       ...prevState,

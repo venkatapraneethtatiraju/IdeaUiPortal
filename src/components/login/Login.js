@@ -37,7 +37,7 @@ class Login extends PureComponent {
     }
   }
 
-  onButtonClicked1= () => {
+  onButtonClicked1 = () => {
     this.setState({ isLogin: true, buttonEnabled: true })
   }
 

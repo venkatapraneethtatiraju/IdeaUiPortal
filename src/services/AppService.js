@@ -13,7 +13,8 @@ import {
     SEARCH_USERSBY_EMAILID_URL,
     RECENTREQUEST_URL,
     RECENTLY_SUBMITTED_URL,
-    PUT_CHANGE_USER_ROLE_ADMIN
+    PUT_CHANGE_USER_ROLE_ADMIN,
+    ACTIVE_CATEGORIES_URL
 } from '../Config/ServiceUrl';
 import { getHeaders } from '../Utility/CommonFunctions';
 
@@ -114,7 +115,14 @@ export const getRecentlySubmittedIdeas = () => {
 }
 
 //Service call to put Activate/Deactivate users role
-export const putChangeUserRole = (userId,roleType,status) => {
+export const putChangeUserRole = (userId, roleType, status) => {
     const headers = getHeaders();
-    return Axios.get(`${PUT_CHANGE_USER_ROLE_ADMIN}${userId}/status?roleType?=${roleType}&status=${status}`, { headers });
+    return Axios.put(`${PUT_CHANGE_USER_ROLE_ADMIN}${userId}/status?roleType=${roleType}&status=${status}`,'', { headers });
 }
+//Service call to get active categories 
+export const getActiveCategories = () => {
+    const headers = getHeaders();
+    return Axios.get(`${ACTIVE_CATEGORIES_URL}`, { headers });
+}
+
+

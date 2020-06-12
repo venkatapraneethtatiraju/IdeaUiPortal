@@ -7,7 +7,7 @@ import { ReactComponent as PptIcon } from '../../images/ppt.svg'
 import { ReactComponent as LikeIcon } from '../../images/hands.svg'
 import { ReactComponent as DownloadIcon } from '../../images/download.svg'
 import { ReactComponent as GestureIcon } from '../../images/gestures.svg'
-import { postIdeaLike, postIdeaDisLike, getIdeaDetailsById } from '../../services/AppService';
+import { postIdeaLike, postIdeaDisLike, getIdeaDetailsById, getActiveCategories } from '../../services/AppService';
 import Editor from '../Editor/Editor';
 import { SUCCESS, CLOSE, REVIEW, APPROVED, COMPLETE, DEVELOPMENT } from '../../Config/Constants';
 import ReactHtmlParser from 'react-html-parser';
@@ -48,8 +48,12 @@ class PopUpModel extends Component {
             isViewIdea: this.props.isViewIdea,
             selectedId: this.props.selectedId,
             isLike: false,
-            ideaDetailsListView: []
+            ideaDetailsListView: [],
+            ideaActiveCategories: [],
+            ideaTecCategory : [],
+            ideaCategoryNonTech : []
         }
+
         if (this.props.onEditHandler) {
             console.log("const...", this.props.onEditHandler);
             let datas = this.props.onEditHandler;
@@ -60,10 +64,10 @@ class PopUpModel extends Component {
             this.state.ideaCategoryValue = datas.ideaCategory;
             console.log(this.state.ideaDetails, "this.state.ideaDetails");
         }
+
         if (this.props.isViewIdea === "true") {
             this.state.selectedId = this.props.selectedId;
         }
-
     }
 
     validateInputs = () => {
@@ -133,36 +137,26 @@ class PopUpModel extends Component {
         if (event.target.name === "ideaSubject") {
             this.setState({ ideaSubject: event.target.value })
         }
-        //   else if (event.target.name ==="ideaDetails"){
-        //     this.setState({ideaDetails : event.target.value})
-        //     }
 
     }
 
     ideaTypeChangedHandler = (event) => {
-
-        let ideaCategory = [];
-        let ideaCategoryNonTech = [];
-        if (event.target.textContent === "Technical") {
-            this.setState({ ideaType: 1 });
-            ideaCategory.push('BI COE', 'DEVOPS COE', 'Microsoft COE',
-                'Digital Assurance COE', 'XACT COE', 'Mobility COE');
+        if (event.target.textContent === "Technical") 
+        {
             this.setState({
-                ideaCategory: ideaCategory,
-                ideaColorTech: 'rgb(247, 148, 29)',
-                ideaColorNonTech: 'rgb(177, 177, 177)'
-            })
+                        ideaCategory: this.state.ideaTecCategory,
+                        ideaColorTech: 'rgb(247, 148, 29)',
+                        ideaColorNonTech: 'rgb(177, 177, 177)',
+                        ideaType: 1 
+                    })
         }
         else if (event.target.textContent === "Non Technical") {
-            this.setState({ ideaType: 2 });
-            ideaCategory.push('HR', 'Admin', 'General');
             this.setState({
-                ideaCategory: ideaCategory,
-                ideaColorNonTech: 'rgb(247, 148, 29)',
-                ideaColorTech: 'rgb(177, 177, 177)'
-            })
-            console.log(this.state.ideaCategory)
-
+                        ideaCategory: this.state.ideaCategoryNonTech,
+                        ideaColorNonTech: 'rgb(247, 148, 29)',
+                        ideaColorTech: 'rgb(177, 177, 177)',
+                        ideaType: 2 
+                    })
         }
     }
 
@@ -197,27 +191,64 @@ class PopUpModel extends Component {
         }
     }
 
-    selectedRow = () => {
-        debugger;
-    }
     componentDidMount() {
         if (this.state.isViewIdea && this.props.ideaId) {
-            getIdeaDetailsById(this.props.ideaId)
-                .then(response => {
-                    if (response.data.message === SUCCESS) {
-                        this.setState({ ideaDetailsListView: response.data.result })
-                    }
-                })
-                .catch(error => {
-                });
+            this.getDetailsByID(this.props.ideaId);
+        } else if (this.state.isAddEditIdea) {
+            this.getCategories();
         }
-        console.log(this.state.ideaDetailsListView)
     }
+
+    getDetailsByID = (ideaId) => {
+        getIdeaDetailsById(ideaId)
+            .then(response => {
+                if (response.data.message === SUCCESS) {
+                    this.setState({ ideaDetailsListView: response.data.result })
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+
+    getCategories = () => {
+        getActiveCategories()
+            .then(response => {
+                this.setState({ ideaActiveCategories: response.data })
+                this.setCategoriesData(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    setCategoriesData = (categoriesData) => {
+        let ideaTecCategory = [];
+        let ideaCategoryNonTech = [];
+           if(categoriesData.map(idea => {
+                if(idea.ideaType === 'Technical'){
+                    ideaTecCategory.push(idea.subCategoryName);
+                }
+               if(idea.ideaType === 'Non-Technical'){
+                    ideaCategoryNonTech.push(idea.subCategoryName);
+                }
+            }))
+            this.setState({ideaType : 1, ideaTecCategory : ideaTecCategory, 
+                ideaCategoryNonTech : ideaCategoryNonTech, ideaCategory : ideaTecCategory })
+    }
+
 
 
     render() {
-        const { title, categoryName, subcategoryName, ideaStatus,
-            ideaDescription, ideaStatusHistories, likeIdeaDetailList, likeCount } = this.state.ideaDetailsListView;
+        const {
+            title,
+            categoryName,
+            subcategoryName,
+            ideaStatus, ideaDescription,
+            ideaStatusHistories,
+            likeIdeaDetailList,
+            likeCount } = this.state.ideaDetailsListView;
         let optionTemplate = "";
         let count = 0;
         if (this.state.ideaCategory.length > 0) {
@@ -299,7 +330,6 @@ class PopUpModel extends Component {
                         {this.state.isAddEditIdea === "true" ? <Col style={{ paddingRight: '11px' }} className="column-left-idea">
                             {/* {this.state.currentState ==="ápproved" ? 
                             ''
-                     
                              :   */}
                             <Col style={{ paddingLeft: '20px' }} className="column-addidea-left">
                                 {this.state.isViewIdea === "true" || this.state.currentState === "ápproved" ? null :
@@ -340,7 +370,9 @@ class PopUpModel extends Component {
                                     <label className="text-formatter">Idea Details</label>
                                     <Editor name="ideaDetails" value={this.state.ideaDetails}
                                         onEditChanged={this.onEditChanged}
-                                        ref="ideaDetails" />
+                                        ref="ideaDetails"/>
+                                        {this.state.ideaDetailsError ? <div className="errorMessage">
+                                    {this.state.ideaDetailsError}</div> : null}
                                 </Row>
                             </Col>
                         </Col> : null}
