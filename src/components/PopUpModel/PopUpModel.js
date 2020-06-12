@@ -16,12 +16,10 @@ import StatusButton from '../StatusButton/StatusButton';
 import AdminPopUpModel from './AdminPopUpModel';
 import StatusTag from '../StatusTag/StatusTag';
 
-
-
 class PopUpModel extends Component {
     constructor(props) {
         super(props)
-
+        this.categoryDD = React.createRef();
         this.state = {
             ideaId: '',
             ideaSubject: '',
@@ -50,8 +48,8 @@ class PopUpModel extends Component {
             isLike: false,
             ideaDetailsListView: [],
             ideaActiveCategories: [],
-            ideaTecCategory : [],
-            ideaCategoryNonTech : []
+            ideaTecCategory: [],
+            ideaCategoryNonTech: []
         }
 
         if (this.props.onEditHandler) {
@@ -62,7 +60,6 @@ class PopUpModel extends Component {
             this.state.ideaDetails = datas.ideaDescription;
             this.state.ideaType = datas.ideaType === 'TECHNICAL' ? this.state.ideaType = 1 : this.state.ideaType = 2;
             this.state.ideaCategoryValue = datas.ideaCategory;
-            console.log(this.state.ideaDetails, "this.state.ideaDetails");
         }
 
         if (this.props.isViewIdea === "true") {
@@ -71,8 +68,7 @@ class PopUpModel extends Component {
     }
 
     validateInputs = () => {
-        console.log("child")
-        const { ideaSubject, ideaType, ideaCategoryValue, ideaDetails } = this.state;
+        const { ideaSubject, ideaCategoryValue, ideaDetails } = this.state;
         let valid = false;
         if (ideaSubject.trim() === "") {
             this.setState({ ideaSubjectError: 'This is a mandatory field' });
@@ -91,20 +87,13 @@ class PopUpModel extends Component {
         if (ideaDetails.trim() === "") {
             this.setState({ ideaDetailsError: 'This is a mandatory field' });
             valid = true;
-
         } else {
             this.setState({ ideaDetailsError: '' });
             valid = false;
         }
-        // else {
-        //     valid = false;
-        //    this.setState({ideaSubjectError :'',ideaCategoryValueError : '', ideaDetailsError : ''});
-        //    //this.setState({ideaSubjectError :''})
-        // }
-        console.log("child", valid)
-
         return valid;
     }
+
     saveandSubmitHandler = (e) => {
         let ideaStatusId = 0;
         if (e.target.textContent === 'Save & Submit') {
@@ -116,47 +105,37 @@ class PopUpModel extends Component {
         if (this.validateInputs())
             return;
         else {
-
-
-
-
-            const { ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaId, subject } = this.state;
-
+            const { ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaId } = this.state;
             this.props.saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId, ideaId);
         }
-    }
-    onEditHandler = (e) => {
-        // console.log("asdadaaaaa", this.props.onEditHandler)
     }
 
     onEditChanged = (e) => {
         this.setState({ ideaDetails: e })
     }
+
     inputChangedHandler = (event) => {
-        debugger;
         if (event.target.name === "ideaSubject") {
             this.setState({ ideaSubject: event.target.value })
         }
-
     }
 
     ideaTypeChangedHandler = (event) => {
-        if (event.target.textContent === "Technical") 
-        {
+        if (event.target.textContent === "Technical") {
             this.setState({
-                        ideaCategory: this.state.ideaTecCategory,
-                        ideaColorTech: 'rgb(247, 148, 29)',
-                        ideaColorNonTech: 'rgb(177, 177, 177)',
-                        ideaType: 1 
-                    })
+                ideaCategory: this.state.ideaTecCategory,
+                ideaColorTech: 'rgb(247, 148, 29)',
+                ideaColorNonTech: 'rgb(177, 177, 177)',
+                ideaType: 1
+            })
         }
         else if (event.target.textContent === "Non Technical") {
             this.setState({
-                        ideaCategory: this.state.ideaCategoryNonTech,
-                        ideaColorNonTech: 'rgb(247, 148, 29)',
-                        ideaColorTech: 'rgb(177, 177, 177)',
-                        ideaType: 2 
-                    })
+                ideaCategory: this.state.ideaCategoryNonTech,
+                ideaColorNonTech: 'rgb(247, 148, 29)',
+                ideaColorTech: 'rgb(177, 177, 177)',
+                ideaType: 2
+            })
         }
     }
 
@@ -211,7 +190,6 @@ class PopUpModel extends Component {
             });
     }
 
-
     getCategories = () => {
         getActiveCategories()
             .then(response => {
@@ -226,19 +204,21 @@ class PopUpModel extends Component {
     setCategoriesData = (categoriesData) => {
         let ideaTecCategory = [];
         let ideaCategoryNonTech = [];
-           if(categoriesData.map(idea => {
-                if(idea.ideaType === 'Technical'){
-                    ideaTecCategory.push(idea.subCategoryName);
-                }
-               if(idea.ideaType === 'Non-Technical'){
-                    ideaCategoryNonTech.push(idea.subCategoryName);
-                }
-            }))
-            this.setState({ideaType : 1, ideaTecCategory : ideaTecCategory, 
-                ideaCategoryNonTech : ideaCategoryNonTech, ideaCategory : ideaTecCategory })
+        for (let category of categoriesData) {
+            if (category.ideaType === 'Technical') {
+                ideaTecCategory.push(category);
+            }
+            if (category.ideaType === 'Non-Technical') {
+                ideaCategoryNonTech.push(category);
+            }
+        }
+        this.setState({
+            ideaType: 1,
+            ideaTecCategory: ideaTecCategory,
+            ideaCategoryNonTech: ideaCategoryNonTech,
+            ideaCategory: ideaTecCategory
+        })
     }
-
-
 
     render() {
         const {
@@ -249,11 +229,11 @@ class PopUpModel extends Component {
             ideaStatusHistories,
             likeIdeaDetailList,
             likeCount } = this.state.ideaDetailsListView;
+
         let optionTemplate = "";
-        let count = 0;
         if (this.state.ideaCategory.length > 0) {
-            optionTemplate = this.state.ideaCategory.map(value => (
-                <option value={count = count + 1}>{value}</option>
+            optionTemplate = this.state.ideaCategory.map(item => (
+                <option value={item.id}>{item.subCategoryName}</option>
             ));
         }
 
@@ -325,15 +305,11 @@ class PopUpModel extends Component {
                     width={760}
 
                 >
-
                     <Row gutter={18} justify="space-between" className="attachments-column" >
                         {this.state.isAddEditIdea === "true" ? <Col style={{ paddingRight: '11px' }} className="column-left-idea">
-                            {/* {this.state.currentState ==="ápproved" ? 
-                            ''
-                             :   */}
                             <Col style={{ paddingLeft: '20px' }} className="column-addidea-left">
                                 {this.state.isViewIdea === "true" || this.state.currentState === "ápproved" ? null :
-                                    <div>
+                                    <div style={{ marginBottom: '15px' }}>
                                         <Row>
                                             <label>Idea Subject</label>
                                             <Input type="text" value={this.state.ideaSubject}
@@ -344,19 +320,17 @@ class PopUpModel extends Component {
                                         </Row>
                                         {this.state.ideaSubjectError ? <div className="errorMessage">
                                             {this.state.ideaSubjectError}</div> : null}
-                                        <br />
                                     </div>}
-                                <Row gutter={8} className="tag-div">
+                                <Row gutter={8} className="tag-div" style={{ marginBottom: '15px' }}>
                                     <Col style={{ padding: '5px 4px' }}><label style={{ marginRight: '20px' }}>Idea Type</label></Col>
                                     <Tag className="type-tag" onClick={this.ideaTypeChangedHandler} name="technical"
                                         color="#f7941d" style={{ backgroundColor: this.state.ideaColorTech }}>Technical</Tag>
                                     <Tag className="type-tag" onClick={this.ideaTypeChangedHandler} name="nontechnical"
                                         color="#b1b1b1" style={{ backgroundColor: this.state.ideaColorNonTech }}>Non Technical</Tag>
                                 </Row>
-                                <br />
-                                <Row>
+                                <Row style={{ marginBottom: '15px' }}>
                                     <label>Idea Category</label>
-                                    <Select className={!this.state.ideaCategoryValueError ? 'cat-dropdown' : 'errorInput'}
+                                    <Select ref={this.categoryDD} className={!this.state.ideaCategoryValueError ? 'cat-dropdown' : 'errorInput'}
                                         placeholder="---select category from here---"
                                         style={{ width: "100%" }}
                                         onChange={this.onCategoryChanged}>
@@ -365,14 +339,16 @@ class PopUpModel extends Component {
                                     {this.state.ideaCategoryValueError ? <div className="errorMessage">
                                         {this.state.ideaCategoryValueError}</div> : null}
                                 </Row>
-                                <br />
-                                <Row>
+                                <Row style={{ marginBottom: '15px' }}>
                                     <label className="text-formatter">Idea Details</label>
                                     <Editor name="ideaDetails" value={this.state.ideaDetails}
                                         onEditChanged={this.onEditChanged}
-                                        ref="ideaDetails"/>
-                                        {this.state.ideaDetailsError ? <div className="errorMessage">
-                                    {this.state.ideaDetailsError}</div> : null}
+                                        ref="ideaDetails" />
+                                    {this.state.ideaDetailsError ?
+                                        <div className="errorMessage" style={{ position: 'absolute', bottom: '20px' }}>
+                                            {this.state.ideaDetailsError}
+                                            {console.log(this.state.ideaDetailsError, 'this.state.ideaDetailsError')}
+                                        </div> : null}
                                 </Row>
                             </Col>
                         </Col> : null}
@@ -447,7 +423,6 @@ class PopUpModel extends Component {
                                 </Row> */}
                             </Row>
                         </Col> : null}
-
                         {this.state.isViewIdea === "true" ? <Col style={{ paddingRight: '0px' }} className="column-right-view-idea">
                             <Col className="column-right-top">
                                 <Row>
@@ -493,7 +468,6 @@ class PopUpModel extends Component {
                             </Col>
                             <Col className="column-right-bottom"></Col>
                         </Col> : null}
-
                     </Row>
                 </Modal>}
             </div>
