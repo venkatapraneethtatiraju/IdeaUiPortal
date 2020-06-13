@@ -144,12 +144,13 @@ class PopUpModel extends Component {
     }
 
     onLikeIconClicked = (ideaId) => {
-        if (!this.state.isLike) {
+        debugger;
+        if (!this.state.ideaDetailsListView.likeCount) {
             postIdeaLike(ideaId)
                 .then(response => {
                     if (response.data.message === SUCCESS) {
                         this.setState({ isLike: true })
-                        this.props.updateLikes(this.state.isLike)
+                        this.props.updateLikes(this.state.ideaDetailsListView.likeCount)
                     }
                 })
                 .catch(error => {
@@ -161,7 +162,7 @@ class PopUpModel extends Component {
                 .then(response => {
                     if (response.data.message === SUCCESS) {
                         this.setState({ isLike: false })
-                        // this.props.updateLikes(this.state.isLike)
+                        this.props.updateLikes(this.state.isLike)
                     }
                 })
                 .catch(error => {
@@ -223,6 +224,7 @@ class PopUpModel extends Component {
     render() {
         const {
             title,
+            id,
             categoryName,
             subcategoryName,
             ideaStatus, ideaDescription,
@@ -388,17 +390,17 @@ class PopUpModel extends Component {
                                 </Row>
                             </Col>
                             <Row className="column-left-bottom">
-                                {likeCount ?
+                                {likeCount || this.state.isLike ?
                                     <Row className="like-container">
                                         <GestureIcon className="like-hands"
-                                            onClick={() => this.onLikeIconClicked(this.state.ideaId)} />
+                                            onClick={() => this.onLikeIconClicked(id)} />
                                     </Row> :
                                     <Row className="like-container">
                                         <LikeIcon className="like-hands" alt="Edit-Tools" />
                                         <Col className="gesture-middle">
                                             <Col className="gesture-container">
                                                 <GestureIcon className="gesture"
-                                                    onClick={() => this.onLikeIconClicked(this.state.ideaId)} />
+                                                    onClick={() => this.onLikeIconClicked(id)} />
                                             </Col>
                                         </Col>
                                     </Row>}
