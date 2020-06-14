@@ -16,7 +16,7 @@ class GenericButton extends Component {
                         fontWeight: 500,
                         fontSize: '14px',
                         width: 'auto',
-                        height: '34px'
+                        height: '34px',
                     }}
                 >
                     {this.props.buttonName}
