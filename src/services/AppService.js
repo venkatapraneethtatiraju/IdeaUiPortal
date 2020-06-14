@@ -79,33 +79,33 @@ export const getMyIdeaRequest = () => {
 }
 
 //Service call to GET my idea to display in dashboard
-export const getAllRecentRequest = () => {
+export const getAllRecentRequest = (pagination) => {
     const headers = getHeaders();
-    return Axios.get(`${ALLRECENTREQUEST_URL}`, { headers });
+    return Axios.get(`${ALLRECENTREQUEST_URL}pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}`, { headers });
 }
 
 //Service call to get all users i.e registered
-export const getAllRegisteredUsers = () => {
+export const getAllRegisteredUsers = (pagination) => {
     const headers = getHeaders();
-    return Axios.get(`${ALLUSERS_URL}page=0&size=15`, { headers });
+    return Axios.get(`${ALLUSERS_URL}pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}`, { headers });
 }
 
 //Service call to get all Categories
-export const getAllCategories = () => {
+export const getAllCategories = (pagination) => {
     const headers = getHeaders();
-    return Axios.get(`${CATEGORIES_URL}`, { headers });
+    return Axios.get(`${CATEGORIES_URL}pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}`, { headers });
 }
 
 //Service call to get all user by name search
-export const getUsersByName = (name) => {
+export const getUsersByName = (pagination,name) => {
     const headers = getHeaders();
-    return Axios.get(`${SEARCH_USERSBY_NAME_URL}${name}`, { headers });
+    return Axios.get(`${SEARCH_USERSBY_NAME_URL}pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}&name=${name}`, { headers });
 }
 
 //Service call to get all user by emailId search
-export const getUsersByEmailID = (emailID) => {
+export const getUsersByEmailID = (pagination,emailID) => {
     const headers = getHeaders();
-    return Axios.get(`${SEARCH_USERSBY_EMAILID_URL}${emailID}`, { headers });
+    return Axios.get(`${SEARCH_USERSBY_EMAILID_URL}pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}&email=${emailID}`, { headers });
 }
 
 //Service call to get Recently Submitted Ideas

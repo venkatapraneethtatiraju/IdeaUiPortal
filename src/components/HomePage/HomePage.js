@@ -75,6 +75,7 @@ export default class HomePage extends PureComponent {
 
   clickActionHandler = async (event) => {
     if (event === "management") {
+      this.usersClicked();
       await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black',categoriesClickColor:'grey'})
     }
     else {
@@ -141,13 +142,13 @@ export default class HomePage extends PureComponent {
       });
   }
 
-  // user clicked inside Management tap
+  // user clicked inside the Management tab
   async usersClicked(event) {
     await this.setState({ subHeaderTextTitle: 'Users', userClickColor: "black", categoriesClickColor: "gray" })
     console.log(this.state.isUserSelected, "monster")
   }
 
-  // categories clicked inside Management tap
+  // categories clicked inside the Management tab
   async categoriesClicked(event) {
     await this.setState({ subHeaderTextTitle: 'Categories', isCategoriesSelected: true, isUserSelected: false, userClickColor: "gray", categoriesClickColor: "black" })
   }

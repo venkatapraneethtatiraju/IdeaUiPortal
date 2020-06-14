@@ -4,7 +4,8 @@ import {
     XEBIAOFFICE,
     ROLE,
     JOINEDON,
-    STATUS
+    STATUS,
+    SUCCESS
     
 } from '../../../Config/Constants';
 
@@ -14,13 +15,16 @@ import {getAllCategories, getAllRegisteredUsers } from '../../../services/AppSer
 
 // get user data from api
 
-export const getUserData = async()=>{
+export const getUserData = async(pagination)=>{
 
-    return await getAllRegisteredUsers()
-         .then(response => {
-             let data=  setUserItem(response.data.content)
-             return data;
-         })
+    return await getAllRegisteredUsers(pagination)
+         .then(responses => {
+          
+              console.log(responses,"12e");
+             let data=  setUserItem(responses.data.content)
+            return {data,responses};
+          }
+         )
          .catch(error => {
             return  console.log(error);
          })
@@ -41,9 +45,9 @@ export const getUserData = async()=>{
 
  // get Categories data from api
 
-export const getCategoriesData = async()=>{
+export const getCategoriesData = async(pagination)=>{
 
-    return await getAllCategories()
+    return await getAllCategories(pagination)
          .then(response => {
              let data=  setItemCategories(response.data)
              return data;

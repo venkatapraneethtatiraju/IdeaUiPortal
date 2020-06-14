@@ -9,7 +9,9 @@ import {
     USERS,
     XEBIAOFFICE,
     ROLE,
+    SUCCESS,
     JOINEDON,
+    DEFAULT_PAGE_SIZE
 } from '../../Config/Constants';
 import './AllRecentRequest.scss';
 import Loader from '../../components/Loader/Loader';
@@ -27,20 +29,23 @@ const userColumn = [
     dataIndex: 'userName',
     sorter: (a, b) => a.userName.length - b.userName.length,
     sortDirections: ['descend', 'ascend'],
-    ellipsis: true
+    ellipsis: true,
+    width: '40%'
   },
   {
     title: XEBIAOFFICE,
     dataIndex: 'location',
-    ellipsis: true
+    ellipsis: true,
+    width: '20%'
   },
 
   {
     title: ROLE,
     dataIndex: 'role',
-   // sorter: (a, b) => a.role.length - b.role.length,
+    sorter: (a, b) => a.role.length - b.role.length,
     sortDirections: ['descend', 'ascend'],
-    ellipsis: true
+    ellipsis: true,
+    width: '20%'
   },
   {
     title: STATUS,
@@ -48,6 +53,7 @@ const userColumn = [
     sorter: (a, b) => a.status.length - b.status.length,
     sortDirections: ['descend', 'ascend'],
     ellipsis: true,
+    width: '20%',
     render: (status) => <StatusTag ideaStatus={status} statusWidth="96px" statusCursor="pointer" />
   }
 ]
@@ -60,13 +66,15 @@ const requestColumn =[
     dataIndex: 'title',
     sorter: (a, b) => a.title.length - b.title.length,
     sortDirections: ['descend', 'ascend'],
-    ellipsis: true
+    ellipsis: true,
+    width: '40%'
   },
   {
     title: SUBMITTED_BY,
     dataIndex: 'submittedBy',
     sorter: (a, b) => a.submittedBy.length - b.submittedBy.length,
-    ellipsis: true
+    ellipsis: true,
+    width: '15%'
   },
 
   {
@@ -74,7 +82,8 @@ const requestColumn =[
     dataIndex: 'submittedOn',
     sorter: (a, b) => a.submittedOn.length - b.submittedOn.length,
     sortDirections: ['descend', 'ascend'],
-    ellipsis: true
+    ellipsis: true,
+    width: '12%'
   },
   {
     title: STATUS,
@@ -82,6 +91,7 @@ const requestColumn =[
     sorter: (a, b) => a.status.length - b.status.length,
     sortDirections: ['descend', 'ascend'],
     ellipsis: true,
+    width: '12%',
     render: (status) => <StatusTag ideaStatus={status} statusWidth="96px" statusCursor="pointer" />
   }
 
@@ -96,21 +106,24 @@ const categoriesColumn =[
     dataIndex: 'categories',
     sorter: (a, b) => a.categories.length - b.categories.length,
     sortDirections: ['descend', 'ascend'],
-    ellipsis: true
+    ellipsis: true,
+    width: '40%'
   },
   {
     title: "Type",
     dataIndex: 'type',
     sorter: (a, b) => a.type.length - b.type.length,
-    ellipsis: true
+    ellipsis: true,
+    width: '20%'
   },
 
   {
     title: 'Updated On',
     dataIndex: 'updatedOn',
-    //sorter: (a, b) => a.submittedOn.length - b.submittedOn.length,
+    sorter: (a, b) => a.updatedOn.length - b.updatedOn.length,
     sortDirections: ['descend', 'ascend'],
-    ellipsis: true
+    ellipsis: true,
+    width: '20%'
   },
   {
     title: STATUS,
@@ -118,6 +131,7 @@ const categoriesColumn =[
     sorter: (a, b) => a.status.length - b.status.length,
     sortDirections: ['descend', 'ascend'],
     ellipsis: true,
+    width: '20%',
     render: (status) => <StatusTag ideaStatus={status} statusWidth="96px" statusCursor="pointer" />
   }
 
@@ -131,6 +145,7 @@ class AllRecentRequest extends Component{
         super(props);
 
         this.state={
+                lastPage: 1,
                 dropDownDefaultValue:'',
                 isUserSelected:true,
                 isCategoriesSelected:false,
@@ -138,9 +153,7 @@ class AllRecentRequest extends Component{
                 isLoading:false,
                 showModal : false,
                 adminRecentData : [],
-                data: [
-          
-                ],
+                data: [ ],
                 columns:[],
 
                 allStatus:
@@ -165,7 +178,15 @@ class AllRecentRequest extends Component{
                   "All Type",
                   "Technical",
                   "Non-Technical",
-                ]
+                ],
+                pagination: {
+                  current: 1,
+                  pageSize: DEFAULT_PAGE_SIZE,
+                  showTotal: (total, range) => ``,
+                  position: ['topRight'],
+                  total: 0,
+                  showQuickJumper: true,
+                },
 
         }
     }
@@ -176,14 +197,12 @@ class AllRecentRequest extends Component{
         console.log("firstTime");
         if(this.props.title ==="request"){
 
-          this.getAllRecentRequestRecord();
+          this.getAllRecentRequestRecord(this.state.pagination);
 
         }
         else{
-    
-            this.getUserDataRecord();
+            this.getUserDataRecord(this.state.pagination);
          
-          
         }
       }
 
@@ -193,67 +212,84 @@ class AllRecentRequest extends Component{
 
     async componentDidUpdate(prevState,nextState){
 
-      
       console.log(prevState,"previouspros")
       console.log(this.props,"presentprops");
       console.log(this.state,"props");
 
-           if(prevState.title !== this.props.title){
+        if(prevState.title !== this.props.title)
+        {
 
                 if(this.props.title ==="request"){
-                  this.getAllRecentRequestRecord();
+                  this.getAllRecentRequestRecord(this.state.pagination);
 
                 }
-                else{
-
-                      console.log("Users");
-                      this.getUserDataRecord();
-                  
-                  }
-
+                else
+                {
+                   console.log("Users");
+                   this.getUserDataRecord(this.state.pagination);
                 }
-       else{
-       
-
+        }
+       else
+       {
           if(prevState.value.subHeaderTextTitle !== this.props.value.subHeaderTextTitle)
           {
-              if(this.props.value.subHeaderTextTitle==="Categories"){
-                
-                this.getCategoriesDataRecord();
+              if(this.props.value.subHeaderTextTitle==="Categories")
+              {
+                this.getCategoriesDataRecord(this.state.pagination);
               }
-              else{
-                this.getUserDataRecord();
-               }
-
+              else
+              {
+                this.getUserDataRecord(this.state.pagination);
+              }
           }
         }
-
       }
      
-    
 
       refreshUserList = () => {
         this.buttonActionHandler();
-        this.getUserDataRecord();
+        this.getUserDataRecord(this.state.pagination);
       }
 
     // get all users from UserColumnAndData.js file i.e hitting users api
-    getUserDataRecord=async()=>
+    getUserDataRecord=async(pagination)=>
     { 
-      this.setState({isLoading:true,columns:[],data:[]})   
-      await getUserData().then(response =>
+      await this.setState({isLoading:true,columns:[],data:[]})   
+      await getUserData(pagination).then(response =>
       {
-        this.setState({selectedStatus:'', dropDownDefaultValue:"All Roles",isLoading:false, columns:userColumn, data:response});
+        const {data,responses} = response;
+        console.log(response,"4567");
+        const { currentPage, totalRecords } = responses.data.page;
+         this.setState({
+          lastPage: Number(currentPage) + 1,
+          pagination: {
+            ...this.state.pagination,
+            current: Number(currentPage) + 1,
+            total: totalRecords,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+          },
+          selectedStatus:'', dropDownDefaultValue:"All Roles",isLoading:false, columns:userColumn, data:data});
+        
       })
     }
 
     // get all users from UserColumnAndData.js file i.e hitting users api
-    getCategoriesDataRecord=async()=>
+    getCategoriesDataRecord=async(pagination)=>
     { 
-      this.setState({isLoading:true,columns:[],data:[]})   
-      await getCategoriesData().then(response =>
+      await this.setState({isLoading:true,columns:[],data:[]})   
+      await getCategoriesData(pagination).then(response =>
       {
-        this.setState({selectedStatus:'', dropDownDefaultValue:"All Type",isLoading:false, columns:categoriesColumn, data:response});
+          //const { currentPage, totalRecords } = response.data.result.page;
+        this.setState({
+          
+          pagination: {
+            ...this.state.pagination,
+            current: 1,
+            total: 15,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+          },
+          selectedStatus:'', dropDownDefaultValue:"All Type",isLoading:false, columns:categoriesColumn, data:response});
+        
       })
     }
 
@@ -262,14 +298,25 @@ class AllRecentRequest extends Component{
     }
 
     //To get all recent request
-    getAllRecentRequestRecord = async () =>
+    getAllRecentRequestRecord = async (pagination) =>
      {
-       this.setState({isLoading:true,columns:[],data:[]})   
-       await getAllRecentRequest()
+      await this.setState({isLoading:true,columns:[],data:[]})   
+       await getAllRecentRequest(pagination)
           .then(response => {
+              console.log(response,"requestw");
+              const { currentPage, totalRecords } = response.data.result.page;
               const RequestData = this.setRecentItem(response.data.result.content);
-              this.setState({selectedStatus:'', dropDownDefaultValue:"All Status" ,columns:requestColumn, data:RequestData,isLoading:false});
-          })
+              this.setState({ 
+                lastPage: Number(currentPage) + 1,
+                pagination: {
+                ...this.state.pagination,
+                current: Number(currentPage) + 1,
+                total: totalRecords,
+                showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+              },
+                selectedStatus:'', dropDownDefaultValue:"All Status" ,columns:requestColumn, data:RequestData,isLoading:false});
+            
+            })
           .catch(error => {
              this.setState({ isLoading:false});
               console.log(error);
@@ -313,10 +360,6 @@ class AllRecentRequest extends Component{
     }
     else{
       if(this.props.value.subHeaderTextTitle ==="Categories"){
-
-        
-
-
          if(this.state.selectedStatus === "All Type"){
           return tabelData;
          }
@@ -341,7 +384,35 @@ class AllRecentRequest extends Component{
     }
   }
 }
-   
+
+      //Handle pagination
+      handlePageChange(pagination) {
+        console.log(pagination, this.state.lastPage);
+        if(this.props.title ==="request")
+        {
+          console.log("request");
+          if (this.state.lastPage !== pagination.current){
+            this.getAllRecentRequestRecord(this.state.pagination);
+          }
+        }
+        else if(this.props.value.subHeaderTextTitle==="Categories")
+                {
+                  console.log("categories");
+                  if (this.state.lastPage !== pagination.current)
+                  {
+                      this.getCategoriesDataRecord(this.state.pagination);
+                  }
+                }
+        else
+            {
+                if (this.state.lastPage !== pagination.current)
+                {
+                  console.log("users");
+                  this.getUserDataRecord(this.state.pagination);
+                }
+            }
+      }
+        
 
 
    SearchTextHandle(searchTxt)
@@ -354,7 +425,7 @@ class AllRecentRequest extends Component{
 
            this.typingTimer = setTimeout(() => {
             
-           this.getAllUserByEmailIId(searchTxt);
+           this.getAllUserByEmailIId(this.state.pagination,searchTxt);
            
         }, 8);
         }
@@ -362,7 +433,7 @@ class AllRecentRequest extends Component{
         {
           this.typingTimer = setTimeout(() => {
 
-          this.getAllUserByName(searchTxt);
+          this.getAllUserByName(this.state.pagination,searchTxt);
            
           }, 5);
         }
@@ -381,34 +452,54 @@ class AllRecentRequest extends Component{
    return newArr;
   };
 
-  getAllUserByName= async (searchTxt)=>{
+  getAllUserByName= async (pagination,searchTxt)=>{
       console.log(searchTxt);
-      this.setState({isLoading:true,columns:[],data:[]})   
-       await getUsersByName(searchTxt)
+       await this.setState({isLoading:true,columns:[],data:[]})   
+       await getUsersByName(pagination,searchTxt)
           .then(response => {
+            
+              const { currentPage, totalRecords } = response.data.page;
               console.log(response.data.content,"userName")
              const RequestData = this.setItemCategories(response.data.content);
-             this.setState({columns:userColumn, data:RequestData,isLoading:false});
-          })
+             this.setState({
+              pagination: {
+                ...this.state.pagination,
+                current: Number(currentPage) + 1,
+                total: totalRecords,
+                showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+              },
+               columns:userColumn, data:RequestData,isLoading:false});
+            
+            })
           .catch(error => {
              this.setState({ isLoading:false});
               console.log(error);
           })
    }
 
-   getAllUserByEmailIId = async (searchTxt)=>{
-    this.setState({isLoading:true,columns:[],data:[]})   
-     await getUsersByEmailID(searchTxt)
+   getAllUserByEmailIId = async (pagination,searchTxt)=>{
+    await this.setState({isLoading:true,columns:[],data:[]})   
+     await getUsersByEmailID(pagination,searchTxt)
         .then(response => {
+          
+            const { currentPage, totalRecords } = response.data.page;
             console.log(response.data.content,"emailID")
            const RequestData = this.setItemCategories(response.data.content);
-           this.setState({columns:userColumn, data:RequestData,isLoading:false});
-        })
+           this.setState({
+            pagination: {
+              ...this.state.pagination,
+              current: Number(currentPage) + 1,
+              total: totalRecords,
+              showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+            },
+             columns:userColumn, data:RequestData,isLoading:false});
+          
+          })
         .catch(error => {
            this.setState({ isLoading:false});
             console.log(error);
         })
-  }
+   }
    
 
    validateEmail = (email) => {
@@ -427,15 +518,15 @@ class AllRecentRequest extends Component{
         ...prevstate,
         showModal: !prevstate.showModal
     }))
-}
-onSelectedRowAction = (record) => {
-  debugger;
-  if (record) {
-      this.setState({ adminRecentData: record, showModal: true, })
+ }
+  onSelectedRowAction = (record) => {
+    debugger;
+    if (record) {
+        this.setState({ adminRecentData: record, showModal: true, })
+    }
   }
-}
   render() {
-
+    const columns = this.state.columns;
     const tabelData= this.state.data;
     const selectedStatusData =  this.filterData(tabelData);
     console.log(selectedStatusData);
@@ -447,11 +538,13 @@ onSelectedRowAction = (record) => {
      </div>:null
     }
       <div className="my-ideas-container ">
+      {columns !==[] && selectedStatusData !==[]?
         <Row justify="center">
           <Col xs={20} sm={20} md={20} lg={20} xl={20}>
             <Table
-              pagination={{ position: ['topRight'] }}
-              columns={this.state.columns}
+              pagination={this.state.pagination}
+              onChange={pagination => (this.handlePageChange(pagination))}
+              columns={columns}
               dataSource={selectedStatusData}
               onRow={(record) => ({
                 onClick: () => this.onSelectedRowAction(record)
@@ -460,9 +553,9 @@ onSelectedRowAction = (record) => {
             </Table>
           </Col>
         
-        </Row>
-        
-        {this.props.title !=="request"?
+        </Row>:null
+         }
+        {this.props.value.userClickColor ==="black"?
         <div className="searchUserTypeMainLyout" >
         <SearchBox value={this.props} onChange={(evt)=> this.SearchTextHandle(evt)} />
         </div>
@@ -480,7 +573,7 @@ onSelectedRowAction = (record) => {
                         adminRecentData={this.state.adminRecentData}
                         refreshUserList = {this.refreshUserList}
                     /> : null}
-      </div>
+       </div>
       </div> 
     );
   }

@@ -11,9 +11,11 @@ const SearchBox = (props) => (
      placeholder="Search Users by EmailId and Name"
      onChange={e=>props.onChange(e.target.value)}
      />
+     {props.value.userClickColor !=="black"?
      <div className="searchIconBody">
      <img src={SearchIcon} className='searchIcon'  />
-     </div>
+     </div>:null
+     }
      </div>
 )
 

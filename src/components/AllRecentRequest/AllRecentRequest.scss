@@ -86,24 +86,8 @@
   }
 }
 
-@media screen and (max-height: 905px) {
-  .searchMainLyout {
-    width: 114px;
-    height: 40px;
-    position: absolute;
-    right: 20%;
-    top: 20.7%;
-  }
-}
-@media screen and (max-height: 905px) {
-  .searchMainLyout {
-    width: 114px;
-    height: 40px;
-    position: absolute;
-    right: 20%;
-    top: 20.7%;
-  }
-}
+
+
 
 .Submitted {
   width: 96px;
@@ -191,8 +175,8 @@
   width: 114px;
   height: 40px;
   position: absolute;
-  right: 20%;
-  top: 16.7%;
+  left: 56%;
+  top: 144px;
 }
 
 .searchUserTypeMainLyout {
@@ -201,8 +185,8 @@
   border: solid 1px #dedede;
   background-color: #ffffff;
   position: absolute;
-  left: 8.5%;
-  top: 16%;
+  left: 9%;
+  top: 137px;
 }
 
 .Active {

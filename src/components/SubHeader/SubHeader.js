@@ -14,14 +14,14 @@ class SubHeader extends Component {
                     </div>:
                     <h2>{this.props.subHeaderTitle}</h2>
                 }
-                {this.props.value.userClickColor !=="black"?
+                
 
                 <GenericButton 
                 buttonClickHandler={this.props.buttonClickHandler}
                 buttonName={this.props.buttonName}
                 btnColor={this.props.btnColor}
                 >
-                </GenericButton>:null}
+                </GenericButton>
             </div>
         );
     }
