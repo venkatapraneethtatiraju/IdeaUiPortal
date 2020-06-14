@@ -24,7 +24,10 @@ import {
     APPROVED,
     COMPLETE,
     DEVELOPMENT,
-    DRAFT
+    DRAFT,
+    TECHNICAL,
+    NON_TECHNICAL,
+    WARNING_MESSAGE
 } from '../../Config/Constants';
 import ReactHtmlParser from 'react-html-parser';
 import { createIconShortName, getFormatttedDate } from '../../Utility/CommonFunctions';
@@ -74,7 +77,7 @@ class PopUpModel extends Component {
             this.state.ideaId = datas.key;
             this.state.ideaSubject = datas.ideaSubject;
             this.state.ideaDetails = datas.ideaDescription;
-            this.state.ideaType = datas.ideaType === 'Technical' ? this.state.ideaType = 1 : this.state.ideaType = 2;
+            this.state.ideaType = datas.ideaType === TECHNICAL ? this.state.ideaType = 1 : this.state.ideaType = 2;
             this.state.ideaStatus = datas.ideaStatus;
         }
 
@@ -89,7 +92,7 @@ class PopUpModel extends Component {
         let valid = false;
 
         if (ideaSubject.trim() === "") {
-            this.setState({ ideaSubjectError: 'This is a mandatory field' });
+            this.setState({ ideaSubjectError: WARNING_MESSAGE });
             valid = true;
         } else {
             this.setState({ ideaSubjectError: '' });
@@ -97,7 +100,7 @@ class PopUpModel extends Component {
         }
 
         if (ideaCategoryValue.length === 0) {
-            this.setState({ ideaCategoryValueError: 'This is a mandatory field' });
+            this.setState({ ideaCategoryValueError: WARNING_MESSAGE });
             valid = true;
         } else {
             this.setState({ ideaCategoryValueError: '' });
@@ -105,7 +108,7 @@ class PopUpModel extends Component {
         }
 
         if (ideaDetails.trim() === "") {
-            this.setState({ ideaDetailsError: 'This is a mandatory field' });
+            this.setState({ ideaDetailsError: WARNING_MESSAGE });
             valid = true;
         } else {
             this.setState({ ideaDetailsError: '' });
@@ -142,7 +145,7 @@ class PopUpModel extends Component {
     }
 
     ideaTypeChangedHandler = (event) => {
-        if (event.target.textContent === "Technical") {
+        if (event.target.textContent === TECHNICAL) {
             this.setState({
                 ideaCategory: this.state.ideaCategoryTech,
                 ideaColorTech: 'rgb(247, 148, 29)',
@@ -228,17 +231,17 @@ class PopUpModel extends Component {
         let ideaCategoryTech = [];
         let ideaCategoryNonTech = [];
         for (let category of categoriesData) {
-            if (category.ideaType === 'Technical') {
+            if (category.ideaType === TECHNICAL) {
                 ideaCategoryTech.push(category);
             }
-            if (category.ideaType === 'Non-Technical') {
+            if (category.ideaType === NON_TECHNICAL) {
                 ideaCategoryNonTech.push(category);
             }
         }
 
         if (this.props.onEditHandler !== undefined) {
             let editIdea = this.props.onEditHandler;
-            if (editIdea.ideaType === "Technical") {
+            if (editIdea.ideaType === TECHNICAL) {
                 this.setState({
                     ideaCategory: ideaCategoryTech,
                     ideaCategoryTech: ideaCategoryTech,
@@ -248,7 +251,7 @@ class PopUpModel extends Component {
                     ideaCategoryValue: editIdea.subCategoryId
                 })
             }
-            else if (editIdea.ideaType === "Non-Technical") {
+            else if (editIdea.ideaType === NON_TECHNICAL) {
                 this.setState({
                     ideaCategory: ideaCategoryNonTech,
                     ideaCategoryTech: ideaCategoryTech,
