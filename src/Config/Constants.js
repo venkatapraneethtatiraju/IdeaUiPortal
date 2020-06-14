@@ -45,4 +45,10 @@ export const IDEA_ADDED_MESSAGE = "Idea Added Successfully!";
 export const TECHNICAL = 'Technical';
 export const NON_TECHNICAL = 'Non-Technical';
 
+//Login data Storage key
+export const TOKEN_KEY = 'tokenId';
+export const USERNAME_KEY = 'userName';
+export const USERID_KEY = 'userId';
+export const USERROLE_KEY = 'userRole';
+
 

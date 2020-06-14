@@ -99,7 +99,7 @@ class Login extends PureComponent {
           console.log('getEmailVerify', response)
           if (response.data.message === 'success') {
             this.setState({ isLogin: true })
-            login(response.data.token);
+            login(response.data);
           }
         })
         .catch(error => {
