@@ -12,10 +12,10 @@ import AllRecentRequest from '../AllRecentRequest/AllRecentRequest'
 import { Row, Col } from 'antd';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import PopUpModel from '../PopUpModel/PopUpModel'
-import { getToken } from '../Auth/Auth';
-import AlertBox from '../Alert/Alert.js'
+import AlertBox from '../Alert/Alert.js';
 import AllIdea from '../AllIdea/AllIdea';
-import { grey } from '@material-ui/core/colors';
+import { createNewIdea } from '../../services/AppService';
+import { IDEA_Added_MESSAGE } from '../../Config/Constants';
 
 export default class HomePage extends PureComponent {
   constructor(props) {
@@ -75,10 +75,10 @@ export default class HomePage extends PureComponent {
 
   clickActionHandler = async (event) => {
     if (event === "management") {
-      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black',categoriesClickColor:'grey'})
+      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black', categoriesClickColor: 'grey' })
     }
     else {
-      await this.setState({ buttonName: "Add an Idea", userClickColor: 'gray',categoriesClickColor:'grey' });
+      await this.setState({ buttonName: "Add an Idea", userClickColor: 'gray', categoriesClickColor: 'grey' });
     }
     await this.setState(prevState => ({
       ...prevState,
@@ -105,10 +105,6 @@ export default class HomePage extends PureComponent {
   }
 
   saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId) {
-    console.log("parent")
-
-    // Simple POST request with a JSON body using fetch
-    console.log(ideaStatusId)
     let requestParam = {
       title: ideaSubject,
       ideaDescription: ideaDetails,
@@ -116,22 +112,12 @@ export default class HomePage extends PureComponent {
       subCategoryId: ideaCategoryValue,
       ideaStatusId: ideaStatusId
     }
-    this.createIdeaPostRequest(requestParam);
-    // this.clickActionHandler()
+    this.createIdea(requestParam);
   }
-  createIdeaPostRequest(requestParam) {
-    let token = getToken();
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify(requestParam)
-    };
 
-    console.log("requestOptions", requestOptions)
-    fetch('https://cors-anywhere.herokuapp.com/http://iportal.herokuapp.com/innovation-portal/api/v1/ideas', requestOptions)
-      .then(response => response.json())
+  createIdea(requestParam) {
+    createNewIdea(requestParam)
       .then(data => {
-        console.log('Success:', data.code);
         this.setState({ myIdeaData: data, status: data.code, showAlert: true })
         this.buttonActionHandler();
       })
@@ -153,7 +139,6 @@ export default class HomePage extends PureComponent {
   }
 
   render() {
-    const alertName = "Idea Submitted Successfully!";
     return (
       <div className="home-page">
         <Header
@@ -162,7 +147,7 @@ export default class HomePage extends PureComponent {
           tabsData={this.state.headerTabs}
         ></Header>
         {this.state.showAlert ?
-          <AlertBox alertName={alertName} /> : null
+          <AlertBox alertName={IDEA_Added_MESSAGE} /> : null
         }
         <Row justify="center" className="sub-header-wrapper">
           <Col xs={20} sm={20} md={20} lg={20} xl={20}>
@@ -201,10 +186,10 @@ export default class HomePage extends PureComponent {
           </Route>
           <Route exact path="/allIdeas" component={AllIdea} />
           <Route exact to="/request">
-            <AllRecentRequest  title={this.state.title} value={this.state} />
+            <AllRecentRequest title={this.state.title} value={this.state} />
           </Route>
           <Route exact path="/management">
-            <AllRecentRequest  title={this.state.title} value={this.state} />
+            <AllRecentRequest title={this.state.title} value={this.state} />
           </Route>
         </Switch>
       </div>
