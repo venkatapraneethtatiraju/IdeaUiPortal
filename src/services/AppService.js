@@ -14,7 +14,8 @@ import {
     RECENTREQUEST_URL,
     RECENTLY_SUBMITTED_URL,
     PUT_CHANGE_USER_ROLE_ADMIN,
-    ACTIVE_CATEGORIES_URL
+    ACTIVE_CATEGORIES_URL,
+    PUT_POST_CATEGORIES
 } from '../Config/ServiceUrl';
 import { getHeaders } from '../Utility/CommonFunctions';
 
@@ -131,4 +132,14 @@ export const createNewIdea = (requestParam) => {
     return Axios.post(`${FOR_IDEAS_URL}`, JSON.stringify(requestParam), { headers });
 }
 
+//Service call to edit  addCategorie
 
+export const putCategories = (userId,requestParam) => {
+    const headers = getHeaders();
+    return Axios.put(`${PUT_POST_CATEGORIES}/${userId}`, JSON.stringify(requestParam), { headers });
+}
+//Service call to edit  editCategorie
+export const postCategories = (requestParam) => {
+    const headers = getHeaders();
+    return Axios.post(`${PUT_POST_CATEGORIES}`, JSON.stringify(requestParam), { headers });
+}

@@ -12,7 +12,7 @@ import {
   TECHNICAL,
 } from "../../Config/Constants";
 import GenericButton from "../Button/Button";
-import { putChangeUserRole } from "../../services/AppService";
+import { putChangeUserRole, putCategories, postCategories } from "../../services/AppService";
 
 export class AdminPopUpModel extends Component {
   constructor(props) {
@@ -29,7 +29,8 @@ export class AdminPopUpModel extends Component {
       tabClicked: false,
       categories: '',
       techBGColor : "#b1b1b1",
-      nonTechBGColor : "#b1b1b1"
+      nonTechBGColor : "#b1b1b1",
+      categoriesValue : this.props.adminRecentData.categories
 
     };
   }
@@ -87,23 +88,66 @@ export class AdminPopUpModel extends Component {
       userStatus: !prevstate.userStatus,
     }));
   };
-  onSaveClicked = () => {
-    let userRole = "";
-    if (this.state.userRole === "Employee") {
-      userRole = ROLE_EMPLOYEE;
-    } else if (this.state.userRole === "Manager") {
-      userRole = ROLE_MANAGER;
-    } else if (this.state.userRole === "Admin") {
-      userRole = ROLE_ADMIN;
-    } else {
-      userRole = this.state.userRole;
-    }
-    putChangeUserRole(this.state.userID, userRole, this.state.userStatus)
-      .then((response) => {
-        this.props.refreshUserList();
-      })
-      .catch((error) => {});
-  };
+  onSaveClicked = (key,catTab,addCategory) => {
+  debugger;
+  let categoryId = 1;
+  if(this.state.categories === TECHNICAL){
+    categoryId = 1
+  }
+  else if(this.state.categories === NON_TECHNICAL) {
+    categoryId = 2
+  }
+  let requestParam = {
+    subCategoryName: this.state.categoriesValue,
+    categoryId: categoryId,
+  }
+  if(catTab && addCategory !== "Add Category"){
+    this.editCategorie(key,requestParam);
+  }
+  else if(addCategory === "Add Category") {
+    this.addCategorie(requestParam);
+  }
+  else {
+      let userRole = "";
+      if (this.state.userRole === "Employee") {
+        userRole = ROLE_EMPLOYEE;
+      } else if (this.state.userRole === "Manager") {
+        userRole = ROLE_MANAGER;
+      } else if (this.state.userRole === "Admin") {
+        userRole = ROLE_ADMIN;
+      } else {
+        userRole = this.state.userRole;
+      }
+      putChangeUserRole(this.state.userID, userRole, this.state.userStatus)
+        .then((response) => {
+          this.props.refreshUserList();
+        })
+        .catch((error) => {});
+    };
+}
+ editCategorie = (key,requestParam) => {
+  putCategories(key,requestParam)
+  .then((response) => {
+    this.props.refreshCategoriesList();
+  })
+  .catch((error) => {});
+  
+ }
+ addCategorie = (requestParam) => {
+  postCategories(requestParam)
+  .then((response) => {
+    this.props.onOk();
+  })
+  .catch((error) => {});
+}
+
+reload = () => {
+  this.props.reloadData();
+}
+  onCategoryChanged = (event) => {
+  this.setState({ categoriesValue: event.target.value })
+  }
+
   componentDidMount() {
     if (this.props.isViewIdea) {
       this.setState({ userID: this.props.adminRecentData.key });
@@ -120,6 +164,10 @@ export class AdminPopUpModel extends Component {
       categories,
       type
     } = this.props.adminRecentData;
+    // if(this.state.categoriesValue!== "")
+    // {
+    //   categories = this.state.categoriesValue
+    // }
     let userRole = role;
     let statusChecked = false;
     // let userEmpBGColor ='#b1b1b1'; let userMgrBGColor ='#b1b1b1'; let userAdmBGColor ='#b1b1b1';
@@ -209,7 +257,7 @@ if(!this.state.tabClicked && addCategory === 'Add Category') {
                 <GenericButton
                   buttonName="Save"
                   btnColor="rgb(177, 177, 177)"
-                  buttonClickHandler={this.onSaveClicked}
+                  buttonClickHandler={() => this.onSaveClicked(key,catTab,addCategory)}
                 ></GenericButton>
               </Col>
             </Row>
@@ -280,8 +328,8 @@ if(!this.state.tabClicked && addCategory === 'Add Category') {
                             <Input type="text"
                                 name="ideaCategory"
                                 ref="ideaCategory"
-                                value={categories}
-                                placeholder={addCat ? 'Enter category name' :''} readonly/>
+                                value={this.state.categoriesValue} onChange={this.onCategoryChanged}
+                                placeholder={addCat ? 'Enter category name' :''}/>
                         </Row>
                         <Row style={{ marginTop: '16px' }} gutter={8} className="tag-div">
                             <Col style={{ padding: '5px 4px' }}><label style={{ marginRight: '20px' }}>Category Type</label></Col>

@@ -189,10 +189,8 @@ class AllRecentRequest extends Component {
     }
   }
 
-  // mount first time lifeCycle
-  componentDidMount() {
-
-    console.log("firstTime");
+    // mount first time lifeCycle
+    componentDidMount(){
     if (this.props.title === "request") {
 
       this.getAllRecentRequestRecord(this.state.pagination);
@@ -203,17 +201,7 @@ class AllRecentRequest extends Component {
 
     }
   }
-
-
-
-
-
   async componentDidUpdate(prevState, nextState) {
-
-    console.log(prevState, "previouspros")
-    console.log(this.props, "presentprops");
-    console.log(this.state, "props");
-
     if (prevState.title !== this.props.title) {
 
       if (this.props.title === "request") {
@@ -237,6 +225,10 @@ class AllRecentRequest extends Component {
     }
   }
 
+  refreshCategoriesList = () => {
+    this.buttonActionHandler();
+    this.getCategoriesDataRecord(this.state.pagination);
+  }
 
   refreshUserList = () => {
     this.buttonActionHandler();
@@ -562,6 +554,17 @@ class AllRecentRequest extends Component {
             selectedTab={this.props.value.subHeaderTextTitle}
           /> : null}
         </div>
+
+        {this.state.showModal && this.props.title!=='request' ? <AdminPopUpModel
+                        onOk={this.buttonActionHandler}
+                        onCancel={this.buttonActionHandler}
+                        isAddEditIdea="false"
+                        isViewIdea="true"
+                        adminRecentData={this.state.adminRecentData}
+                        refreshUserList = {this.refreshUserList}
+                        refreshCategoriesList = {this.refreshCategoriesList}
+                        selectedTab = {this.props.value.subHeaderTextTitle}
+                    /> : null}
       </div>
     );
   }

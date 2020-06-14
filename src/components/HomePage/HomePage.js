@@ -64,7 +64,8 @@ export default class HomePage extends PureComponent {
       ideaType: '',
       ideaCategoryValue: '',
       ideaDetails: '',
-      status: 0
+      status: 0,
+      reloadData : false
     };
     this.saveandSubmitHandler = this.saveandSubmitHandler.bind(this)
   }
@@ -142,6 +143,11 @@ export default class HomePage extends PureComponent {
     await this.setState({ subHeaderTextTitle: 'Categories', isCategoriesSelected: true, isUserSelected: false, userClickColor: "gray", categoriesClickColor: "black" })
   }
 
+  reloadData = () => {
+    debugger;
+    this.setState({reloadData : true})
+  }
+
   render() {
     return (
       <div className="home-page">
@@ -188,8 +194,11 @@ export default class HomePage extends PureComponent {
           adminRecentData=""
           selectedTab="Categories"
           buttonName = {this.state.buttonName}
+          reloadData = {this.reloadData}
           />:null}
-        
+       {this.state.reloadData ?
+        <AllRecentRequest
+          reloadData = "true"/>:null}
 
         <Switch>
           <Redirect exact from="/" to="/dashboard" />
