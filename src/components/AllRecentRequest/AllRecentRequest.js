@@ -257,6 +257,7 @@ class AllRecentRequest extends Component{
       await this.setState({isLoading:true,columns:[],data:[]})   
       await getUserData(pagination).then(response =>
       {
+        
         const {data,responses} = response;
         console.log(response,"4567");
         const { currentPage, totalRecords } = responses.data.page;

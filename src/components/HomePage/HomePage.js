@@ -78,7 +78,8 @@ export default class HomePage extends PureComponent {
   clickActionHandler = async (event) => {
     if (event === "management") {
       this.usersClicked();
-      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black',categoriesClickColor:'grey'})
+      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black',categoriesClickColor:'grey'});
+      
     }
     else {
       await this.setState({ buttonName: "Add an Idea", userClickColor: 'gray', categoriesClickColor: 'grey' });
