@@ -97,13 +97,13 @@ export const getAllCategories = (pagination) => {
 }
 
 //Service call to get all user by name search
-export const getUsersByName = (pagination,name) => {
+export const getUsersByName = (pagination, name) => {
     const headers = getHeaders();
     return Axios.get(`${SEARCH_USERSBY_NAME_URL}pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}&name=${name}`, { headers });
 }
 
 //Service call to get all user by emailId search
-export const getUsersByEmailID = (pagination,emailID) => {
+export const getUsersByEmailID = (pagination, emailID) => {
     const headers = getHeaders();
     return Axios.get(`${SEARCH_USERSBY_EMAILID_URL}pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}&email=${emailID}`, { headers });
 }

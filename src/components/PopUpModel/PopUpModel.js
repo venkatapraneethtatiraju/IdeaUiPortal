@@ -174,6 +174,7 @@ class PopUpModel extends Component {
             postIdeaLike(ideaId)
                 .then(response => {
                     if (response.data.message === SUCCESS) {
+                        debugger;
                         this.setState({ isLike: true })
                         this.props.updateLikes(this.state.ideaDetailsListView.likeCount)
                     }
