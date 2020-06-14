@@ -1,15 +1,34 @@
 import React, { Component } from 'react';
 import './PopUpModel.scss';
-import { Modal, Row, Col, Tag, Button, Timeline, Avatar, Input, Select, Upload } from 'antd';
+import {
+    Modal, Row, Col, Tag, Button, Timeline,
+    Avatar, Input, Select, Upload
+} from 'antd';
 import GenericButton from '../Button/Button';
 import { ReactComponent as JpgIcon } from '../../images/jpg.svg'
 import { ReactComponent as PptIcon } from '../../images/ppt.svg'
 import { ReactComponent as LikeIcon } from '../../images/hands.svg'
 import { ReactComponent as DownloadIcon } from '../../images/download.svg'
 import { ReactComponent as GestureIcon } from '../../images/gestures.svg'
-import { postIdeaLike, postIdeaDisLike, getIdeaDetailsById, getActiveCategories } from '../../services/AppService';
+import {
+    postIdeaLike,
+    postIdeaDisLike,
+    getIdeaDetailsById,
+    getActiveCategories
+} from '../../services/AppService';
 import Editor from '../Editor/Editor';
-import { SUCCESS, CLOSE, REVIEW, APPROVED, COMPLETE, DEVELOPMENT } from '../../Config/Constants';
+import {
+    SUCCESS,
+    CLOSE,
+    REVIEW,
+    APPROVED,
+    COMPLETE,
+    DEVELOPMENT,
+    DRAFT,
+    TECHNICAL,
+    NON_TECHNICAL,
+    WARNING_MESSAGE
+} from '../../Config/Constants';
 import ReactHtmlParser from 'react-html-parser';
 import { createIconShortName, getFormatttedDate } from '../../Utility/CommonFunctions';
 import StatusButton from '../StatusButton/StatusButton';
@@ -19,7 +38,6 @@ import StatusTag from '../StatusTag/StatusTag';
 class PopUpModel extends Component {
     constructor(props) {
         super(props)
-        this.categoryDD = React.createRef();
         this.state = {
             ideaId: '',
             ideaSubject: '',
@@ -27,7 +45,7 @@ class PopUpModel extends Component {
             subjectCategoryName: '',
             ideaType: 1,
             ideaCategory: {},
-            ideaCategoryValue: 0,
+            ideaCategoryValue: [],
             ideaDetails: '',
             ideaSubmittedBy: '',
             ideaStatusId: 0,
@@ -35,7 +53,7 @@ class PopUpModel extends Component {
             ideaTypeError: "",
             ideaCategoryValueError: "",
             ideaDetailsError: "",
-            ideaColorTech: "rgb(247, 148, 29)",
+            ideaColorTech: "rgb(177, 177, 177)",
             ideaColorNonTech: "rgb(177, 177, 177)",
             selectedRow: [],
             currentState: "",
@@ -45,21 +63,22 @@ class PopUpModel extends Component {
             isAddEditIdea: this.props.isAddEditIdea,
             isViewIdea: this.props.isViewIdea,
             selectedId: this.props.selectedId,
+            isEditIdea: this.props.isEditIdea,
             isLike: false,
             ideaDetailsListView: [],
             ideaActiveCategories: [],
-            ideaTecCategory: [],
-            ideaCategoryNonTech: []
+            ideaCategoryTech: [],
+            ideaCategoryNonTech: [],
+            ideaStatus: '',
         }
 
         if (this.props.onEditHandler) {
-            console.log("const...", this.props.onEditHandler);
             let datas = this.props.onEditHandler;
             this.state.ideaId = datas.key;
             this.state.ideaSubject = datas.ideaSubject;
             this.state.ideaDetails = datas.ideaDescription;
-            this.state.ideaType = datas.ideaType === 'TECHNICAL' ? this.state.ideaType = 1 : this.state.ideaType = 2;
-            this.state.ideaCategoryValue = datas.ideaCategory;
+            this.state.ideaType = datas.ideaType === TECHNICAL ? this.state.ideaType = 1 : this.state.ideaType = 2;
+            this.state.ideaStatus = datas.ideaStatus;
         }
 
         if (this.props.isViewIdea === "true") {
@@ -68,29 +87,34 @@ class PopUpModel extends Component {
     }
 
     validateInputs = () => {
+
         const { ideaSubject, ideaCategoryValue, ideaDetails } = this.state;
         let valid = false;
+
         if (ideaSubject.trim() === "") {
-            this.setState({ ideaSubjectError: 'This is a mandatory field' });
+            this.setState({ ideaSubjectError: WARNING_MESSAGE });
             valid = true;
         } else {
             this.setState({ ideaSubjectError: '' });
             valid = false;
         }
-        if (!ideaCategoryValue) {
-            this.setState({ ideaCategoryValueError: 'This is a mandatory field' });
+
+        if (ideaCategoryValue.length === 0) {
+            this.setState({ ideaCategoryValueError: WARNING_MESSAGE });
             valid = true;
         } else {
             this.setState({ ideaCategoryValueError: '' });
             valid = false;
         }
+
         if (ideaDetails.trim() === "") {
-            this.setState({ ideaDetailsError: 'This is a mandatory field' });
+            this.setState({ ideaDetailsError: WARNING_MESSAGE });
             valid = true;
         } else {
             this.setState({ ideaDetailsError: '' });
             valid = false;
         }
+
         return valid;
     }
 
@@ -110,8 +134,8 @@ class PopUpModel extends Component {
         }
     }
 
-    onEditChanged = (e) => {
-        this.setState({ ideaDetails: e })
+    onEditChanged = (details) => {
+        this.setState({ ideaDetails: details })
     }
 
     inputChangedHandler = (event) => {
@@ -121,12 +145,13 @@ class PopUpModel extends Component {
     }
 
     ideaTypeChangedHandler = (event) => {
-        if (event.target.textContent === "Technical") {
+        if (event.target.textContent === TECHNICAL) {
             this.setState({
-                ideaCategory: this.state.ideaTecCategory,
+                ideaCategory: this.state.ideaCategoryTech,
                 ideaColorTech: 'rgb(247, 148, 29)',
                 ideaColorNonTech: 'rgb(177, 177, 177)',
-                ideaType: 1
+                ideaType: 1,
+                ideaCategoryValue: []
             })
         }
         else if (event.target.textContent === "Non Technical") {
@@ -134,17 +159,17 @@ class PopUpModel extends Component {
                 ideaCategory: this.state.ideaCategoryNonTech,
                 ideaColorNonTech: 'rgb(247, 148, 29)',
                 ideaColorTech: 'rgb(177, 177, 177)',
-                ideaType: 2
+                ideaType: 2,
+                ideaCategoryValue: []
             })
         }
     }
 
-    onCategoryChanged = (event) => {
-        this.setState({ ideaCategoryValue: event })
+    onCategoryChanged = (value) => {
+        this.setState({ ideaCategoryValue: value })
     }
 
     onLikeIconClicked = (ideaId) => {
-        debugger;
         if (!this.state.ideaDetailsListView.likeCount) {
             postIdeaLike(ideaId)
                 .then(response => {
@@ -172,9 +197,9 @@ class PopUpModel extends Component {
     }
 
     componentDidMount() {
-        if (this.state.isViewIdea && this.props.ideaId) {
+        if (this.state.isViewIdea === "true" && this.props.ideaId) {
             this.getDetailsByID(this.props.ideaId);
-        } else if (this.state.isAddEditIdea) {
+        } else if (this.state.isAddEditIdea === "true") {
             this.getCategories();
         }
     }
@@ -203,22 +228,54 @@ class PopUpModel extends Component {
     }
 
     setCategoriesData = (categoriesData) => {
-        let ideaTecCategory = [];
+        let ideaCategoryTech = [];
         let ideaCategoryNonTech = [];
         for (let category of categoriesData) {
-            if (category.ideaType === 'Technical') {
-                ideaTecCategory.push(category);
+            if (category.ideaType === TECHNICAL) {
+                ideaCategoryTech.push(category);
             }
-            if (category.ideaType === 'Non-Technical') {
+            if (category.ideaType === NON_TECHNICAL) {
                 ideaCategoryNonTech.push(category);
             }
         }
-        this.setState({
-            ideaType: 1,
-            ideaTecCategory: ideaTecCategory,
-            ideaCategoryNonTech: ideaCategoryNonTech,
-            ideaCategory: ideaTecCategory
-        })
+
+        if (this.props.onEditHandler !== undefined) {
+            let editIdea = this.props.onEditHandler;
+            if (editIdea.ideaType === TECHNICAL) {
+                this.setState({
+                    ideaCategory: ideaCategoryTech,
+                    ideaCategoryTech: ideaCategoryTech,
+                    ideaCategoryNonTech: ideaCategoryNonTech,
+                    ideaColorTech: 'rgb(247, 148, 29)',
+                    ideaColorNonTech: 'rgb(177, 177, 177)',
+                    ideaCategoryValue: editIdea.subCategoryId
+                })
+            }
+            else if (editIdea.ideaType === NON_TECHNICAL) {
+                this.setState({
+                    ideaCategory: ideaCategoryNonTech,
+                    ideaCategoryTech: ideaCategoryTech,
+                    ideaCategoryNonTech: ideaCategoryNonTech,
+                    ideaColorNonTech: 'rgb(247, 148, 29)',
+                    ideaColorTech: 'rgb(177, 177, 177)',
+                    ideaCategoryValue: editIdea.subCategoryId
+                })
+            }
+        }
+        else {
+            this.setState({
+                ideaType: 1,
+                ideaCategoryTech: ideaCategoryTech,
+                ideaCategoryNonTech: ideaCategoryNonTech,
+                ideaCategory: ideaCategoryTech,
+                ideaColorTech: 'rgb(247, 148, 29)',
+                ideaColorNonTech: 'rgb(177, 177, 177)'
+            })
+        }
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     render() {
@@ -232,13 +289,6 @@ class PopUpModel extends Component {
             likeIdeaDetailList,
             likeCount } = this.state.ideaDetailsListView;
 
-        let optionTemplate = "";
-        if (this.state.ideaCategory.length > 0) {
-            optionTemplate = this.state.ideaCategory.map(item => (
-                <option value={item.id}>{item.subCategoryName}</option>
-            ));
-        }
-
         return (
             <div className="modal-content">
                 {/* {true ? <AdminPopUpModel /> : */}
@@ -247,14 +297,20 @@ class PopUpModel extends Component {
                         <Row className="popup-header-title" gutter={2}>
                             <Col className="label-div" style={{ maxWidth: '38%' }}>
                                 <label className="header-label">
-                                    {this.state.isViewIdea === "true" ? title : 'Add an Idea'}
+                                    {this.state.isViewIdea === "true" ? title
+                                        : this.state.isEditIdea === "true" ? this.state.ideaSubject
+                                            : 'Add an Idea'}
                                 </label>
                             </Col>
                             {this.state.isViewIdea === "true" && ideaStatus ?
                                 <Col>
                                     <StatusTag ideaStatus={ideaStatus} statusWidth="96px" statusCursor="default" />
-                                </Col> : null}
-
+                                </Col>
+                                : this.state.isEditIdea === "true" ?
+                                    <Col>
+                                        <StatusTag ideaStatus={this.state.ideaStatus} statusWidth="96px" statusCursor="default" />
+                                    </Col>
+                                    : null}
                             <Col style={{ display: 'none' }}>
                                 <Tag className="display-status-tag" color="#F7941D" >Draft</Tag>
                             </Col>
@@ -263,27 +319,28 @@ class PopUpModel extends Component {
                                 <Tag className="display-status-tag" color="#A5AAD9" >Submitted</Tag>
                             </Col>
 
-                            {this.state.isViewIdea === "true" || this.state.currentState === "approved" ? null :
-                                <Row className="right-display">
-                                    {console.log('this.state.currentState : ' + this.state.currentState)}
-                                    <Row>
-                                        <Button type="link" onClick={this.saveandSubmitHandler} style={{
-                                            color: this.props.btnColor
-                                        }}>Save as Draft</Button>
-                                        <GenericButton
-                                            buttonClickHandler={this.saveandSubmitHandler}
-                                            buttonName={this.props.saveandSubmit}
-                                            btnColor={this.props.btnColor}
-                                        ></GenericButton>
-                                    </Row>
-                                </Row>}
+                            {this.state.isAddEditIdea === "true" ? <Row className="right-display">
+                                <Row>
+                                    <Button type="link" onClick={this.saveandSubmitHandler} style={{
+                                        color: this.props.btnColor
+                                    }}>Save as Draft</Button>
+                                    <GenericButton
+                                        buttonClickHandler={this.saveandSubmitHandler}
+                                        buttonName={this.props.saveandSubmit}
+                                        btnColor={this.props.btnColor}
+                                    ></GenericButton>
+                                </Row>
+                            </Row> : null}
 
-                            <Col className="right-display" style={{ display: 'none' }}>
-                                <GenericButton
-                                    buttonName="Edit"
-                                    btnColor={this.props.btnColor}
-                                ></GenericButton>
-                            </Col>
+                            {this.state.isViewIdea === "true" && ideaStatus !== undefined && ideaStatus === DRAFT ?
+                                <Col className="right-display">
+                                    <GenericButton
+                                        buttonClickHandler={this.props.buttonEditHandler}
+                                        buttonName="Edit"
+                                        btnColor={this.props.btnColor}
+                                    ></GenericButton>
+                                </Col> : null}
+
                             <Row className="right-display" style={{ display: 'none' }}>
                                 <StatusButton ideaStatus={CLOSE} />
                                 <Col className="split-line" />
@@ -298,14 +355,12 @@ class PopUpModel extends Component {
                             </Row>
                         </Row>
                     }
-
                     visible
                     centered
                     onCancel={this.props.onCancel}
                     onOk={this.props.onOk}
                     footer={null}
                     width={760}
-
                 >
                     <Row gutter={18} justify="space-between" className="attachments-column" >
                         {this.state.isAddEditIdea === "true" ? <Col style={{ paddingRight: '11px' }} className="column-left-idea">
@@ -326,17 +381,25 @@ class PopUpModel extends Component {
                                 <Row gutter={8} className="tag-div" style={{ marginBottom: '15px' }}>
                                     <Col style={{ padding: '5px 4px' }}><label style={{ marginRight: '20px' }}>Idea Type</label></Col>
                                     <Tag className="type-tag" onClick={this.ideaTypeChangedHandler} name="technical"
-                                        color="#f7941d" style={{ backgroundColor: this.state.ideaColorTech }}>Technical</Tag>
+                                        style={{ backgroundColor: this.state.ideaColorTech }}>Technical</Tag>
                                     <Tag className="type-tag" onClick={this.ideaTypeChangedHandler} name="nontechnical"
-                                        color="#b1b1b1" style={{ backgroundColor: this.state.ideaColorNonTech }}>Non Technical</Tag>
+                                        style={{ backgroundColor: this.state.ideaColorNonTech }}>Non Technical</Tag>
                                 </Row>
                                 <Row style={{ marginBottom: '15px' }}>
                                     <label>Idea Category</label>
-                                    <Select ref={this.categoryDD} className={!this.state.ideaCategoryValueError ? 'cat-dropdown' : 'errorInput'}
+                                    <Select
+                                        value={this.state.ideaCategoryValue}
+                                        className={!this.state.ideaCategoryValueError ? 'cat-dropdown' : 'errorInput'}
                                         placeholder="---select category from here---"
                                         style={{ width: "100%" }}
                                         onChange={this.onCategoryChanged}>
-                                        {optionTemplate}
+                                        {this.state.ideaCategory.length > 0 ?
+                                            <>
+                                                {this.state.ideaCategory.map(item => (
+                                                    <Select.Option value={item.id}>{item.subCategoryName}</Select.Option>
+                                                ))}
+                                            </>
+                                            : null}
                                     </Select>
                                     {this.state.ideaCategoryValueError ? <div className="errorMessage">
                                         {this.state.ideaCategoryValueError}</div> : null}
@@ -349,7 +412,6 @@ class PopUpModel extends Component {
                                     {this.state.ideaDetailsError ?
                                         <div className="errorMessage" style={{ position: 'absolute', bottom: '20px' }}>
                                             {this.state.ideaDetailsError}
-                                            {console.log(this.state.ideaDetailsError, 'this.state.ideaDetailsError')}
                                         </div> : null}
                                 </Row>
                             </Col>
@@ -389,89 +451,94 @@ class PopUpModel extends Component {
                                     <p>{ReactHtmlParser(ideaDescription)}</p>
                                 </Row>
                             </Col>
-                            <Row className="column-left-bottom">
-                                {likeCount || this.state.isLike ?
-                                    <Row className="like-container">
-                                        <GestureIcon className="like-hands"
-                                            onClick={() => this.onLikeIconClicked(id)} />
-                                    </Row> :
-                                    <Row className="like-container">
-                                        <LikeIcon className="like-hands" alt="Edit-Tools" />
-                                        <Col className="gesture-middle">
-                                            <Col className="gesture-container">
-                                                <GestureIcon className="gesture"
-                                                    onClick={() => this.onLikeIconClicked(id)} />
+                            {ideaStatus !== undefined && ideaStatus !== DRAFT ?
+                                <Row className="column-left-bottom">
+                                    {likeCount || this.state.isLike ?
+                                        <Row className="like-container">
+                                            <GestureIcon className="like-hands"
+                                                onClick={() => this.onLikeIconClicked(id)} />
+                                        </Row> :
+                                        <Row className="like-container">
+                                            <LikeIcon className="like-hands" alt="Edit-Tools" />
+                                            <Col className="gesture-middle">
+                                                <Col className="gesture-container">
+                                                    <GestureIcon className="gesture"
+                                                        onClick={() => this.onLikeIconClicked(id)} />
+                                                </Col>
                                             </Col>
-                                        </Col>
-                                    </Row>}
+                                        </Row>}
 
-                                <Row style={{ marginRight: '10px', position: 'relative' }}>
-                                    {likeIdeaDetailList && likeIdeaDetailList.map((data, index) => (
-                                        <>
-                                            {index < 8 ? <Col className="imageIcon">
-                                                <Avatar style={{ backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }} size={35}>
-                                                    {createIconShortName(data.name)}
-                                                </Avatar>
-                                            </Col> : index === 8 ? <Col className="imageIcon">
-                                                <Avatar style={{ backgroundColor: '#7fa2c4' }} size={35}>
-                                                    {`+${likeIdeaDetailList.length - 8}`}
-                                                </Avatar>
-                                            </Col> : null}
-                                        </>
-                                    ))}
-                                </Row>
-                                {/* <Row style={{ position: 'relative', width: '60px' }}>
-                                    <p className="like-p">Likes this</p>
-                                </Row> */}
-                            </Row>
+                                    <Row style={{ marginRight: '10px', position: 'relative' }}>
+                                        {likeIdeaDetailList && likeIdeaDetailList.map((data, index) => (
+                                            <>
+                                                {index < 8 ? <Col className="imageIcon">
+                                                    <Avatar style={{ backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }} size={35}>
+                                                        {createIconShortName(data.name)}
+                                                    </Avatar>
+                                                </Col> : index === 8 ? <Col className="imageIcon">
+                                                    <Avatar style={{ backgroundColor: '#7fa2c4' }} size={35}>
+                                                        {`+${likeIdeaDetailList.length - 8}`}
+                                                    </Avatar>
+                                                </Col> : null}
+                                            </>
+                                        ))}
+                                    </Row>
+                                </Row> : null}
                         </Col> : null}
                         {this.state.isViewIdea === "true" ? <Col style={{ paddingRight: '0px' }} className="column-right-view-idea">
                             <Col className="column-right-top">
                                 <Row>
                                     <label className="timeline-header">Attachments</label>
-                                    <Row>
-                                        <Col className="attach-container">
-                                            <JpgIcon className="jpg-ppt" />
-                                            <Col className="middle">
-                                                <Col className="download-container">
-                                                    <DownloadIcon className="download" />
+                                    {ideaStatus !== undefined && ideaStatus !== DRAFT ?
+                                        <Row>
+                                            <Col className="attach-container">
+                                                <JpgIcon className="jpg-ppt" />
+                                                <Col className="middle">
+                                                    <Col className="download-container">
+                                                        <DownloadIcon className="download" />
+                                                    </Col>
                                                 </Col>
                                             </Col>
-                                        </Col>
-                                        <Col className="attach-container">
-                                            <PptIcon className="jpg-ppt" />
-                                            <Col className="middle">
-                                                <Col className="download-container">
-                                                    <DownloadIcon className="download" />
+                                            <Col className="attach-container">
+                                                <PptIcon className="jpg-ppt" />
+                                                <Col className="middle">
+                                                    <Col className="download-container">
+                                                        <DownloadIcon className="download" />
+                                                    </Col>
                                                 </Col>
                                             </Col>
-                                        </Col>
-                                    </Row>
+                                        </Row>
+                                        :
+                                        <span style={{ width: '100%', height: '29px', marginBottom: '20px' }}
+                                            className="text-indication">Nothing to display here</span>}
                                 </Row>
                                 <Row>
                                     <label style={{ marginBottom: '25px' }} className="timeline-header">Timeline</label>
-                                    <Timeline>
-                                        {ideaStatusHistories && ideaStatusHistories.map((timeline) => (
-                                            <Timeline.Item>
-                                                <Col>
-                                                    <p>{getFormatttedDate(timeline.creationTime)}</p>
-                                                    <Row>
-                                                        <StatusTag ideaStatus={timeline.ideaStatus} statusWidth="96px" statusCursor="default" />
-                                                        <p>by {timeline.name}</p>
-                                                    </Row>
-                                                    {timeline.comment !== '' ? <Row className="comment">
-                                                        <p style={{ padding: '5px 5px 0 10px' }}>{timeline.comment}</p>
-                                                    </Row> : null}
-                                                </Col>
-                                            </Timeline.Item>
-                                        ))}
-                                    </Timeline>
+                                    {ideaStatus !== undefined && ideaStatus !== DRAFT ?
+                                        <Timeline>
+                                            {ideaStatusHistories && ideaStatusHistories.map((timeline) => (
+                                                <Timeline.Item>
+                                                    <Col>
+                                                        <p>{getFormatttedDate(timeline.creationTime)}</p>
+                                                        <Row>
+                                                            <StatusTag ideaStatus={timeline.ideaStatus} statusWidth="96px" statusCursor="default" />
+                                                            <p>by {timeline.name}</p>
+                                                        </Row>
+                                                        {timeline.comment !== '' ? <Row className="comment">
+                                                            <p style={{ padding: '5px 5px 0 10px' }}>{timeline.comment}</p>
+                                                        </Row> : null}
+                                                    </Col>
+                                                </Timeline.Item>
+                                            ))}
+                                        </Timeline>
+                                        : <span style={{ width: '100%', height: '29px', marginTop: '-24px' }}
+                                            className="text-indication">Nothing to display here</span>}
                                 </Row>
                             </Col>
                             <Col className="column-right-bottom"></Col>
                         </Col> : null}
                     </Row>
-                </Modal>}
+                </Modal>
             </div>
         );
     }

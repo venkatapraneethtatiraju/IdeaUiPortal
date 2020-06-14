@@ -160,13 +160,16 @@ export class AdminPopUpModel extends Component {
 
     let addCategory = this.props.buttonName;
     let addCat = false;
+
     if(addCategory === 'Add Category'){
       addCat = true;
     }
     else {
       addCat = false;
     }
-
+if(!this.state.tabClicked && addCategory === 'Add Category') {
+  techBGColor = '#f7941d';
+}
 
     if (status === "Active") {
       statusChecked = false;
@@ -267,7 +270,7 @@ export class AdminPopUpModel extends Component {
                   onChange={this.onUserDeactivate}
                 />
               </Col>
-            </Row>
+            </Row>:
             
                         
           </Col>:
@@ -277,7 +280,8 @@ export class AdminPopUpModel extends Component {
                             <Input type="text"
                                 name="ideaCategory"
                                 ref="ideaCategory"
-                                value={categories} readonly/>
+                                value={categories}
+                                placeholder={addCat ? 'Enter category name' :''} readonly/>
                         </Row>
                         <Row style={{ marginTop: '16px' }} gutter={8} className="tag-div">
                             <Col style={{ padding: '5px 4px' }}><label style={{ marginRight: '20px' }}>Category Type</label></Col>
@@ -286,10 +290,11 @@ export class AdminPopUpModel extends Component {
                             <Tag className="type-tag" name="nontechnical" 
                                style={{backgroundColor : nonTechBGColor}} onClick={this.onUserTypeClicked}>Non Technical</Tag>
                         </Row>
+                        {!addCat ? 
                         <Row gutter={8} style={{ marginTop: '16px' }} className="tag-div">
                             <Col style={{ padding: '5px 4px' }}><label style={{ marginRight: '20px' }}>Deactivate Category</label></Col>
                             <Col className="switch-div"><Switch defaultChecked="true" size="small" /></Col>
-                        </Row> 
+                        </Row> : null}
              </Col>}
         </Modal>
       </>
