@@ -19,6 +19,7 @@ import { getUserData, getCategoriesData } from './Management/UserColumnAndData';
 import StatusTag from '../StatusTag/StatusTag';
 import { getFormatttedDate } from '../../Utility/CommonFunctions';
 import AdminPopUpModel from '../PopUpModel/AdminPopUpModel';
+import PopUpModel from '../PopUpModel/PopUpModel';
 
 // User Table Column
 const userColumn = [
@@ -153,7 +154,7 @@ class AllRecentRequest extends Component {
       adminRecentData: [],
       data: [],
       columns: [],
-
+      btnColor: '#e4500e',
       allStatus:
         [
           "All Status",
@@ -544,7 +545,7 @@ class AllRecentRequest extends Component {
             <DropDown subHeaderTextTitle={this.props.value.subHeaderTextTitle} placeholder={this.state.dropDownDefaultValue} title={this.props.title} value={this.state} onSelect={(value) => this.dropDownHandleChange(value)} />
           </div>
 
-          {this.state.showModal ? <AdminPopUpModel
+          {this.state.showModal && this.props.title!=='request'? <AdminPopUpModel
             onOk={this.buttonActionHandler}
             onCancel={this.buttonActionHandler}
             isAddEditIdea="false"
@@ -565,6 +566,14 @@ class AllRecentRequest extends Component {
                         refreshCategoriesList = {this.refreshCategoriesList}
                         selectedTab = {this.props.value.subHeaderTextTitle}
                     /> : null}
+         {this.state.showModal && this.props.title ==='request'?  <PopUpModel title="request"
+          onOk={this.buttonActionHandler}
+          onCancel={this.buttonActionHandler}
+          ideaId={this.state.adminRecentData.key}
+          btnColor={this.state.btnColor}
+          isOperPerform = "true"
+          isAddEditIdea="false"
+          isViewIdea="true"/>:null}       
       </div>
     );
   }

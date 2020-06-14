@@ -27,7 +27,8 @@ import {
     DRAFT,
     TECHNICAL,
     NON_TECHNICAL,
-    WARNING_MESSAGE
+    WARNING_MESSAGE,
+    SUBMITTED
 } from '../../Config/Constants';
 import ReactHtmlParser from 'react-html-parser';
 import { createIconShortName, getFormatttedDate } from '../../Utility/CommonFunctions';
@@ -64,6 +65,7 @@ class PopUpModel extends Component {
             isViewIdea: this.props.isViewIdea,
             selectedId: this.props.selectedId,
             isEditIdea: this.props.isEditIdea,
+            isOperPerform : this.props.isOperPerform,
             ideaDetailsListView: [],
             ideaActiveCategories: [],
             ideaCategoryTech: [],
@@ -374,18 +376,22 @@ class PopUpModel extends Component {
                                     ></GenericButton>
                                 </Col> : null}
 
-                            <Row className="right-display" style={{ display: 'none' }}>
+                            {this.state.isOperPerform === "true" && (ideaStatus === SUBMITTED || 
+                                ideaStatus === CLOSE || ideaStatus === REVIEW) ?
+                            <Row className="right-display">
                                 <StatusButton ideaStatus={CLOSE} />
                                 <Col className="split-line" />
                                 <StatusButton ideaStatus={REVIEW} />
                                 <Col className="split-line" />
                                 <StatusButton ideaStatus={APPROVED} />
-                            </Row>
-                            <Row className="right-display" style={{ display: 'none' }}>
+                            </Row>:null}
+                            {this.state.isOperPerform === "true" && (ideaStatus === APPROVED || 
+                                ideaStatus === DEVELOPMENT || ideaStatus === COMPLETE) ?
+                            <Row className="right-display">
                                 <StatusButton ideaStatus={DEVELOPMENT} />
                                 <Col className="split-line" />
                                 <StatusButton ideaStatus={COMPLETE} />
-                            </Row>
+                            </Row>:null}
                         </Row>
                     }
                     visible
