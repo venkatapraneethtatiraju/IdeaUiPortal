@@ -41,7 +41,7 @@ export const ROLE_MANAGER = 'ROLE_MANAGER';
 export const ROLE_ADMIN = 'ROLE_ADMIN';
 export const WARNING_MESSAGE = 'This is a mandatory field';
 export const IDEA_UPDATED_MESSAGE = "Idea Updated Successfully!";
-export const IDEA_Added_MESSAGE = "Idea Added Successfully!";
+export const IDEA_ADDED_MESSAGE = "Idea Added Successfully!";
 export const TECHNICAL = 'Technical';
 export const NON_TECHNICAL = 'Non-Technical';
 

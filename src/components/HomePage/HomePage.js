@@ -15,7 +15,7 @@ import PopUpModel from '../PopUpModel/PopUpModel'
 import AlertBox from '../Alert/Alert.js';
 import AllIdea from '../AllIdea/AllIdea';
 import { createNewIdea } from '../../services/AppService';
-import { IDEA_Added_MESSAGE } from '../../Config/Constants';
+import { IDEA_ADDED_MESSAGE } from '../../Config/Constants';
 
 export default class HomePage extends PureComponent {
   constructor(props) {
@@ -147,7 +147,7 @@ export default class HomePage extends PureComponent {
           tabsData={this.state.headerTabs}
         ></Header>
         {this.state.showAlert ?
-          <AlertBox alertName={IDEA_Added_MESSAGE} /> : null
+          <AlertBox alertName={IDEA_ADDED_MESSAGE} /> : null
         }
         <Row justify="center" className="sub-header-wrapper">
           <Col xs={20} sm={20} md={20} lg={20} xl={20}>
