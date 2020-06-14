@@ -158,6 +158,15 @@ export class AdminPopUpModel extends Component {
       techBGColor = '#b1b1b1';
     }
 
+    let addCategory = this.props.buttonName;
+    let addCat = false;
+    if(addCategory === 'Add Category'){
+      addCat = true;
+    }
+    else {
+      addCat = false;
+    }
+
 
     if (status === "Active") {
       statusChecked = false;
@@ -170,6 +179,10 @@ export class AdminPopUpModel extends Component {
         <Modal
           title={
             <Row className="popup-header-title" gutter={2}>
+              {addCat ? <Col className="label-div" style={{ maxWidth: "55%" }}>
+                <label className="header-label">Add Category</label>
+              </Col> :
+              <>
               <Col className="label-div" style={{ maxWidth: "55%" }}>
                 <label className="header-label">Edit {!catTab ? `"${userName}"`: `"${categories}"`}</label>
               </Col>
@@ -187,6 +200,8 @@ export class AdminPopUpModel extends Component {
                   statusCursor="default"
                 />
               </Col>
+              </>
+              }
               <Col className="right-display">
                 <GenericButton
                   buttonName="Save"

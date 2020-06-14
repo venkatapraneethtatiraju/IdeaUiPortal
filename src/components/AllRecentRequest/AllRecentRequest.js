@@ -432,7 +432,7 @@ onSelectedRowAction = (record) => {
   }
 }
   render() {
-
+debugger;
     const tabelData= this.state.data;
     const selectedStatusData =  this.filterData(tabelData);
     console.log(selectedStatusData);
@@ -476,6 +476,7 @@ onSelectedRowAction = (record) => {
                         isViewIdea="true"
                         adminRecentData={this.state.adminRecentData}
                         refreshUserList = {this.refreshUserList}
+                        selectedTab = {this.props.value.subHeaderTextTitle}
                     /> : null}
       </div>
       </div> 

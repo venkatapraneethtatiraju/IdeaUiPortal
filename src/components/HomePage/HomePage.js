@@ -16,6 +16,7 @@ import { getToken } from '../Auth/Auth';
 import AlertBox from '../Alert/Alert.js'
 import AllIdea from '../AllIdea/AllIdea';
 import { grey } from '@material-ui/core/colors';
+import AdminPopUpModel from '../PopUpModel/AdminPopUpModel';
 
 export default class HomePage extends PureComponent {
   constructor(props) {
@@ -179,7 +180,7 @@ export default class HomePage extends PureComponent {
             </SubHeader>
           </Col>
         </Row>
-        {this.state.showModal &&
+        {this.state.showModal && this.state.title !=='management' ?
           <PopUpModel modelText="testing"
             onOk={this.buttonActionHandler}
             onCancel={this.buttonActionHandler}
@@ -188,8 +189,19 @@ export default class HomePage extends PureComponent {
             btnColor={this.state.btnColor}
             isAddEditIdea="true"
             isViewIdea="false"
-          />
+          />:null
         }
+        {this.state.showModal && this.state.title ==='management'  ?
+          <AdminPopUpModel
+          onOk={this.buttonActionHandler}
+          onCancel={this.buttonActionHandler}
+          isAddEditIdea="false"
+          isViewIdea="true"
+          adminRecentData=""
+          selectedTab="Categories"
+          buttonName = {this.state.buttonName}
+          />:null}
+        
 
         <Switch>
           <Redirect exact from="/" to="/dashboard" />
