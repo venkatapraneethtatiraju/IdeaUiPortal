@@ -141,9 +141,6 @@ export class AdminPopUpModel extends Component {
   .catch((error) => {});
 }
 
-reload = () => {
-  this.props.reloadData();
-}
   onCategoryChanged = (event) => {
   this.setState({ categoriesValue: event.target.value })
   }
