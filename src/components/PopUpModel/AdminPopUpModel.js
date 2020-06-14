@@ -8,6 +8,8 @@ import {
   ROLE_EMPLOYEE,
   ROLE_ADMIN,
   SUCCESS,
+  NON_TECHNICAL,
+  TECHNICAL,
 } from "../../Config/Constants";
 import GenericButton from "../Button/Button";
 import { putChangeUserRole } from "../../services/AppService";
@@ -25,6 +27,10 @@ export class AdminPopUpModel extends Component {
       userStatus: false,
       userID: "",
       tabClicked: false,
+      categories: '',
+      techBGColor : "#b1b1b1",
+      nonTechBGColor : "#b1b1b1"
+
     };
   }
 
@@ -59,6 +65,20 @@ export class AdminPopUpModel extends Component {
           userEmpBGColor: "#b1b1b1",
         });
         break;
+        case "Technical":
+        this.setState({
+          categories: TECHNICAL,
+          techBGColor: "#f7941d",
+          nonTechBGColor: "#b1b1b1",
+        });
+        break;
+        case "Non Technical":
+          this.setState({
+          categories: NON_TECHNICAL,
+          nonTechBGColor: "#f7941d",
+          techBGColor: "#b1b1b1",
+          });
+          break;
     }
   };
   onUserDeactivate = () => {
@@ -97,6 +117,8 @@ export class AdminPopUpModel extends Component {
       role,
       status,
       userName,
+      categories,
+      type
     } = this.props.adminRecentData;
     let userRole = role;
     let statusChecked = false;
@@ -117,6 +139,38 @@ export class AdminPopUpModel extends Component {
           break;
       }
     }
+    let currentManagement  = this.props.selectedTab;
+    let catTab = false;
+    if(currentManagement ==='Categories'){
+      catTab = true;
+    }
+    else {
+      catTab = false;
+    }
+    let techBGColor = this.state.techBGColor;
+    let nonTechBGColor = this.state.nonTechBGColor;
+    if(!this.state.tabClicked && type === 'Technical'){
+      techBGColor = '#f7941d';
+      nonTechBGColor = '#b1b1b1'
+    }
+    else if(!this.state.tabClicked && type === 'Non-Technical') {
+      nonTechBGColor = '#f7941d'
+      techBGColor = '#b1b1b1';
+    }
+
+    let addCategory = this.props.buttonName;
+    let addCat = false;
+
+    if(addCategory === 'Add Category'){
+      addCat = true;
+    }
+    else {
+      addCat = false;
+    }
+if(!this.state.tabClicked && addCategory === 'Add Category') {
+  techBGColor = '#f7941d';
+}
+
     if (status === "Active") {
       statusChecked = false;
     } else {
@@ -128,8 +182,12 @@ export class AdminPopUpModel extends Component {
         <Modal
           title={
             <Row className="popup-header-title" gutter={2}>
+              {addCat ? <Col className="label-div" style={{ maxWidth: "55%" }}>
+                <label className="header-label">Add Category</label>
+              </Col> :
+              <>
               <Col className="label-div" style={{ maxWidth: "55%" }}>
-                <label className="header-label">Edit "{userName}"</label>
+                <label className="header-label">Edit {!catTab ? `"${userName}"`: `"${categories}"`}</label>
               </Col>
               <Col>
                 <StatusTag
@@ -145,6 +203,8 @@ export class AdminPopUpModel extends Component {
                   statusCursor="default"
                 />
               </Col>
+              </>
+              }
               <Col className="right-display">
                 <GenericButton
                   buttonName="Save"
@@ -160,6 +220,7 @@ export class AdminPopUpModel extends Component {
           width={550}
           footer={null}
         >
+         {!catTab ?
           <Col className="admin-content-main">
             <Row>
               <label className="timeline-header">User Name</label>
@@ -198,33 +259,6 @@ export class AdminPopUpModel extends Component {
                 Admin
               </Tag>
             </Row>
-            {/* <Row style={{ marginTop: '16px' }}>
-                            <label style={{ marginBottom: '4px' }} className="timeline-header">Assigning for Category</label>
-                            <Select className={!this.state.ideaCategoryValueError ? 'cat-dropdown' : 'errorInput'}
-                                placeholder="---select category from here---"
-                                style={{ width: "100%" }}
-                                onChange={this.onCategoryChanged}>
-                            </Select>
-                            {this.state.ideaCategoryValueError ? <div className="errorMessage">
-                                {this.state.ideaCategoryValueError}</div> : null}
-                        </Row>
-                        <Row style={{ marginTop: '16px' }}>
-                            <label style={{ marginBottom: '4px' }} className="timeline-header">Category</label>
-                            <Input type="text"
-                                name="ideaCategory"
-                                ref="ideaCategory"
-                                onChange={this.inputChangedHandler}
-                                className={!this.state.ideaSubjectError ? 'idea-input' : 'errorInput'} />
-                        </Row> */}
-            {/* <Row style={{ marginTop: '16px' }} gutter={8} className="tag-div">
-                            <Col style={{ padding: '5px 4px' }}><label style={{ marginRight: '20px' }}>Category Type</label></Col>
-                            <Tag className="type-tag" name="technical" color="#f7941d">Technical</Tag>
-                            <Tag className="type-tag" name="nontechnical" color="#f7941d">Non Technical</Tag>
-                        </Row> */}
-            {/* <Row gutter={8} style={{ marginTop: '16px' }} className="tag-div">
-                            <Col style={{ padding: '5px 4px' }}><label style={{ marginRight: '20px' }}>Deactivate Category</label></Col>
-                            <Col className="switch-div"><Switch defaultChecked="true" size="small" /></Col>
-                        </Row> */}
             <Row gutter={8} style={{ marginTop: "16px" }} className="tag-div">
               <Col style={{ padding: "5px 4px" }}>
                 <label style={{ marginRight: "20px" }}>Deactivate User</label>
@@ -236,8 +270,32 @@ export class AdminPopUpModel extends Component {
                   onChange={this.onUserDeactivate}
                 />
               </Col>
-            </Row>
-          </Col>
+            </Row>:
+            
+                        
+          </Col>:
+           <Col className="admin-content-main">
+             <Row style={{ marginTop: '16px' }}>
+                            <label style={{ marginBottom: '4px' }} className="timeline-header">Category</label>
+                            <Input type="text"
+                                name="ideaCategory"
+                                ref="ideaCategory"
+                                value={categories}
+                                placeholder={addCat ? 'Enter category name' :''} readonly/>
+                        </Row>
+                        <Row style={{ marginTop: '16px' }} gutter={8} className="tag-div">
+                            <Col style={{ padding: '5px 4px' }}><label style={{ marginRight: '20px' }}>Category Type</label></Col>
+                            <Tag className="type-tag" name="technical" 
+                              style={{backgroundColor : techBGColor}} onClick={this.onUserTypeClicked}>Technical</Tag>
+                            <Tag className="type-tag" name="nontechnical" 
+                               style={{backgroundColor : nonTechBGColor}} onClick={this.onUserTypeClicked}>Non Technical</Tag>
+                        </Row>
+                        {!addCat ? 
+                        <Row gutter={8} style={{ marginTop: '16px' }} className="tag-div">
+                            <Col style={{ padding: '5px 4px' }}><label style={{ marginRight: '20px' }}>Deactivate Category</label></Col>
+                            <Col className="switch-div"><Switch defaultChecked="true" size="small" /></Col>
+                        </Row> : null}
+             </Col>}
         </Modal>
       </>
     );

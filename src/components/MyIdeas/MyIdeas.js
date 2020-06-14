@@ -6,17 +6,18 @@ import {
   DEFAULT_PAGE_SIZE,
   SUCCESS,
   GET_MYIDEAS_DETAIL,
-  DRAFT,
   IDEA_SUBJECT,
   IDEA_TYPE,
   IDEA_CATEGORY,
   SUBMITTED_ON,
-  IDEA_STATUS
+  IDEA_STATUS,
+  IDEA_UPDATED_MESSAGE
 } from '../../Config/Constants';
 import { getMyIdeas, saveAndSubmitIdeaById } from '../../services/AppService';
 import { addNewProperty } from '../../Utility/CommonFunctions';
 import { ReactComponent as AttachmentIcon } from '../../images/attach.svg'
 import StatusTag from '../StatusTag/StatusTag';
+import Alertbox from '../Alert/Alert';
 
 const myIdeasColumn = [
   {
@@ -92,7 +93,13 @@ class MyIdeas extends PureComponent {
       },
       selectedRow: [],
       data: [],
-      columns: myIdeasColumn
+      columns: myIdeasColumn,
+      status: 0,
+      displayAlert: false,
+      isAddEditIdea: "false",
+      isViewIdea: "true",
+      isEditIdea: "false",
+      ideaId: ''
     }
     this.saveandSubmitHandler = this.saveandSubmitHandler.bind(this)
   }
@@ -101,8 +108,14 @@ class MyIdeas extends PureComponent {
   buttonActionHandler = (event) => {
     this.setState(prevstate => ({
       ...prevstate,
-      showModal: !prevstate.showModal
+      showModal: !prevstate.showModal,
+      isAddEditIdea: "false",
+      isViewIdea: "true",
+      isEditIdea: "false",
     }))
+    setTimeout(() => {
+      this.setState({ displayAlert: false })
+    }, 4000);
   }
 
   componentDidMount() {
@@ -167,10 +180,11 @@ class MyIdeas extends PureComponent {
   saveAndSubmitIdea(requestParam, ideaId) {
     saveAndSubmitIdeaById(requestParam, ideaId)
       .then(response => {
-        this.setState({ status: response.data.code, isSubmitted: true });
+        this.setState({ status: response.data.code, isSubmitted: true, displayAlert: true });
         this.buttonActionHandler();
       })
       .catch(error => {
+        console.error('Error:', error);
         this.setState({ status: error.code })
       })
   }
@@ -184,39 +198,65 @@ class MyIdeas extends PureComponent {
 
   //Open Popupmodal to View/Add/Edit idea
   onRowClick = (record) => {
-    if (record.status === DRAFT) {
-      this.setState({ showModal: true, selectedRow: record })
-    }
+    this.setState({ showModal: true, ideaId: record.id, selectedRow: record });
+  }
+
+  buttonEditHandler = (event) => {
+    this.setState(prevstate => ({
+      ...prevstate,
+      showModal: !prevstate.showModal,
+      isAddEditIdea: "false",
+      isViewIdea: "true",
+      isEditIdea: "false",
+    }))
+
+    setTimeout(() => {
+      this.setState(prevstate => ({
+        ...prevstate,
+        showModal: true,
+        isAddEditIdea: "true",
+        isViewIdea: "false",
+        isEditIdea: "true",
+      }))
+    }, 0);
   }
 
   render() {
     return (
-      <div className="my-ideas-container">
-        <Row justify="center">
-          <Col xs={20} sm={20} md={20} lg={20} xl={20}>
-            <Table
-              pagination={this.state.pagination}
-              columns={this.state.columns}
-              dataSource={this.state.data}
-              onChange={pagination => (this.handlePageChange(pagination))}
-              onRow={(record) => ({
-                onClick: () => this.onRowClick(record)
-              }
-              )}>
-            </Table>
-          </Col>
-        </Row>
-        {this.state.showModal ? <PopUpModel
-          onOk={this.buttonActionHandler}
-          onCancel={this.buttonActionHandler}
-          saveandSubmitHandler={this.saveandSubmitHandler}
-          saveandSubmit={this.state.saveandSubmit}
-          btnColor={this.state.btnColor}
-          onEditHandler={this.state.selectedRow}
-          isAddEditIdea="true"
-          isViewIdea="false"
-        /> : null}
-      </div>
+      <>
+        {this.state.displayAlert ?
+          <Alertbox alertName={IDEA_UPDATED_MESSAGE} /> : null
+        }
+        <div className="my-ideas-container">
+          <Row justify="center">
+            <Col xs={20} sm={20} md={20} lg={20} xl={20}>
+              <Table
+                pagination={this.state.pagination}
+                columns={this.state.columns}
+                dataSource={this.state.data}
+                onChange={pagination => (this.handlePageChange(pagination))}
+                onRow={(record) => ({
+                  onClick: () => this.onRowClick(record)
+                }
+                )}>
+              </Table>
+            </Col>
+          </Row>
+          {this.state.showModal ? <PopUpModel
+            onOk={this.buttonActionHandler}
+            onCancel={this.buttonActionHandler}
+            saveandSubmitHandler={this.saveandSubmitHandler}
+            saveandSubmit={this.state.saveandSubmit}
+            btnColor={this.state.btnColor}
+            onEditHandler={this.state.selectedRow}
+            isAddEditIdea={this.state.isAddEditIdea}
+            isViewIdea={this.state.isViewIdea}
+            isEditIdea={this.state.isEditIdea}
+            ideaId={this.state.ideaId}
+            buttonEditHandler={this.buttonEditHandler}
+          /> : null}
+        </div>
+      </>
     );
   }
 }

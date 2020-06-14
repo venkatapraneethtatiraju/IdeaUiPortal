@@ -4,7 +4,7 @@ import {
     TOPCONTRIBUTORS_URL,
     IDEASTATS_URL,
     IDEAS_URL,
-    GET_MYIDEADS_URL,
+    FOR_IDEAS_URL,
     ALLRECENTREQUEST_URL,
     MYIDEA_URL,
     ALLUSERS_URL,
@@ -57,7 +57,7 @@ export const postIdeaDisLike = (ideaId) => {
 //Service call to get my ideas in myideas page
 export const getMyIdeas = (pagination) => {
     const headers = getHeaders();
-    return Axios.get(`${GET_MYIDEADS_URL}?pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}`, { headers });
+    return Axios.get(`${FOR_IDEAS_URL}?pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}`, { headers });
 }
 
 //Service call to save and submit idea
@@ -117,12 +117,18 @@ export const getRecentlySubmittedIdeas = () => {
 //Service call to put Activate/Deactivate users role
 export const putChangeUserRole = (userId, roleType, status) => {
     const headers = getHeaders();
-    return Axios.put(`${PUT_CHANGE_USER_ROLE_ADMIN}${userId}/status?roleType=${roleType}&status=${status}`,'', { headers });
+    return Axios.put(`${PUT_CHANGE_USER_ROLE_ADMIN}${userId}/status?roleType=${roleType}&status=${status}`, '', { headers });
 }
 //Service call to get active categories 
 export const getActiveCategories = () => {
     const headers = getHeaders();
     return Axios.get(`${ACTIVE_CATEGORIES_URL}`, { headers });
+}
+
+//Service call to create new idea
+export const createNewIdea = (requestParam) => {
+    const headers = getHeaders();
+    return Axios.post(`${FOR_IDEAS_URL}`, JSON.stringify(requestParam), { headers });
 }
 
 

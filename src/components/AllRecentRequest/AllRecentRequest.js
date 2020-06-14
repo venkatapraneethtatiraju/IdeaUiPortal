@@ -527,6 +527,7 @@ class AllRecentRequest extends Component{
   }
   render() {
     const columns = this.state.columns;
+debugger;
     const tabelData= this.state.data;
     const selectedStatusData =  this.filterData(tabelData);
     console.log(selectedStatusData);
@@ -572,6 +573,7 @@ class AllRecentRequest extends Component{
                         isViewIdea="true"
                         adminRecentData={this.state.adminRecentData}
                         refreshUserList = {this.refreshUserList}
+                        selectedTab = {this.props.value.subHeaderTextTitle}
                     /> : null}
        </div>
       </div> 
