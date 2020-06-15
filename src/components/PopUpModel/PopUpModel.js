@@ -27,13 +27,14 @@ import {
     DRAFT,
     TECHNICAL,
     NON_TECHNICAL,
-    WARNING_MESSAGE
+    WARNING_MESSAGE,
+    SUBMITTED
 } from '../../Config/Constants';
 import ReactHtmlParser from 'react-html-parser';
 import { createIconShortName, getFormatttedDate } from '../../Utility/CommonFunctions';
 import StatusButton from '../StatusButton/StatusButton';
-import AdminPopUpModel from './AdminPopUpModel';
 import StatusTag from '../StatusTag/StatusTag';
+import { getUserId, getUserName } from '../Auth/Auth';
 
 class PopUpModel extends Component {
     constructor(props) {
@@ -64,7 +65,7 @@ class PopUpModel extends Component {
             isViewIdea: this.props.isViewIdea,
             selectedId: this.props.selectedId,
             isEditIdea: this.props.isEditIdea,
-            isLike: false,
+            isOperPerform : this.props.isOperPerform,
             ideaDetailsListView: [],
             ideaActiveCategories: [],
             ideaCategoryTech: [],
@@ -170,12 +171,15 @@ class PopUpModel extends Component {
     }
 
     onLikeIconClicked = (ideaId) => {
-        if (!this.state.ideaDetailsListView.likeCount) {
+        if (!this.isLikeTheIdea(this.state.ideaDetailsListView.likeIdeaDetailList)) {
             postIdeaLike(ideaId)
                 .then(response => {
                     if (response.data.message === SUCCESS) {
-                        this.setState({ isLike: true })
-                        this.props.updateLikes(this.state.ideaDetailsListView.likeCount)
+                        this.updateLikeIdeaList(true, ideaId);
+                        if (this.props.isClickTopTrending !== undefined
+                            && this.props.isClickTopTrending === "true") {
+                            this.props.updateLikes();
+                        }
                     }
                 })
                 .catch(error => {
@@ -186,14 +190,35 @@ class PopUpModel extends Component {
             postIdeaDisLike(ideaId)
                 .then(response => {
                     if (response.data.message === SUCCESS) {
-                        this.setState({ isLike: false })
-                        this.props.updateLikes(this.state.isLike)
+                        this.updateLikeIdeaList(false, ideaId);
+                        if (this.props.isClickTopTrending !== undefined
+                            && this.props.isClickTopTrending === "true") {
+                            this.props.updateLikes();
+                        }
                     }
                 })
                 .catch(error => {
                     console.log(error);
                 })
         }
+    }
+
+    updateLikeIdeaList = (isLike, ideaId) => {
+        let likeIdeaList = this.state.ideaDetailsListView.likeIdeaDetailList;
+        if (isLike) {
+            const likeItem = {
+                name: getUserName(),
+                userId: Number(getUserId()),
+                ideaId: ideaId
+            }
+            likeIdeaList.push(likeItem);
+
+        } else {
+            let removeIndex = likeIdeaList.map((likeIdea) => { return likeIdea.userId; }).indexOf(Number(getUserId()));
+            likeIdeaList.splice(removeIndex, 1);
+        }
+
+        this.setState({ ideaDetailsListView: { ...this.state.ideaDetailsListView, likeIdeaDetailList: likeIdeaList } });
     }
 
     componentDidMount() {
@@ -278,6 +303,18 @@ class PopUpModel extends Component {
         this.mounted = false;
     }
 
+    isLikeTheIdea = (likeIdeaDetailList) => {
+        if (likeIdeaDetailList !== undefined && likeIdeaDetailList.length > 0) {
+            const loggedInUserId = getUserId();
+            for (let likeIdea of likeIdeaDetailList) {
+                if (likeIdea.userId === Number(loggedInUserId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     render() {
         const {
             title,
@@ -286,12 +323,10 @@ class PopUpModel extends Component {
             subcategoryName,
             ideaStatus, ideaDescription,
             ideaStatusHistories,
-            likeIdeaDetailList,
-            likeCount } = this.state.ideaDetailsListView;
+            likeIdeaDetailList } = this.state.ideaDetailsListView;
 
         return (
             <div className="modal-content">
-                {/* {true ? <AdminPopUpModel /> : */}
                 <Modal
                     title={
                         <Row className="popup-header-title" gutter={2}>
@@ -341,18 +376,22 @@ class PopUpModel extends Component {
                                     ></GenericButton>
                                 </Col> : null}
 
-                            <Row className="right-display" style={{ display: 'none' }}>
+                            {this.state.isOperPerform === "true" && (ideaStatus === SUBMITTED || 
+                                ideaStatus === CLOSE || ideaStatus === REVIEW) ?
+                            <Row className="right-display">
                                 <StatusButton ideaStatus={CLOSE} />
                                 <Col className="split-line" />
                                 <StatusButton ideaStatus={REVIEW} />
                                 <Col className="split-line" />
                                 <StatusButton ideaStatus={APPROVED} />
-                            </Row>
-                            <Row className="right-display" style={{ display: 'none' }}>
+                            </Row>:null}
+                            {this.state.isOperPerform === "true" && (ideaStatus === APPROVED || 
+                                ideaStatus === DEVELOPMENT || ideaStatus === COMPLETE) ?
+                            <Row className="right-display">
                                 <StatusButton ideaStatus={DEVELOPMENT} />
                                 <Col className="split-line" />
                                 <StatusButton ideaStatus={COMPLETE} />
-                            </Row>
+                            </Row>:null}
                         </Row>
                     }
                     visible
@@ -453,7 +492,7 @@ class PopUpModel extends Component {
                             </Col>
                             {ideaStatus !== undefined && ideaStatus !== DRAFT ?
                                 <Row className="column-left-bottom">
-                                    {likeCount || this.state.isLike ?
+                                    {this.isLikeTheIdea(likeIdeaDetailList) ?
                                         <Row className="like-container">
                                             <GestureIcon className="like-hands"
                                                 onClick={() => this.onLikeIconClicked(id)} />

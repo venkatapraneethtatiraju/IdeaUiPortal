@@ -59,7 +59,7 @@ export const getCategoriesData = async(pagination)=>{
     function setItemCategories(result) {
       const newArr = result.map((val, index) => {
       return {
-         key: val.userId,
+         key: val.id,
          categories: val.subCategoryName ? val.subCategoryName : "- ",
          type:val.ideaType? val.ideaType:"-",
          updatedOn: "-",

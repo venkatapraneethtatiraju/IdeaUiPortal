@@ -74,7 +74,7 @@ export class TopTrendingIdeas extends PureComponent {
         }
     }
 
-    updateLikes = (isLike) => {
+    updateLikes = () => {
         this.getTopTrendingRecord();
     }
 
@@ -108,6 +108,7 @@ export class TopTrendingIdeas extends PureComponent {
                     isViewIdea="true"
                     ideaId={this.state.ideaId}
                     updateLikes={this.updateLikes}
+                    isClickTopTrending="true"
                 /> : null}
             </Col>
         )

@@ -67,7 +67,7 @@ export default class HomePage extends PureComponent {
       ideaType: '',
       ideaCategoryValue: '',
       ideaDetails: '',
-      status: 0
+      status: 0,
     };
     this.saveandSubmitHandler = this.saveandSubmitHandler.bind(this)
   }
@@ -293,7 +293,7 @@ export default class HomePage extends PureComponent {
           selectedTab="Categories"
           buttonName = {this.state.buttonName}
           />:null}
-        
+     
 
         <Switch>
           <Redirect exact from="/" to="/dashboard" />

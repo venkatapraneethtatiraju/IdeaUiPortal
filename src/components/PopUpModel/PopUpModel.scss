@@ -155,10 +155,7 @@ div.ant-modal-content {
       .gesture-middle {
         display: none;
         transition: 0.5s ease;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -40%);
+        transform: translate(0%, -6px);
         text-align: center;
       }
       .gesture-container {
@@ -174,20 +171,9 @@ div.ant-modal-content {
         height: 16.3px;
         object-fit: contain;
         cursor: pointer;
-        transform: translateY(27%);
         path {
           fill: #6a205f;
         }
-      }
-      .gestureLike {
-        top: 50%;
-        left: 50%;
-        height: 16.3px;
-        object-fit: contain;
-        //   path {
-        //     fill: #6a205f;
-        //  }
-        //fill: #6a205f;
       }
 
       .like-container:hover .gesture-middle {
