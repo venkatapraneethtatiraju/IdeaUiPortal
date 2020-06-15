@@ -28,13 +28,19 @@ import {
     TECHNICAL,
     NON_TECHNICAL,
     WARNING_MESSAGE,
-    SUBMITTED
+    SUBMITTED,
+    REASON_CLOSE,
+    REASON_REVIEW,
+    REASON_APPROVED,
+    REASON_DEVELOPMENT,
+    REASON_COMPLETE
 } from '../../Config/Constants';
 import ReactHtmlParser from 'react-html-parser';
 import { createIconShortName, getFormatttedDate } from '../../Utility/CommonFunctions';
 import StatusButton from '../StatusButton/StatusButton';
 import StatusTag from '../StatusTag/StatusTag';
 import { getUserId, getUserName } from '../Auth/Auth';
+import TextArea from 'antd/lib/input/TextArea';
 
 class PopUpModel extends Component {
     constructor(props) {
@@ -65,12 +71,14 @@ class PopUpModel extends Component {
             isViewIdea: this.props.isViewIdea,
             selectedId: this.props.selectedId,
             isEditIdea: this.props.isEditIdea,
-            isOperPerform : this.props.isOperPerform,
+            isOperPerform: this.props.isOperPerform,
             ideaDetailsListView: [],
             ideaActiveCategories: [],
             ideaCategoryTech: [],
             ideaCategoryNonTech: [],
             ideaStatus: '',
+            visible: false,
+            titleMessage: '',
         }
 
         if (this.props.onEditHandler) {
@@ -315,6 +323,59 @@ class PopUpModel extends Component {
         return false;
     }
 
+    handleOk = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+    onStatusClose = () => {
+        this.setState({
+            visible: true,
+            titleMessage: REASON_CLOSE
+        });
+    }
+
+    onStatusReview = () => {
+        this.setState({
+            visible: true,
+            titleMessage: REASON_REVIEW
+        });
+    }
+
+    onStatusApproved = () => {
+        this.setState({
+            visible: true,
+            titleMessage: REASON_APPROVED
+        });
+    }
+
+    onStatusDevelopment = () => {
+        this.setState({
+            visible: true,
+            titleMessage: REASON_DEVELOPMENT
+        });
+    }
+
+    onStatusComplete = () => {
+        this.setState({
+            visible: true,
+            titleMessage: REASON_COMPLETE
+        });
+    }
+
+    closeReasonHandler = () => {
+        this.setState({
+            visible: false,
+        });
+    }
+
     render() {
         const {
             title,
@@ -327,6 +388,31 @@ class PopUpModel extends Component {
 
         return (
             <div className="modal-content">
+                <Modal
+                    title=''
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    width={407}
+                    footer={null}>
+                    <Col className="reason-main">
+                        <Col className="col-inner">
+                            <label className="reason-header-label">
+                                {this.state.titleMessage}
+                            </label>
+                        </Col>
+                        <Col className="col-inner">
+                            <TextArea className="textarea-style" />
+                        </Col>
+                        <Col className="close-button-div">
+                            <GenericButton
+                                buttonClickHandler={this.closeReasonHandler}
+                                buttonName="Close"
+                                btnColor={this.props.btnColor}
+                            ></GenericButton>
+                        </Col>
+                    </Col>
+                </Modal>
                 <Modal
                     title={
                         <Row className="popup-header-title" gutter={2}>
@@ -376,22 +462,22 @@ class PopUpModel extends Component {
                                     ></GenericButton>
                                 </Col> : null}
 
-                            {this.state.isOperPerform === "true" && (ideaStatus === SUBMITTED || 
+                            {this.state.isOperPerform === "true" && (ideaStatus === SUBMITTED ||
                                 ideaStatus === CLOSE || ideaStatus === REVIEW) ?
-                            <Row className="right-display">
-                                <StatusButton ideaStatus={CLOSE} />
-                                <Col className="split-line" />
-                                <StatusButton ideaStatus={REVIEW} />
-                                <Col className="split-line" />
-                                <StatusButton ideaStatus={APPROVED} />
-                            </Row>:null}
-                            {this.state.isOperPerform === "true" && (ideaStatus === APPROVED || 
+                                <Row className="right-display">
+                                    <StatusButton ideaStatus={CLOSE} onStatusChange={this.onStatusClose} />
+                                    <Col className="split-line" />
+                                    <StatusButton ideaStatus={REVIEW} onStatusChange={this.onStatusReview} />
+                                    <Col className="split-line" />
+                                    <StatusButton ideaStatus={APPROVED} onStatusChange={this.onStatusApproved} />
+                                </Row> : null}
+                            {this.state.isOperPerform === "true" && (ideaStatus === APPROVED ||
                                 ideaStatus === DEVELOPMENT || ideaStatus === COMPLETE) ?
-                            <Row className="right-display">
-                                <StatusButton ideaStatus={DEVELOPMENT} />
-                                <Col className="split-line" />
-                                <StatusButton ideaStatus={COMPLETE} />
-                            </Row>:null}
+                                <Row className="right-display">
+                                    <StatusButton ideaStatus={DEVELOPMENT} onStatusChange={this.onStatusDevelopment} />
+                                    <Col className="split-line" />
+                                    <StatusButton ideaStatus={COMPLETE} onStatusChange={this.onStatusComplete} />
+                                </Row> : null}
                         </Row>
                     }
                     visible
