@@ -51,4 +51,9 @@ export const USERNAME_KEY = 'userName';
 export const USERID_KEY = 'userId';
 export const USERROLE_KEY = 'userRole';
 
+export const REASON_CLOSE = 'Reason for closing this';
+export const REASON_REVIEW = 'Reason for reviewing this';
+export const REASON_APPROVED = 'Reason for approving this';
+export const REASON_DEVELOPMENT = 'Reason for developing this';
+export const REASON_COMPLETE = 'Reason for completing this';
 
