@@ -248,7 +248,7 @@ class MyIdeas extends PureComponent {
             saveandSubmitHandler={this.saveandSubmitHandler}
             saveandSubmit={this.state.saveandSubmit}
             btnColor={this.state.btnColor}
-            onEditHandler={this.state.selectedRow}
+            editIdeaData={this.state.selectedRow}
             isAddEditIdea={this.state.isAddEditIdea}
             isViewIdea={this.state.isViewIdea}
             isEditIdea={this.state.isEditIdea}

@@ -83,8 +83,8 @@ class PopUpModel extends Component {
             titleMessage: '',
         }
 
-        if (this.props.onEditHandler) {
-            let datas = this.props.onEditHandler;
+        if (this.props.editIdeaData) {
+            let datas = this.props.editIdeaData;
             this.state.ideaId = datas.key;
             this.state.ideaSubject = datas.ideaSubject;
             this.state.ideaDetails = datas.ideaDescription;
@@ -274,8 +274,8 @@ class PopUpModel extends Component {
             }
         }
 
-        if (this.props.onEditHandler !== undefined) {
-            let editIdea = this.props.onEditHandler;
+        if (this.props.editIdeaData !== undefined) {
+            let editIdea = this.props.editIdeaData;
             if (editIdea.ideaType === TECHNICAL) {
                 this.setState({
                     ideaCategory: ideaCategoryTech,
