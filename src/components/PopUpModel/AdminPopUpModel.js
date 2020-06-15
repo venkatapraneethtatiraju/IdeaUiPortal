@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Row, Col, Tag, Select, Input, Switch } from "antd";
+import { Modal, Row, Col, Tag, Input, Switch } from "antd";
 import StatusTag from "../StatusTag/StatusTag";
 import {
   ACTIVE,
@@ -7,7 +7,6 @@ import {
   ROLE_MANAGER,
   ROLE_EMPLOYEE,
   ROLE_ADMIN,
-  SUCCESS,
   NON_TECHNICAL,
   TECHNICAL,
 } from "../../Config/Constants";
@@ -79,6 +78,8 @@ export class AdminPopUpModel extends Component {
           nonTechBGColor: "#f7941d",
           techBGColor: "#b1b1b1",
         });
+        break;
+      default:
         break;
     }
   };
@@ -181,6 +182,8 @@ export class AdminPopUpModel extends Component {
           break;
         case "Admin":
           userAdmBGColor = "#f7941d";
+          break;
+        default:
           break;
       }
     }
