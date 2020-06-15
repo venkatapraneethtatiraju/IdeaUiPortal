@@ -3,7 +3,7 @@ import './Login.scss';
 import { Form, Input, Button } from 'antd';
 import XebiaLogo from '../../images/Logo.svg';
 import axios from 'axios';
-import { login } from '../Auth/Auth';
+import { login ,setUserType, getUserType} from '../Auth/Auth';
 import HomePage from '../HomePage/HomePage';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import Alertbox from '../Alert/Alert';
@@ -100,6 +100,8 @@ class Login extends PureComponent {
           if (response.data.message === 'success') {
             this.setState({ isLogin: true })
             login(response.data.token);
+            setUserType(response.data.result.role);
+            console.log(getUserType());
           }
         })
         .catch(error => {

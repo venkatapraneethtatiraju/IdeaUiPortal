@@ -18,12 +18,15 @@ import { grey } from '@material-ui/core/colors';
 import AdminPopUpModel from '../PopUpModel/AdminPopUpModel';
 import { createNewIdea } from '../../services/AppService';
 import { IDEA_ADDED_MESSAGE } from '../../Config/Constants';
+import {setUserType,getUserType} from '../Auth/Auth';
+import { useTheme } from '@material-ui/core';
 
 export default class HomePage extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
+      userType:'',
       subHeaderTextTitle: 'Users',
       userClickColor: "gray",
       categoriesClickColor: "gray",
@@ -37,26 +40,26 @@ export default class HomePage extends PureComponent {
       showAlert: false,
       headerTabs: {
         leftTabs: {
-          dashboard: {
-            title: 'Dashboard',
-            isActive: true,
-            icon: <ClockIcon className="header-icon" />
-          },
-          management: {
-            title: 'Management',
-            isActive: false,
-            icon: <ProfileIcon className="header-icon" />
-          },
-          request: {
-            title: 'Request',
-            isActive: false,
-            icon: <RecentIcon className="header-icon" />
-          },
-          myIdeas: {
-            title: 'My Ideas',
-            isActive: false,
-            icon: <ThinkIcon className="header-icon" />
-          }
+          // dashboard: {
+          //   title: 'Dashboard',
+          //   isActive: true,
+          //   icon: <ClockIcon className="header-icon" />
+          // },
+          // management: {
+          //   title: 'Management',
+          //   isActive: false,
+          //   icon: <ProfileIcon className="header-icon" />
+          // },
+          // request: {
+          //   title: 'Request',
+          //   isActive: false,
+          //   icon: <RecentIcon className="header-icon" />
+          // },
+          // myIdeas: {
+          //   title: 'My Ideas',
+          //   isActive: false,
+          //   icon: <ThinkIcon className="header-icon" />
+          // }
 
         }
       },
@@ -76,6 +79,11 @@ export default class HomePage extends PureComponent {
   }
 
   clickActionHandler = async (event) => {
+    console.log(getUserType());
+    const userType= getUserType();
+
+    this.updateHeaders();
+
     if (event === "management") {
       this.usersClicked();
       await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black',categoriesClickColor:'grey'});
@@ -106,6 +114,7 @@ export default class HomePage extends PureComponent {
     setTimeout(() => {
       this.setState({ showAlert: false })
     }, 4000);
+    this.categoriesClicked();
   }
 
   saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId) {
@@ -140,6 +149,101 @@ export default class HomePage extends PureComponent {
   // categories clicked inside the Management tab
   async categoriesClicked(event) {
     await this.setState({ subHeaderTextTitle: 'Categories', isCategoriesSelected: true, isUserSelected: false, userClickColor: "gray", categoriesClickColor: "black" })
+  }
+
+  // component Did mount
+
+  componentDidMount()
+  {
+    
+    this.updateHeaders();
+  }
+
+  updateHeaders()
+  {
+    const userType= getUserType();
+    debugger;
+   // this.setState({userType:userType})
+
+      let leftObjects={};
+  
+      if(userType ==="Employee"){
+
+        leftObjects = {
+          dashboard: {
+            title: 'Dashboard',
+            isActive: true,
+            icon: <ClockIcon className="header-icon" />
+          },
+          myIdeas: {
+            title: 'My Ideas',
+            isActive: false,
+            icon: <ThinkIcon className="header-icon" />
+          }
+        }
+      }
+      else if(userType ==="Manager"){
+
+        leftObjects =
+        {  
+          dashboard: {
+          title: 'Dashboard',
+          isActive: true,
+          icon: <ClockIcon className="header-icon" />
+        },
+        request: {
+          title: 'Request',
+          isActive: false,
+          icon: <RecentIcon className="header-icon" />
+        },
+        myIdeas: {
+          title: 'My Ideas',
+          isActive: false,
+          icon: <ThinkIcon className="header-icon" />
+        }
+       }
+      }
+      else{
+        leftObjects = {
+          dashboard: {
+            title: 'Dashboard',
+            isActive: true,
+            icon: <ClockIcon className="header-icon" />
+          },
+          management: {
+            title: 'Management',
+            isActive: false,
+            icon: <ProfileIcon className="header-icon" />
+          },
+          request: {
+            title: 'Request',
+            isActive: false,
+            icon: <RecentIcon className="header-icon" />
+          },
+          myIdeas: {
+            title: 'My Ideas',
+            isActive: false,
+            icon: <ThinkIcon className="header-icon" />
+          }
+        }
+      }
+
+     this.setState(prevState => ({
+      ...prevState,
+      userType:userType,
+      headerTabs: {
+        leftTabs: leftObjects
+      }
+    }))
+  }
+
+  componentDidUpdate(prevState,nextState)
+  {
+    console.log(prevState);
+    console.log(this.state.props);
+    console.log(this.state.headerTabs.leftTabs);
+
+
   }
 
   render() {

@@ -5,6 +5,17 @@ import { ReactComponent as BellIcon } from '../../images/bell.svg';
 import { Avatar, Badge } from 'antd';
 import DefaultIcon from '../../images/default-avatar.png';
 import { Link } from "react-router-dom";
+import {Icon, Menu, Dropdown, Button, message, Tooltip } from 'antd';
+
+const menu = ()=>(
+  <Menu >
+    <Menu.Item key="1">Edit</Menu.Item>
+    
+    <Menu.Item  key="3">Logout</Menu.Item>
+  </Menu>
+);
+
+
 
 const Header = (props) => (
   <div className="app-header">
@@ -22,11 +33,14 @@ const Header = (props) => (
       ))}
     </div>
     <div className="right-nav-content">
-      <div className="right-inner-nav">
+      <div  className="right-inner-nav">
         <Badge count={1}>
           <BellIcon className="nav-logos" />
         </Badge>
-        <Avatar shape="circle" src={DefaultIcon} />
+        <Dropdown overlay={menu}>
+        <Avatar  shape="circle" src={DefaultIcon} />
+        </Dropdown>
+        
       </div>
     </div>
   </div>

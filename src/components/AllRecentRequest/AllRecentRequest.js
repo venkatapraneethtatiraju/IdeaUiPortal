@@ -212,9 +212,9 @@ class AllRecentRequest extends Component{
 
     async componentDidUpdate(prevState,nextState){
 
-      console.log(prevState,"previouspros")
-      console.log(this.props,"presentprops");
-      console.log(this.state,"props");
+      console.log(prevState,"previousPros")
+      console.log(this.props,"presentProps");
+      console.log(this.state,"State");
 
         if(prevState.title !== this.props.title)
         {
@@ -453,6 +453,7 @@ class AllRecentRequest extends Component{
    return newArr;
   };
 
+  // get all user by name search from API.
   getAllUserByName= async (pagination,searchTxt)=>{
       console.log(searchTxt);
        await this.setState({isLoading:true,columns:[],data:[]})   
@@ -477,6 +478,8 @@ class AllRecentRequest extends Component{
               console.log(error);
           })
    }
+
+   // get all user by email ID search from API.
 
    getAllUserByEmailIId = async (pagination,searchTxt)=>{
     await this.setState({isLoading:true,columns:[],data:[]})   
@@ -521,14 +524,13 @@ class AllRecentRequest extends Component{
     }))
  }
   onSelectedRowAction = (record) => {
-    debugger;
+    //debugger;
     if (record) {
         this.setState({ adminRecentData: record, showModal: true, })
     }
   }
   render() {
     const columns = this.state.columns;
-debugger;
     const tabelData= this.state.data;
     const selectedStatusData =  this.filterData(tabelData);
     console.log(selectedStatusData);
