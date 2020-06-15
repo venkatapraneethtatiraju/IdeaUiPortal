@@ -99,8 +99,7 @@ class Login extends PureComponent {
           console.log('getEmailVerify', response)
           if (response.data.message === 'success') {
             this.setState({ isLogin: true })
-            login(response.data.token);
-            setUserType(response.data.result.role);
+            login(response.data);
             console.log(getUserType());
           }
         })

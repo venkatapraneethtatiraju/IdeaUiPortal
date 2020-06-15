@@ -6,16 +6,32 @@ import { Avatar, Badge } from 'antd';
 import DefaultIcon from '../../images/default-avatar.png';
 import { Link } from "react-router-dom";
 import {Icon, Menu, Dropdown, Button, message, Tooltip } from 'antd';
+import {logout, login} from '../Auth/Auth'
+import { Route, Switch, Redirect } from 'react-router-dom';
+import Login from '../login/Login'
 
 const menu = ()=>(
-  <Menu >
+  <Menu onClick={e=>handleMenuClick(e)} >
     <Menu.Item key="1">Edit</Menu.Item>
     
-    <Menu.Item  key="3">Logout</Menu.Item>
+    <Menu.Item  key="2">Logout</Menu.Item>
   </Menu>
 );
 
+const handleMenuClick = async (e)=> {
+  console.log('click', e.key);
+  if(e.key == 2){
 
+    logoutPerform();
+  }
+}
+
+ const logoutPerform = async ()=>
+ {
+
+  // await logout();
+   //return <Login/>
+ }
 
 const Header = (props) => (
   <div className="app-header">
@@ -37,10 +53,11 @@ const Header = (props) => (
         <Badge count={1}>
           <BellIcon className="nav-logos" />
         </Badge>
+       
         <Dropdown overlay={menu}>
-        <Avatar  shape="circle" src={DefaultIcon} />
+          <Avatar  shape="circle" src={DefaultIcon} />
         </Dropdown>
-        
+      
       </div>
     </div>
   </div>

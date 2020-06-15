@@ -18,7 +18,7 @@ import { grey } from '@material-ui/core/colors';
 import AdminPopUpModel from '../PopUpModel/AdminPopUpModel';
 import { createNewIdea } from '../../services/AppService';
 import { IDEA_ADDED_MESSAGE } from '../../Config/Constants';
-import {setUserType,getUserType} from '../Auth/Auth';
+import {setUserType,getUserRole} from '../Auth/Auth';
 import { useTheme } from '@material-ui/core';
 
 export default class HomePage extends PureComponent {
@@ -79,8 +79,8 @@ export default class HomePage extends PureComponent {
   }
 
   clickActionHandler = async (event) => {
-    console.log(getUserType());
-    const userType= getUserType();
+    console.log(getUserRole());
+    const userType= getUserRole();
 
     this.updateHeaders();
 
@@ -161,12 +161,8 @@ export default class HomePage extends PureComponent {
 
   updateHeaders()
   {
-    const userType= getUserType();
-    debugger;
-   // this.setState({userType:userType})
-
+    const userType= getUserRole();
       let leftObjects={};
-  
       if(userType ==="Employee"){
 
         leftObjects = {
@@ -203,7 +199,7 @@ export default class HomePage extends PureComponent {
         }
        }
       }
-      else{
+      else {
         leftObjects = {
           dashboard: {
             title: 'Dashboard',
@@ -242,7 +238,6 @@ export default class HomePage extends PureComponent {
     console.log(prevState);
     console.log(this.state.props);
     console.log(this.state.headerTabs.leftTabs);
-
 
   }
 
