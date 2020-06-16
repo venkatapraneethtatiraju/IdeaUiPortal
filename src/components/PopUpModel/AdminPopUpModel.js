@@ -329,7 +329,7 @@ export class AdminPopUpModel extends Component {
                     onChange={this.onUserDeactivate}
                   />
                 </Col>
-              </Row>:
+              </Row>
 
 
           </Col> :
