@@ -106,6 +106,12 @@ export class AdminPopUpModel extends Component {
       categoryId: categoryId,
     }
     if (catTab && addCategory !== "Add Category") {
+      if(this.state.userStatus === true) {
+        requestParam.isActive = "false"
+      }
+      else {
+        requestParam.isActive = "true"
+        }
       this.editCategorie(key, requestParam);
     }
     else if (addCategory === "Add Category") {
@@ -346,7 +352,8 @@ export class AdminPopUpModel extends Component {
               {!addCat ?
                 <Row gutter={8} style={{ marginTop: '20px' }} className="tag-div">
                   <Col style={{ padding: '5px 4px' }}><label style={{ marginRight: '20px' }}>Deactivate Category</label></Col>
-                  <Col className="switch-div"><Switch defaultChecked="true" size="small" /></Col>
+                  <Col className="switch-div"><Switch defaultChecked="true" size="small"  
+                    onChange={this.onUserDeactivate}/></Col>
                 </Row> : null}
             </Col>}
         </Modal>
