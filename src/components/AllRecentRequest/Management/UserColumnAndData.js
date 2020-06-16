@@ -49,7 +49,7 @@ export const getCategoriesData = async(pagination)=>{
 
     return await getAllCategories(pagination)
          .then(response => {
-             let data=  setItemCategories(response.data)
+             let data=  setItemCategories(response.data.result)
              return data;
          })
          .catch(error => {
