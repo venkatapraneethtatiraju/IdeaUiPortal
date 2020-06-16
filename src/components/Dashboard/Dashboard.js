@@ -41,7 +41,7 @@ class Dashboard extends Component {
         let emailId = "mani.singh@xebia.com";
         await getUsersByEmailID(this.state.pagination1,emailId)
             .then(response => {
-        const userRole =  response.data.content[0].role;
+        const userRole =  response.data.result.content[0].role;
         setUserType(userRole);
         this.setState({userRole:userRole});
    })

@@ -51,11 +51,11 @@ const Header = (props) => (
         <Badge count={1}>
           <BellIcon className="nav-logos" />
         </Badge>
-        <Link exact from="/dashboard" to="/">
+       
         <Dropdown overlay={menu}>
           <Avatar  shape="circle" src={DefaultIcon} />
         </Dropdown>
-        </Link>
+       
       </div>
     </div>
   </div>

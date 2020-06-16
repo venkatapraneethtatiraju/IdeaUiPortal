@@ -3,12 +3,11 @@ import './Login.scss';
 import { Form, Input, Button } from 'antd';
 import XebiaLogo from '../../images/Logo.svg';
 import axios from 'axios';
-import { login ,setUserType, getUserType} from '../Auth/Auth';
+import { login } from '../Auth/Auth';
 import HomePage from '../HomePage/HomePage';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import Alertbox from '../Alert/Alert';
 import { isAuthenticated } from '../Auth/Auth';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 class Login extends PureComponent {
   constructor(props) {
@@ -100,8 +99,7 @@ class Login extends PureComponent {
           console.log('getEmailVerify', response)
           if (response.data.message === 'success') {
             this.setState({ isLogin: true })
-            login(response.data);
-            console.log(getUserType());
+            login(response.data.token);
           }
         })
         .catch(error => {
@@ -215,7 +213,7 @@ class Login extends PureComponent {
 
 
   render() {
-    if (this.state.isLogin ) {
+    if (this.state.isLogin || isAuthenticated()) {
       return <HomePage />
     }
     const alertName = "OTP send successfully!";
