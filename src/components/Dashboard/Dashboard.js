@@ -6,7 +6,7 @@ import IdeasStats from './IdeasStats/IdeasStats';
 import TopContributors from './TopContributors/TopContributors';
 import RecentlySubmittedIdeas from './RecentlySubmittedIdeas/RecentlySubmittedIdeas';
 import RecentRequests from './RecentRequests/RecentRequests';
-import {setUserType,getUserType} from '../Auth/Auth';
+import {setUserType,getUserType, getEmailId} from '../Auth/Auth';
 import { getUsersByEmailID } from '../../services/AppService';
 import {
     DEFAULT_PAGE_SIZE
@@ -31,14 +31,15 @@ class Dashboard extends Component {
     }
 
     componentDidMount(){
-            this.getAllUserByEmailIId();
-            console.log("every");
+       
+        this.getAllUserByEmailIId(); 
+         
     }
     // get all user by email ID search from API.
 
     getAllUserByEmailIId = async ()=>{
 
-        let emailId = "mani.singh@xebia.com";
+        let emailId = getEmailId();
         await getUsersByEmailID(this.state.pagination1,emailId)
             .then(response => {
         const userRole =  response.data.result.content[0].role;

@@ -64,6 +64,7 @@ export class TopContributors extends PureComponent {
 
     //Called the service when component is mount
     componentDidMount() {
+        
         this.getTopContributorRecord();
     }
 

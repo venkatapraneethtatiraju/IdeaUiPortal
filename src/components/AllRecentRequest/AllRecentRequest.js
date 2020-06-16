@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { Table, Row, Col } from 'antd';
 import { getUsersByName, getUsersByEmailID, getAllRecentRequest } from '../../services/AppService';
-import {
+import {ALLSTATUS,ALLROLES,ALLTYPE,
   SUBMITTED_ON,
   IDEA_SUBJECT,
   SUBMITTED_BY,
   STATUS,
   USERS,
   XEBIAOFFICE,
-  ROLE,
-  DEFAULT_PAGE_SIZE
+  ROLE,DEFAULTPAGINATION,
 } from '../../Config/Constants';
 import './AllRecentRequest.scss';
 import Loader from '../../components/Loader/Loader';
@@ -17,7 +16,7 @@ import DropDown from '../DropDownComponent/DropDownComponent'
 import SearchBox from '.././/SearchBarComponent/SearchBar'
 import { getUserData, getCategoriesData } from './Management/UserColumnAndData';
 import StatusTag from '../StatusTag/StatusTag';
-import { getFormatttedDate } from '../../Utility/CommonFunctions';
+import { getFormatttedDate,validateEmail } from '../../Utility/CommonFunctions';
 import AdminPopUpModel from '../PopUpModel/AdminPopUpModel';
 import PopUpModel from '../PopUpModel/PopUpModel';
 
@@ -136,7 +135,8 @@ class AllRecentRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lastPage: 1,
+      requestLastPage: 1,
+      userLastPage: 1,
       dropDownDefaultValue: '',
       isUserSelected: true,
       isCategoriesSelected: false,
@@ -144,98 +144,86 @@ class AllRecentRequest extends Component {
       isLoading: false,
       showModal: false,
       adminRecentData: [],
-      data: [],
+      userData: [],
+      requestData: [],
+      categoriesData:[],
       columns: [],
       btnColor: '#e4500e',
-      allStatus:
-        [
-          "All Status",
-          "Submitted",
-          "Approved",
-          "Completed",
-          "Draft"
-        ],
-      allRoles:
-        [
-          "All Roles",
-          "Admin",
-          "Employee",
-          "Manager"
-        ],
-      allType:
-        [
-          "All Type",
-          "Technical",
-          "Non-Technical",
-        ],
-      pagination: {
-        current: 1,
-        pageSize: DEFAULT_PAGE_SIZE,
-        showTotal: (total, range) => ``,
-        position: ['topRight'],
-        total: 0,
-        showQuickJumper: true,
-      },
+      allStatus:ALLSTATUS,
+      allRoles:ALLROLES,
+      allType:ALLTYPE,
+      requestPagination: DEFAULTPAGINATION,
+      userPagination: DEFAULTPAGINATION
     }
   }
 
   // mount first time lifeCycle
   componentDidMount() {
+    this.mounted = true;
     if (this.props.title === "request") {
-      this.getAllRecentRequestRecord(this.state.pagination);
+      this.getAllRecentRequestRecord(this.state.requestPagination);
     }
     else {
-      this.getUserDataRecord(this.state.pagination);
+      this.getUserDataRecord(this.state.userPagination);
     }
   }
 
+  // UNMOUNT cycle
+  componentWillUnmount(){
+    this.mounted = false;
+  }
+
+// every time invoke cycle on update
   async componentDidUpdate(prevState, nextState) {
+    console.log(prevState,"Previous");
+    console.log(this.props,"Current");
     if (prevState.title !== this.props.title) {
       if (this.props.title === "request") {
-        this.getAllRecentRequestRecord(this.state.pagination);
+        this.getAllRecentRequestRecord(this.state.requestPagination);
       }
       else {
-        this.getUserDataRecord(this.state.pagination);
+        this.getUserDataRecord(this.state.userPagination);
       }
     }
     else {
       if (prevState.value.subHeaderTextTitle !== this.props.value.subHeaderTextTitle) {
         if (this.props.value.subHeaderTextTitle === "Categories") {
-          this.getCategoriesDataRecord(this.state.pagination);
+          this.getCategoriesDataRecord();
         }
         else {
-          this.getUserDataRecord(this.state.pagination);
+          this.getUserDataRecord(this.state.userPagination);
         }
       }
     }
   }
 
+  // refresh function
   refreshCategoriesList = () => {
     this.buttonActionHandler();
-    this.getCategoriesDataRecord(this.state.pagination);
+    this.getCategoriesDataRecord();
   }
 
+  // refreshCategories
   refreshUserList = () => {
     this.buttonActionHandler();
-    this.getUserDataRecord(this.state.pagination);
+    this.getUserDataRecord(this.state.userPagination);
   }
 
   // get all users from UserColumnAndData.js file i.e hitting users api
   getUserDataRecord = async (pagination) => {
-    await this.setState({ isLoading: true, columns: [], data: [] })
+    await this.setState({ isLoading: true})
     await getUserData(pagination).then(response => {
-     
       const {data,responses}=  response;
-      const { currentPage, totalRecords } = responses.data.page;
-      this.setState({
+      const { currentPage, totalRecords } = responses.data.result.page;
+      this.setState({ 
         lastPage: Number(currentPage) + 1,
-        pagination: {
-          ...this.state.pagination,
+        userPagination: {
+          ...this.state.userPagination,
           current: Number(currentPage) + 1,
           total: totalRecords,
           showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
         },
-        selectedStatus: '', dropDownDefaultValue: "All Roles", isLoading: false, columns: userColumn, data: data
+        selectedStatus: '', dropDownDefaultValue: "All Roles", isLoading: false, userData: data
       });
     }
     )
@@ -249,20 +237,12 @@ class AllRecentRequest extends Component {
 
 
   // get all users from UserColumnAndData.js file i.e hitting users api
-  getCategoriesDataRecord = async (pagination) => {
-    await this.setState({ isLoading: true, columns: [], data: [] })
-    await getCategoriesData(pagination).then(response => {
-      //const { currentPage, totalRecords } = responses.data.result.page;
+  getCategoriesDataRecord = async () => {
+    await this.setState({ isLoading: true })
+    await getCategoriesData().then(response => {
       this.setState({
-        pagination: {
-          ...this.state.pagination,
-          current: 1,
-          total: 15,
-          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
-        },
-        selectedStatus: '', dropDownDefaultValue: "All Type", isLoading: false, columns: categoriesColumn, data: response
+        selectedStatus: '', dropDownDefaultValue: "All Type", isLoading: false, categoriesData: response
       });
-
     })
     .catch(error => {
       console.log(error);
@@ -272,20 +252,21 @@ class AllRecentRequest extends Component {
 
   //To get all recent request
   getAllRecentRequestRecord = async (pagination) => {
-    await this.setState({ isLoading: true, columns: [], data: [] })
+
+    await this.setState({ isLoading: true})
     await getAllRecentRequest(pagination)
       .then(response => {
         const { currentPage, totalRecords } = response.data.result.page;
         const RequestData = this.setRecentItem(response.data.result.content);
         this.setState({
-          lastPage: Number(currentPage) + 1,
-          pagination: {
-            ...this.state.pagination,
+          requestLastPage: Number(currentPage) + 1,
+          requestPagination: {
+            ...this.state.requestPagination,
             current: Number(currentPage) + 1,
             total: totalRecords,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
           },
-          selectedStatus: '', dropDownDefaultValue: "All Status", columns: requestColumn, data: RequestData, isLoading: false
+          selectedStatus: '', dropDownDefaultValue: "All Status", requestData: RequestData, isLoading: false
         });
 
       })
@@ -308,10 +289,13 @@ class AllRecentRequest extends Component {
     return newArr;
   };
 
+  // dropDown handle change on selection
   async dropDownHandleChange(value) {
     await this.setState({ selectedStatus: '' })
     await this.setState({ selectedStatus: value.value })
   }
+
+  // filter function on the basis of dropdown value
 
   filterData(tabelData) {
     if (this.props.title === "request") {
@@ -352,42 +336,39 @@ class AllRecentRequest extends Component {
     }
   }
 
-  //Handle pagination
+  //Handle pagination function
   handlePageChange(pagination) {
     if (this.props.title === "request") {
-      if (this.state.lastPage !== pagination.current) {
-        this.getAllRecentRequestRecord(this.state.pagination);
+      if (this.state.requestLastPage !== pagination.current) {
+        this.getAllRecentRequestRecord(pagination);
       }
     }
-    else if (this.props.value.subHeaderTextTitle === "Categories") {
-      if (this.state.lastPage !== pagination.current) {
-        this.getCategoriesDataRecord(this.state.pagination);
-      }
-    }
-    else {
-      if (this.state.lastPage !== pagination.current) {
-        this.getUserDataRecord(this.state.pagination);
+    else if (this.props.title==="management" && this.props.value.subHeaderTextTitle === "Users") {
+      if (this.state.userLastPage !== pagination.current) {
+        this.getCategoriesDataRecord(pagination);
       }
     }
   }
 
+  // Users search on the basis of name and email ID;
   SearchTextHandle(searchTxt) {
     clearTimeout(this.typingTimer);
-    let inputText = this.validateEmail(searchTxt);
+    let inputText = validateEmail(searchTxt);
     if (inputText) {
       this.typingTimer = setTimeout(() => {
-        this.getAllUserByEmailIId(this.state.pagination, searchTxt);
-      }, 8);
+        this.getAllUserByEmailIId(this.state.userPagination, searchTxt);
+      }, 10);
     }
     else {
       this.typingTimer = setTimeout(() => {
-        this.getAllUserByName(this.state.pagination, searchTxt);
-      }, 5);
+        this.getAllUserByName(this.state.userPagination, searchTxt);
+      }, 10);
     }
   }
 
+  // return modify property of categories array
   setItemCategories(result) {
-    const newArr = result.map((val, index) => {
+    const catgeoriesArr = result.map((val, index) => {
       return {
         key: val.userId,
         userName: val.name ? val.name : "- ",
@@ -396,19 +377,17 @@ class AllRecentRequest extends Component {
         status: val.enabled ? "Active" : "Deactivated"
       };
     })
-    return newArr;
+    return catgeoriesArr;
   };
 
   // get all user by name search from API.
   getAllUserByName= async (pagination,searchTxt)=>{
       console.log(searchTxt);
-       await this.setState({isLoading:true,columns:[],data:[]})   
+       await this.setState({isLoading:true})   
        await getUsersByName(pagination,searchTxt)
           .then(response => {
-            
-              const { currentPage, totalRecords } = response.data.page;
-              console.log(response.data.content,"userName")
-             const RequestData = this.setItemCategories(response.data.content);
+            const { currentPage, totalRecords } = response.data.result.page;
+             const RequestData = this.setItemCategories(response.data.result.content);
              this.setState({
               pagination: {
                 ...this.state.pagination,
@@ -416,8 +395,7 @@ class AllRecentRequest extends Component {
                 total: totalRecords,
                 showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
               },
-               columns:userColumn, data:RequestData,isLoading:false});
-            
+              userData:RequestData,isLoading:false});
             })
           .catch(error => {
              this.setState({ isLoading:false});
@@ -428,13 +406,11 @@ class AllRecentRequest extends Component {
    // get all user by email ID search from API.
 
    getAllUserByEmailIId = async (pagination,searchTxt)=>{
-    await this.setState({isLoading:true,columns:[],data:[]})   
+    await this.setState({isLoading:true})   
      await getUsersByEmailID(pagination,searchTxt)
         .then(response => {
-          
-            const { currentPage, totalRecords } = response.data.page;
-            console.log(response.data.content,"emailID")
-           const RequestData = this.setItemCategories(response.data.content);
+            const { currentPage, totalRecords } = response.data.result.page;
+           const RequestData = this.setItemCategories(response.data.result.content);
            this.setState({
             pagination: {
               ...this.state.pagination,
@@ -442,7 +418,7 @@ class AllRecentRequest extends Component {
               total: totalRecords,
               showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
             },
-             columns:userColumn, data:RequestData,isLoading:false});
+            userData:RequestData,isLoading:false});
           
           })
         .catch(error => {
@@ -450,19 +426,7 @@ class AllRecentRequest extends Component {
             console.log(error);
         })
    }
-   
-
-   validateEmail = (email) => {
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (re.test(email)) {
-      //Email valid. Procees to test if it's from the right domain (Second argument is to check that the string ENDS with this domain, and that it doesn't just contain it)
-      if (email.indexOf("@xebia.com", email.length - "@xebia.com".length) !== -1) {
-        //VALID        
-        return true;
-      }
-    }
-  }
-
+  
   buttonActionHandler = (event) => {
     this.setState(prevstate => ({
       ...prevstate,
@@ -470,6 +434,7 @@ class AllRecentRequest extends Component {
     }))
   }
 
+  // on row selection of table function
   onSelectedRowAction = (record) => {
     //debugger;
     if (record) {
@@ -479,10 +444,19 @@ class AllRecentRequest extends Component {
   }
 
   render() {
-    const columns = this.state.columns;
-    const tabelData= this.state.data;
-    const selectedStatusData =  this.filterData(tabelData);
-    console.log(selectedStatusData);
+
+    // requestData state
+    const requestData= this.state.requestData;
+    const selectedRequestData =  this.filterData(requestData);
+
+    //userData state
+    const userData= this.state.userData;
+    const selectedUserData =  userData? this.filterData(userData):null;
+
+    //categories state
+    const categoriesData= this.state.categoriesData;
+    const selectedCategoriesData = categoriesData? this.filterData(categoriesData):null;
+    
     return (
       <div>
         {this.state.isLoading ? <div className="loaderLayout">
@@ -490,31 +464,66 @@ class AllRecentRequest extends Component {
         </div> : null
         }
         <div className="my-ideas-container ">
-          {columns !== [] && selectedStatusData !== [] ?
+          
             <Row justify="center">
               <Col xs={20} sm={20} md={20} lg={20} xl={20}>
+
+                {this.props.title ==="request"?
                 <Table
-                  pagination={this.state.pagination}
+                  pagination={this.state.requestPagination}
                   onChange={pagination => (this.handlePageChange(pagination))}
-                  columns={columns}
-                  dataSource={selectedStatusData}
+                  columns={requestColumn}
+                  dataSource={selectedRequestData}
                   onRow={(record) => ({
                     onClick: () => this.onSelectedRowAction(record)
                   })}
                 >
-                </Table>
+                </Table> :null
+                }
+                {this.props.title==="management" && this.props.value.subHeaderTextTitle ==="Users"?
+                 
+                  <Table
+                  pagination={this.state.userPagination}
+                  onChange={pagination => (this.handlePageChange(pagination))}
+                  columns={userColumn}
+                  dataSource={selectedUserData}
+                  onRow={(record) => ({
+                    onClick: () => this.onSelectedRowAction(record)
+                  })}
+                >
+                </Table> :null}
+
+
+                {this.props.title==="management" && this.props.value.subHeaderTextTitle ==="Categories"?
+                <div className="categoriesTable" >
+                <Table
+                pagination={false}
+                columns={categoriesColumn}
+                dataSource={selectedCategoriesData}
+                onRow={(record) => ({
+                  onClick: () => this.onSelectedRowAction(record)
+                })}
+                >
+                </Table></div> :null}
+                
               </Col>
-            </Row> : null
-          }
+            </Row> 
+
           {this.props.value.userClickColor === "black" ?
             <div className="searchUserTypeMainLyout" >
               <SearchBox value={this.props} onChange={(evt) => this.SearchTextHandle(evt)} />
             </div>
             : null
           }
+
+          {this.props.value.subHeaderTextTitle==="Categories" && this.props.title ==="management"?
+          <div className="categoriesMainLyout" >
+            <DropDown subHeaderTextTitle={this.props.value.subHeaderTextTitle} placeholder={this.state.dropDownDefaultValue} title={this.props.title} value={this.state} onSelect={(value) => this.dropDownHandleChange(value)} />
+          </div>:
           <div className="searchMainLyout" >
             <DropDown subHeaderTextTitle={this.props.value.subHeaderTextTitle} placeholder={this.state.dropDownDefaultValue} title={this.props.title} value={this.state} onSelect={(value) => this.dropDownHandleChange(value)} />
           </div>
+          }
 
           {this.state.showModal && this.props.title !== 'request' ? <AdminPopUpModel
             onOk={this.buttonActionHandler}

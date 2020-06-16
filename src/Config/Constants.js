@@ -1,3 +1,5 @@
+import ExportTypography from "antd/lib/typography/Typography";
+
 //Display Name
 export const TOP_TRENDING_IDEAS = 'Top Trending Ideas';
 export const TOP_CONSTRIBUTORS = 'Top Contributors';
@@ -53,10 +55,41 @@ export const TOKEN_KEY = 'tokenId';
 export const USERNAME_KEY = 'userName';
 export const USERID_KEY = 'userId';
 export const USERROLE_KEY = 'userRole';
+export const USER_EMAIL = 'userEmail';
 
 export const REASON_CLOSE = 'Reason for closing this';
 export const REASON_REVIEW = 'Reason for reviewing this';
 export const REASON_APPROVED = 'Reason for approving this';
 export const REASON_DEVELOPMENT = 'Reason for developing this';
 export const REASON_COMPLETE = 'Reason for completing this';
+
+// DropDown Values
+export const ALLSTATUS =[ "All Status",
+"Submitted",
+"Approved",
+"Completed",
+"Development",
+"Closed"];
+
+export const ALLROLES =[
+    "All Roles",
+    "Admin",
+    "Employee",
+    "Manager"
+]
+
+export const ALLTYPE =[
+    "All Type",
+    "Technical",
+    "Non-Technical"
+]
+
+export const DEFAULTPAGINATION={
+    current: 1,
+    pageSize: DEFAULT_PAGE_SIZE,
+    showTotal: (total, range) => ``,
+    position: ['topRight'],
+    total: 0,
+    showQuickJumper: true,
+  }
 

@@ -58,7 +58,7 @@ class RecentRequests extends PureComponent {
 
     //Called when component is mount
     componentDidMount() {
-        this.getRecentRequestRecord();
+            this.getRecentRequestRecord();
     }
 
     //To get the top trending ideas

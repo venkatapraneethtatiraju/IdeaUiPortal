@@ -49,7 +49,9 @@ export class TopTrendingIdeas extends PureComponent {
 
     //Called the service when component is mount
     componentDidMount() {
-        this.getTopTrendingRecord();
+       
+     this.getTopTrendingRecord();
+        
     }
 
     //Unmount the component

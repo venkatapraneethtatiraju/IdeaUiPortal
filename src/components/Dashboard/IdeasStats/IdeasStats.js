@@ -146,7 +146,9 @@ export class IdeasStats extends PureComponent {
 
     //Load Idea stats data on page load for All time
     componentDidMount() {
+        
         this.getIdeaStatsRecord(ALL);
+         
     }
 
     //Unmount the component

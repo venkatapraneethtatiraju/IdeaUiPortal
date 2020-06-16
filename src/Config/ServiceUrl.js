@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://iportal.herokuapp.com/innovation-portal/api/v1';
+export const BASE_URL = 'https://cors-anywhere.herokuapp.com/http://iportal.herokuapp.com/innovation-portal/api/v1';
 export const TOPTRENDING_IDEAS_URL = BASE_URL + '/dashboard/toptrending';
 export const TOPCONTRIBUTORS_URL = BASE_URL + '/dashboard/topcontributor';
 export const IDEASTATS_URL = BASE_URL + '/dashboard/ideastats';
@@ -10,8 +10,11 @@ export const ALLRECENTREQUEST_URL = BASE_URL + '/ideas/request/all?';
 export const ALLUSERS_URL = BASE_URL + '/users?';
 export const SEARCH_USERSBY_NAME_URL = BASE_URL + '/users?';
 export const SEARCH_USERSBY_EMAILID_URL = BASE_URL + '/users?';
-export const CATEGORIES_URL = BASE_URL + '/categories?';
+export const CATEGORIES_URL = BASE_URL + '/categories';
 export const RECENTLY_SUBMITTED_URL = BASE_URL + '/ideas/recent';
 export const PUT_CHANGE_USER_ROLE_ADMIN = BASE_URL + '/users/';
 export const ACTIVE_CATEGORIES_URL = BASE_URL + '/active/categories?isActive=true';
 export const PUT_POST_CATEGORIES = BASE_URL + '/categories';
+export const GET_OTP = BASE_URL + '/otp';
+export const VERIFY_OTP = BASE_URL + '/otp/verify?otp=';
+export const EMAIL_VERIFY_REGISTER = BASE_URL + '/token/verify?emailId=';

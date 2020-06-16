@@ -16,7 +16,10 @@ import {
     PUT_CHANGE_USER_ROLE_ADMIN,
     ACTIVE_CATEGORIES_URL,
     PUT_POST_CATEGORIES,
-    BASE_URL
+    BASE_URL,
+    GET_OTP,
+    VERIFY_OTP,
+    EMAIL_VERIFY_REGISTER
 } from '../Config/ServiceUrl';
 import { getHeaders } from '../Utility/CommonFunctions';
 import { getUserId } from '../components/Auth/Auth';
@@ -94,9 +97,9 @@ export const getAllRegisteredUsers = (pagination) => {
 }
 
 //Service call to get all Categories
-export const getAllCategories = (pagination) => {
+export const getAllCategories = () => {
     const headers = getHeaders();
-    return Axios.get(`${CATEGORIES_URL}pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}`, { headers });
+    return Axios.get(`${CATEGORIES_URL}`, { headers });
 }
 
 //Service call to get all user by name search
@@ -144,4 +147,22 @@ export const putCategories = (userId, requestParam) => {
 export const postCategories = (requestParam) => {
     const headers = getHeaders();
     return Axios.post(`${PUT_POST_CATEGORIES}`, JSON.stringify(requestParam), { headers });
+}
+
+// Service to get otp on given email ID
+export const postOTP = (requestParam) => {
+    return Axios.post(`${GET_OTP}`,{requestParam});
+}
+
+
+//Service call to get VERIFY OTP 
+export const getVerifyOtp = (otp) => {
+    const headers = getHeaders();
+    return Axios.get(`${VERIFY_OTP}/otp=${otp}`, { headers });
+}
+
+
+//Service call to check email is register or not
+export const getEmailVerify = (email) => {
+    return Axios.get(`${EMAIL_VERIFY_REGISTER}${email}`);
 }

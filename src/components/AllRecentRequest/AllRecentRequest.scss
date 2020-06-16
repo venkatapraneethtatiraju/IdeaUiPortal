@@ -176,6 +176,14 @@
   top: 144px;
 }
 
+.categoriesMainLyout {
+  width: 114px;
+  height: 40px;
+  position: absolute;
+  right: 9%;
+  top: 144px;
+}
+
 .searchUserTypeMainLyout {
   width: 394px;
   height: 40px;
@@ -214,4 +222,9 @@
   letter-spacing: normal;
   text-align: center;
   color: #ffffff;
+}
+
+.categoriesTable{
+  position: absolute;
+  top:63px;
 }

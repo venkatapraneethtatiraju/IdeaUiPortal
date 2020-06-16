@@ -15,9 +15,7 @@ ReactDOM.render(
   <React.StrictMode>
     <ErrorBoundary>
       <BrowserRouter>
-        <Switch>
-          <Route path="/" component={App} />
-        </Switch>
+          <App/>
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>,

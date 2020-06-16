@@ -29,7 +29,12 @@ const handleMenuClick = async (e)=> {
  const logoutPerform = async ()=>
  {
    await logout();
+   refreshPage();
  }
+
+ function refreshPage() {
+  window.location.reload(true);
+}
 
 const Header = (props) => (
   <div className="app-header">
@@ -55,7 +60,7 @@ const Header = (props) => (
         <Dropdown overlay={menu}>
           <Avatar  shape="circle" src={DefaultIcon} />
         </Dropdown>
-       
+      
       </div>
     </div>
   </div>

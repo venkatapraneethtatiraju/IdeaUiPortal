@@ -20,6 +20,7 @@ import { createNewIdea } from '../../services/AppService';
 import { IDEA_ADDED_MESSAGE } from '../../Config/Constants';
 import {setUserType,getUserRole} from '../Auth/Auth';
 import { useTheme } from '@material-ui/core';
+import Login from '../login/Login';
 
 export default class HomePage extends PureComponent {
   constructor(props) {
@@ -79,9 +80,7 @@ export default class HomePage extends PureComponent {
   }
 
   clickActionHandler = async (event) => {
-    console.log(getUserRole());
-    const userType= getUserRole();
-
+   
     this.updateHeaders();
 
     if (event === "management") {
@@ -157,7 +156,8 @@ export default class HomePage extends PureComponent {
   componentDidMount()
   {
     
-    this.updateHeaders();
+      this.updateHeaders()
+    //this.updateHeaders();
   }
 
   updateHeaders()
@@ -291,19 +291,20 @@ export default class HomePage extends PureComponent {
 
           <Switch>
           <Redirect exact from="/" to="/dashboard" />
-          <Route exact path="/dashboard"  >
+          <Route  path="/dashboard"  >
             <Dashboard onClick={(event) => this.clickActionHandler(event)} />
           </Route>
-          <Route path="/myIdeas" >
+          <Route  path="/myIdeas" >
             <MyIdeas myIdeaData={this.state.myIdeaData} />
           </Route>
-          <Route exact path="/allIdeas" component={AllIdea} />
-          <Route exact to="/request">
+          <Route  path="/allIdeas" component={AllIdea} />
+          <Route  path="/request">
             <AllRecentRequest title={this.state.title} value={this.state} />
           </Route>
-          <Route exact path="/management">
+          <Route  path="/management">
             <AllRecentRequest title={this.state.title} value={this.state} />
           </Route>
+         
         </Switch>
       </div>
     );

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import GenericButton from '../Button/Button';
 import './SubHeader.scss';
 class SubHeader extends Component {
+    
     render() {
+        console.log(this.props.value,"subs")
         return (
             <div className="sub-header-container">
                
@@ -15,13 +17,15 @@ class SubHeader extends Component {
                     <h2>{this.props.subHeaderTitle}</h2>
                 }
                 
-                { this.props.subHeaderTitle ==="Management" ?
-                <GenericButton 
-                buttonClickHandler={this.props.buttonClickHandler}
-                buttonName={this.props.buttonName}
-                btnColor={this.props.btnColor}
-                >
-                </GenericButton>:null}
+                { this.props.value.title ==="management" && this.props.value.subHeaderTextTitle==="Users" ?
+                   null:
+                    <GenericButton 
+                        buttonClickHandler={this.props.buttonClickHandler}
+                        buttonName={this.props.buttonName}
+                        btnColor={this.props.btnColor}
+                        >
+                    </GenericButton>
+                }
             </div>
         );
     }

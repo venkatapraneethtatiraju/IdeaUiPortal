@@ -29,8 +29,8 @@ function setUserItem(result) {
 
 
 // get Categories data from api
-export const getCategoriesData = async (pagination) => {
-  return await getAllCategories(pagination)
+export const getCategoriesData = async () => {
+  return await getAllCategories()
     .then(responses => {
       let data = setItemCategories(responses.data.result)
       return data;

@@ -48,7 +48,10 @@ class RecentlySubmittedIdeas extends PureComponent {
     }
 
     componentDidMount() {
+       
+       
         this.getRecentIdeaDetails();
+         
     }
 
     //Get the recently submitted ideas
