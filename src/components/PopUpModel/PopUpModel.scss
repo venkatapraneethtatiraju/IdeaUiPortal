@@ -526,3 +526,50 @@ div.ant-modal-content {
     }
   }
 }
+
+.tab-container {
+  .ant-tabs {
+    color: #70707075;
+    width: 359px;
+    height: 245px;
+    .ant-tabs-bar {
+      margin: 0px 0px 8px 0px;
+      border: 0px;
+      border-bottom: none;
+      .ant-tabs-tab {
+        font-size: 14px;
+        font-stretch: normal;
+        letter-spacing: normal;
+        padding: 0px;
+      }
+      .ant-tabs-tab:hover {
+        color: #707070;
+      }
+      .ant-tabs-ink-bar {
+        border-radius: 4px;
+        border: 0px;
+        color: #707070;
+        background-color: #ffffff !important;
+      }
+      .ant-tabs-tab-active {
+        color: #707070;
+        font-weight: normal;
+      }
+    }
+  }
+}
+
+.business-impact {
+  width: 367px;
+  height: 170px !important;
+  border-radius: 4px;
+  border: solid 1px #dddddd;
+  background-color: #ffffff;
+}
+
+.errorTextArea {
+  border: 1px solid #cc0000;
+  width: 367px;
+  height: 170px !important;
+  border-radius: 4px;
+}

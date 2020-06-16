@@ -438,7 +438,6 @@ class AllRecentRequest extends Component {
   onSelectedRowAction = (record) => {
     //debugger;
     if (record) {
-      console.log(record, "record");
       this.setState({ adminRecentData: record, showModal: true, })
     }
   }

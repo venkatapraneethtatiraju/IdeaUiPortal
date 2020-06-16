@@ -85,8 +85,8 @@ export default class HomePage extends PureComponent {
 
     if (event === "management") {
       this.usersClicked();
-      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black',categoriesClickColor:'grey'});
-      
+      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black', categoriesClickColor: 'grey' });
+
     }
     else {
       await this.setState({ buttonName: "Add an Idea", userClickColor: 'gray', categoriesClickColor: 'grey' });
@@ -106,7 +106,6 @@ export default class HomePage extends PureComponent {
   }
 
   buttonActionHandler = (event) => {
-    debugger;
     this.setState(prevstate => ({
       ...prevstate,
       showModal: !prevstate.showModal,
@@ -117,13 +116,14 @@ export default class HomePage extends PureComponent {
     this.categoriesClicked();
   }
 
-  saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId) {
+  saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId, businessImpact) {
     let requestParam = {
       title: ideaSubject,
       ideaDescription: ideaDetails,
       categoryId: ideaType,
       subCategoryId: ideaCategoryValue,
-      ideaStatusId: ideaStatusId
+      ideaStatusId: ideaStatusId,
+      businessImpact: businessImpact,
     }
     this.createIdea(requestParam);
   }
@@ -266,7 +266,7 @@ export default class HomePage extends PureComponent {
             </SubHeader>
           </Col>
         </Row>
-        {this.state.showModal && this.state.title !=='management' ?
+        {this.state.showModal && this.state.title !== 'management' ?
           <PopUpModel modelText="testing"
             onOk={this.buttonActionHandler}
             onCancel={this.buttonActionHandler}
@@ -275,19 +275,19 @@ export default class HomePage extends PureComponent {
             btnColor={this.state.btnColor}
             isAddEditIdea="true"
             isViewIdea="false"
-          />:null
+          /> : null
         }
-        {this.state.showModal && this.state.title ==='management'  ?
+        {this.state.showModal && this.state.title === 'management' ?
           <AdminPopUpModel
-          onOk={this.buttonActionHandler}
-          onCancel={this.buttonActionHandler}
-          isAddEditIdea="false"
-          isViewIdea="true"
-          adminRecentData=""
-          selectedTab="Categories"
-          buttonName = {this.state.buttonName}
-          />:null}
-     
+            onOk={this.buttonActionHandler}
+            onCancel={this.buttonActionHandler}
+            isAddEditIdea="false"
+            isViewIdea="true"
+            adminRecentData=""
+            selectedTab="Categories"
+            buttonName={this.state.buttonName}
+          /> : null}
+
 
           <Switch>
           <Redirect exact from="/" to="/dashboard" />
