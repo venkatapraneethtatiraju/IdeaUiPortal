@@ -107,6 +107,7 @@ export default class HomePage extends PureComponent {
   }
 
   buttonActionHandler = (event) => {
+    debugger;
     this.setState(prevstate => ({
       ...prevstate,
       showModal: !prevstate.showModal,

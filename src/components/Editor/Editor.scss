@@ -1,12 +1,6 @@
-body {
-  background: #f3f1f2;
-  font-family: sans-serif;
-}
-
 .app {
   margin: 0rem 0rem;
   display: inline-block;
-  /* width: 100%; */
   padding-top: 4px;
 }
 
@@ -14,12 +8,9 @@ body {
 .app .ql-snow.ql-toolbar {
   display: flex;
   background: #ffffff;
-  // border-top-left-radius: 0.5em;
-  // border-top-right-radius: 0.5em;
 }
 
 .app .ql-editor {
-  min-height: 10.5em;
   left: 0px;
   display: block;
   position: relative;
@@ -36,35 +27,24 @@ body {
   color: #333333 !important;
 }
 
-// min-height: 10.5em;
-//     left: 0px;
-//     display: block;
-//     margin-top: 6px;
-//     padding: 0px;
-//     /* position: absolute; */
-//     text-align: left;
-//     /* left: 20px; */
-//     /* display: block; */
-//     width: 92%;
-
 .ql-container.ql-snow {
   border: 1px solid #ccc;
   width: 359px;
 }
 
 .app .ql-container {
-  // border-bottom-left-radius: 0.5em;
-  // border-bottom-right-radius: 0.5em;
   background: #fefcfc;
   top: 42px;
   height: 143px;
   position: relative;
+  font-size: 13px;
+  font-family: "Helvetica" !important;
 }
 
 .ql-toolbar.ql-snow {
   border: 1px solid #ccc;
   box-sizing: border-box;
-  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-family: !important;
   padding: 8px;
   position: absolute;
   text-align: center;
@@ -82,4 +62,8 @@ body {
 
 .app .ql-snow.ql-toolbar button:hover {
   color: black !important;
+}
+
+.app p {
+  color: rgba(0, 0, 0, 0.65);
 }

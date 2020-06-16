@@ -9,6 +9,9 @@ import {
   ROLE_ADMIN,
   NON_TECHNICAL,
   TECHNICAL,
+  EMPLOYEE,
+  ADMIN,
+  MANAGER,
 } from "../../Config/Constants";
 import GenericButton from "../Button/Button";
 import { putChangeUserRole, putCategories, postCategories } from "../../services/AppService";
@@ -23,14 +26,14 @@ export class AdminPopUpModel extends Component {
       userEmpBGColor: "#b1b1b1",
       userMgrBGColor: "#b1b1b1",
       userAdmBGColor: "#b1b1b1",
-      userStatus: false,
+      userStatus: this.props.adminRecentData.enabled,
       userID: "",
       tabClicked: false,
       categories: '',
       techBGColor: "#b1b1b1",
       nonTechBGColor: "#b1b1b1",
-      categoriesValue: this.props.adminRecentData.categories
-
+      categoriesValue: this.props.adminRecentData.categories,
+      categoryStatus: this.props.adminRecentData.active,
     };
   }
 
@@ -43,7 +46,7 @@ export class AdminPopUpModel extends Component {
     switch (event.target.textContent) {
       case "Employee":
         this.setState({
-          userRole: ROLE_EMPLOYEE,
+          userRole: EMPLOYEE,
           userEmpBGColor: "#f7941d",
           userMgrBGColor: "#b1b1b1",
           userAdmBGColor: "#b1b1b1",
@@ -51,7 +54,7 @@ export class AdminPopUpModel extends Component {
         break;
       case "Manager":
         this.setState({
-          userRole: ROLE_MANAGER,
+          userRole: MANAGER,
           userMgrBGColor: "#f7941d",
           userEmpBGColor: "#b1b1b1",
           userAdmBGColor: "#b1b1b1",
@@ -59,7 +62,7 @@ export class AdminPopUpModel extends Component {
         break;
       case "Admin":
         this.setState({
-          userRole: ROLE_ADMIN,
+          userRole: ADMIN,
           userAdmBGColor: "#f7941d",
           userMgrBGColor: "#b1b1b1",
           userEmpBGColor: "#b1b1b1",
@@ -83,14 +86,22 @@ export class AdminPopUpModel extends Component {
         break;
     }
   };
+
   onUserDeactivate = () => {
     this.setState((prevstate) => ({
       ...prevstate,
       userStatus: !prevstate.userStatus,
     }));
   };
+
+  onCategoryDeactivate = () => {
+    this.setState((prevstate) => ({
+      ...prevstate,
+      categoryStatus: !prevstate.categoryStatus,
+    }));
+  };
+
   onSaveClicked = (key, catTab, addCategory) => {
-    debugger;
     let categoryId = 1;
     if (this.state.categories === TECHNICAL) {
       categoryId = 1
@@ -103,6 +114,7 @@ export class AdminPopUpModel extends Component {
       categoryId: categoryId,
     }
     if (catTab && addCategory !== "Add Category") {
+      requestParam.isActive = this.state.categoryStatus;
       this.editCategorie(key, requestParam);
     }
     else if (addCategory === "Add Category") {
@@ -110,16 +122,18 @@ export class AdminPopUpModel extends Component {
     }
     else {
       let userRole = "";
-      if (this.state.userRole === "Employee") {
+      let subCategoryId = "";
+      if (this.state.userRole === EMPLOYEE) {
         userRole = ROLE_EMPLOYEE;
-      } else if (this.state.userRole === "Manager") {
+      } else if (this.state.userRole === MANAGER) {
         userRole = ROLE_MANAGER;
-      } else if (this.state.userRole === "Admin") {
+        subCategoryId = 1;
+      } else if (this.state.userRole === ADMIN) {
         userRole = ROLE_ADMIN;
       } else {
         userRole = this.state.userRole;
       }
-      putChangeUserRole(this.state.userID, userRole, this.state.userStatus)
+      putChangeUserRole(this.state.userID, userRole, this.state.userStatus, subCategoryId)
         .then((response) => {
           this.props.refreshUserList();
         })
@@ -157,18 +171,14 @@ export class AdminPopUpModel extends Component {
       key,
       location,
       role,
-      status,
       userName,
       categories,
+      enabled,
+      active,
       type
     } = this.props.adminRecentData;
-    // if(this.state.categoriesValue!== "")
-    // {
-    //   categories = this.state.categoriesValue
-    // }
+
     let userRole = role;
-    let statusChecked = false;
-    // let userEmpBGColor ='#b1b1b1'; let userMgrBGColor ='#b1b1b1'; let userAdmBGColor ='#b1b1b1';
     let userEmpBGColor = this.state.userEmpBGColor;
     let userMgrBGColor = this.state.userMgrBGColor;
     let userAdmBGColor = this.state.userAdmBGColor;
@@ -217,12 +227,6 @@ export class AdminPopUpModel extends Component {
     }
     if (!this.state.tabClicked && addCategory === 'Add Category') {
       techBGColor = '#f7941d';
-    }
-
-    if (status === "Active") {
-      statusChecked = false;
-    } else {
-      statusChecked = true;
     }
 
     return (
@@ -314,14 +318,14 @@ export class AdminPopUpModel extends Component {
                 <Col className="switch-div">
                   <Switch
                     size="small"
-                    defaultChecked={statusChecked}
+                    defaultChecked={!enabled}
                     onChange={this.onUserDeactivate}
                   />
                 </Col>
-              </Row>:
+              </Row>
 
 
-          </Col> :
+            </Col> :
             <Col className="admin-content-main">
               <Row>
                 <label style={{ marginBottom: '10px' }} className="timeline-header">Category</label>
@@ -341,7 +345,8 @@ export class AdminPopUpModel extends Component {
               {!addCat ?
                 <Row gutter={8} style={{ marginTop: '20px' }} className="tag-div">
                   <Col style={{ padding: '5px 4px' }}><label style={{ marginRight: '20px' }}>Deactivate Category</label></Col>
-                  <Col className="switch-div"><Switch defaultChecked="true" size="small" /></Col>
+                  <Col className="switch-div"><Switch defaultChecked={!active} size="small"
+                    onChange={this.onCategoryDeactivate} /></Col>
                 </Row> : null}
             </Col>}
         </Modal>

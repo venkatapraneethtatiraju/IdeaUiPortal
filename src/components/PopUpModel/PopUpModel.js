@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './PopUpModel.scss';
 import {
     Modal, Row, Col, Tag, Button, Timeline,
-    Avatar, Input, Select, Upload
+    Avatar, Input, Select, Upload, Tabs,
 } from 'antd';
 import GenericButton from '../Button/Button';
 import { ReactComponent as JpgIcon } from '../../images/jpg.svg'
@@ -41,6 +41,8 @@ import StatusButton from '../StatusButton/StatusButton';
 import StatusTag from '../StatusTag/StatusTag';
 import { getUserId, getUserName } from '../Auth/Auth';
 import TextArea from 'antd/lib/input/TextArea';
+
+const { TabPane } = Tabs;
 
 class PopUpModel extends Component {
     constructor(props) {
@@ -81,8 +83,8 @@ class PopUpModel extends Component {
             titleMessage: '',
         }
 
-        if (this.props.onEditHandler) {
-            let datas = this.props.onEditHandler;
+        if (this.props.editIdeaData) {
+            let datas = this.props.editIdeaData;
             this.state.ideaId = datas.key;
             this.state.ideaSubject = datas.ideaSubject;
             this.state.ideaDetails = datas.ideaDescription;
@@ -116,7 +118,7 @@ class PopUpModel extends Component {
             valid = false;
         }
 
-        if (ideaDetails.trim() === "") {
+        if (ideaDetails.trim() === "" || ideaDetails === '<p><br></p>') {
             this.setState({ ideaDetailsError: WARNING_MESSAGE });
             valid = true;
         } else {
@@ -272,8 +274,8 @@ class PopUpModel extends Component {
             }
         }
 
-        if (this.props.onEditHandler !== undefined) {
-            let editIdea = this.props.onEditHandler;
+        if (this.props.editIdeaData !== undefined) {
+            let editIdea = this.props.editIdeaData;
             if (editIdea.ideaType === TECHNICAL) {
                 this.setState({
                     ideaCategory: ideaCategoryTech,
@@ -390,6 +392,7 @@ class PopUpModel extends Component {
             <div className="modal-content">
                 <Modal
                     title=''
+                    centered
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
@@ -571,9 +574,17 @@ class PopUpModel extends Component {
                                     <label className="timeline-header">Idea Category</label>
                                     <p>{subcategoryName}</p>
                                 </Row>
-                                <Row>
-                                    <label className="timeline-header">Idea Details</label>
-                                    <p>{ReactHtmlParser(ideaDescription)}</p>
+                                <Row className="details-tab">
+                                    <Tabs defaultActiveKey="Idea-Details">
+                                        <TabPane tab="Idea Details" key="Idea-Details">
+                                            <p>{ReactHtmlParser(ideaDescription)}</p>
+                                        </TabPane>
+                                        <TabPane tab="Business Impact" key="Business-Impact">
+                                            <p>This is for Business Impact. When we add the idea
+                                            we should define how it is important for business.
+                                            </p>
+                                        </TabPane>
+                                    </Tabs>
                                 </Row>
                             </Col>
                             {ideaStatus !== undefined && ideaStatus !== DRAFT ?
