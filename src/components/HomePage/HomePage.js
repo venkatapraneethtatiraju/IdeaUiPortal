@@ -161,8 +161,9 @@ export default class HomePage extends PureComponent {
 
   updateHeaders()
   {
-    const userType= getUserRole();
+      const userType= getUserRole();
       let leftObjects={};
+      this.setState({userType:userType});
       if(userType ==="Employee"){
 
         leftObjects = {
@@ -235,10 +236,11 @@ export default class HomePage extends PureComponent {
 
   componentDidUpdate(prevState,nextState)
   {
-    console.log(prevState);
-    console.log(this.state.props);
-    console.log(this.state.headerTabs.leftTabs);
+      if(this.state.userType !== nextState){
 
+        this.updateHeaders();
+
+      }
   }
 
   render() {
@@ -291,18 +293,18 @@ export default class HomePage extends PureComponent {
      
 
         <Switch>
-          <Redirect exact from="/" to="/dashboard" />
-          <Route exact path="/dashboard"  >
+          <Redirect path='/' to='/dashboard'/>
+          <Route  path="/dashboard">
             <Dashboard onClick={(event) => this.clickActionHandler(event)} />
           </Route>
           <Route path="/myIdeas" >
             <MyIdeas myIdeaData={this.state.myIdeaData} />
           </Route>
-          <Route exact path="/allIdeas" component={AllIdea} />
-          <Route exact to="/request">
+          <Route  path="/allIdeas" component={AllIdea} />
+          <Route  path="/request">
             <AllRecentRequest title={this.state.title} value={this.state} />
           </Route>
-          <Route exact path="/management">
+          <Route  path="/management">
             <AllRecentRequest title={this.state.title} value={this.state} />
           </Route>
         </Switch>

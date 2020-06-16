@@ -8,6 +8,7 @@ import HomePage from '../HomePage/HomePage';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import Alertbox from '../Alert/Alert';
 import { isAuthenticated } from '../Auth/Auth';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 class Login extends PureComponent {
   constructor(props) {
@@ -214,7 +215,7 @@ class Login extends PureComponent {
 
 
   render() {
-    if (this.state.isLogin || isAuthenticated()) {
+    if (this.state.isLogin ) {
       return <HomePage />
     }
     const alertName = "OTP send successfully!";

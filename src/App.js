@@ -1,12 +1,15 @@
 import React, { PureComponent } from "react";
 import Login from "./components/login/Login";
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import Dashboard from "./components/Dashboard/Dashboard";
+import HomePage from "./components/HomePage/HomePage";
 
-export default class App extends PureComponent {
-  render() {
+export default function App()  {
+  
     return (
       <div className="app-container">
-        <Login />
+      <Route  path='/' component={Login} />
       </div>
     );
   }
-}
+

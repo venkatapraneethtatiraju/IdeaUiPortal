@@ -240,9 +240,8 @@ class AllRecentRequest extends Component {
   getUserDataRecord = async (pagination) => {
     await this.setState({ isLoading: true, columns: [], data: [] })
     await getUserData(pagination).then(response => {
-
-      const { data, responses } = response;
-      console.log(response, "4567");
+     
+      const {data,responses}=  response;
       const { currentPage, totalRecords } = responses.data.page;
       this.setState({
         lastPage: Number(currentPage) + 1,
@@ -254,9 +253,16 @@ class AllRecentRequest extends Component {
         },
         selectedStatus: '', dropDownDefaultValue: "All Roles", isLoading: false, columns: userColumn, data: data
       });
-
+    }
+    )
+    .catch(error => {
+      console.log(error);
+      this.setState({isLoading:false})
     })
   }
+
+ 
+
 
   // get all users from UserColumnAndData.js file i.e hitting users api
   getCategoriesDataRecord = async (pagination) => {
@@ -274,6 +280,10 @@ class AllRecentRequest extends Component {
         selectedStatus: '', dropDownDefaultValue: "All Type", isLoading: false, columns: categoriesColumn, data: response
       });
 
+    })
+    .catch(error => {
+      console.log(error);
+      this.setState({isLoading:false})
     })
   }
 

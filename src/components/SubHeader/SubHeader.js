@@ -15,13 +15,13 @@ class SubHeader extends Component {
                     <h2>{this.props.subHeaderTitle}</h2>
                 }
                 
-
+                { this.props.subHeaderTitle ==="Management" ?
                 <GenericButton 
                 buttonClickHandler={this.props.buttonClickHandler}
                 buttonName={this.props.buttonName}
                 btnColor={this.props.btnColor}
                 >
-                </GenericButton>
+                </GenericButton>:null}
             </div>
         );
     }

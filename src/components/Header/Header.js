@@ -28,9 +28,7 @@ const handleMenuClick = async (e)=> {
 
  const logoutPerform = async ()=>
  {
-
-  // await logout();
-   //return <Login/>
+   await logout();
  }
 
 const Header = (props) => (
@@ -53,11 +51,11 @@ const Header = (props) => (
         <Badge count={1}>
           <BellIcon className="nav-logos" />
         </Badge>
-       
+        <Link exact from="/dashboard" to="/">
         <Dropdown overlay={menu}>
           <Avatar  shape="circle" src={DefaultIcon} />
         </Dropdown>
-      
+        </Link>
       </div>
     </div>
   </div>
