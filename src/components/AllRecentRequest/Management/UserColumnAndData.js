@@ -20,7 +20,8 @@ function setUserItem(result) {
       userName: val.name ? val.name : "- ",
       location: val.location.country ? val.location.country : "-",
       role: val.role ? val.role : "-",
-      status: val.enabled ? "Active" : "Deactivated"
+      status: val.enabled ? "Active" : "Deactivated",
+      enabled: val.enabled
     };
   })
   return newArr;
@@ -45,7 +46,8 @@ function setItemCategories(result) {
       categories: val.subCategoryName ? val.subCategoryName : "- ",
       type: val.ideaType ? val.ideaType : "-",
       updatedOn: "-",
-      status: val.active ? "Active" : "Deactivated"
+      status: val.active ? "Active" : "Deactivated",
+      active: val.active
     };
   })
   return newArr;
