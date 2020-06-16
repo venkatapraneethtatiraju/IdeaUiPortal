@@ -103,10 +103,10 @@ class RecentRequests extends PureComponent {
                     }
                     )}>
                 </Table>
-                <div  onClick={(e )=>this.props.onClick("request")}
+                <div onClick={(e) => this.props.onClick("request")}
                     visible={this.state.showViewAll}>
                     <Link className="viewDatas" to='/request'>View all requests</Link>
-                    </div>
+                </div>
                 {this.state.showModal ? <PopUpModel
                     visible={this.state.visible}
                     onCancel={this.buttonActionHandler}
@@ -115,7 +115,7 @@ class RecentRequests extends PureComponent {
                     isAddEditIdea="false"
                     isViewIdea="true"
                     ideaId={this.state.ideaId}
-                    updateLikes={this.updateLikes}
+                    isOperPerform="true"
                 /> : null}
             </Col>
         )

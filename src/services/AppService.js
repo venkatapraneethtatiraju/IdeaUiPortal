@@ -134,7 +134,7 @@ export const createNewIdea = (requestParam) => {
 
 //Service call to edit  addCategorie
 
-export const putCategories = (userId,requestParam) => {
+export const putCategories = (userId, requestParam) => {
     const headers = getHeaders();
     return Axios.put(`${PUT_POST_CATEGORIES}/${userId}`, JSON.stringify(requestParam), { headers });
 }
