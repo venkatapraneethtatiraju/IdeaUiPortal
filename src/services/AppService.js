@@ -15,9 +15,11 @@ import {
     RECENTLY_SUBMITTED_URL,
     PUT_CHANGE_USER_ROLE_ADMIN,
     ACTIVE_CATEGORIES_URL,
-    PUT_POST_CATEGORIES
+    PUT_POST_CATEGORIES,
+    BASE_URL
 } from '../Config/ServiceUrl';
 import { getHeaders } from '../Utility/CommonFunctions';
+import { getUserId } from '../components/Auth/Auth';
 
 //Service call to get top trending ideas to display in dashboard
 export const getTopTrendingIdeas = () => {
@@ -58,7 +60,7 @@ export const postIdeaDisLike = (ideaId) => {
 //Service call to get my ideas in myideas page
 export const getMyIdeas = (pagination) => {
     const headers = getHeaders();
-    return Axios.get(`${FOR_IDEAS_URL}?pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}`, { headers });
+    return Axios.get(`${BASE_URL}/users/${getUserId()}/ideas?pageNumber=${pagination.current - 1}&pageSize=${pagination.pageSize}`, { headers });
 }
 
 //Service call to save and submit idea
@@ -116,7 +118,7 @@ export const getRecentlySubmittedIdeas = () => {
 }
 
 //Service call to put Activate/Deactivate users role
-export const putChangeUserRole = (userId, roleType, status,subCategoryId) => {
+export const putChangeUserRole = (userId, roleType, status, subCategoryId) => {
     const headers = getHeaders();
     return Axios.put(`${PUT_CHANGE_USER_ROLE_ADMIN}${userId}/status?roleType=${roleType}&status=${status}&subCategoryId=${subCategoryId}`, '', { headers });
 }

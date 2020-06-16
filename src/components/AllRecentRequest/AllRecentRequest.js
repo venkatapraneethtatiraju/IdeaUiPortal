@@ -97,9 +97,7 @@ const requestColumn = [
 ]
 
 // categoriesColumn
-
 const categoriesColumn = [
-
   {
     title: "Categories",
     dataIndex: 'categories',
@@ -115,7 +113,6 @@ const categoriesColumn = [
     ellipsis: true,
     width: '20%'
   },
-
   {
     title: 'Updated On',
     dataIndex: 'updatedOn',
@@ -133,16 +130,11 @@ const categoriesColumn = [
     width: '20%',
     render: (status) => <StatusTag ideaStatus={status} statusWidth="96px" statusCursor="pointer" />
   }
-
 ]
 
 class AllRecentRequest extends Component {
-
-
   constructor(props) {
-
     super(props);
-
     this.state = {
       lastPage: 1,
       dropDownDefaultValue: '',
@@ -163,15 +155,13 @@ class AllRecentRequest extends Component {
           "Completed",
           "Draft"
         ],
-
       allRoles:
         [
           "All Roles",
           "Admin",
           "Employee",
           "Manager"
-        ]
-      ,
+        ],
       allType:
         [
           "All Type",
@@ -186,28 +176,23 @@ class AllRecentRequest extends Component {
         total: 0,
         showQuickJumper: true,
       },
-
     }
   }
 
-    // mount first time lifeCycle
-    componentDidMount(){
+  // mount first time lifeCycle
+  componentDidMount() {
     if (this.props.title === "request") {
-
       this.getAllRecentRequestRecord(this.state.pagination);
-
     }
     else {
       this.getUserDataRecord(this.state.pagination);
-
     }
   }
+
   async componentDidUpdate(prevState, nextState) {
     if (prevState.title !== this.props.title) {
-
       if (this.props.title === "request") {
         this.getAllRecentRequestRecord(this.state.pagination);
-
       }
       else {
         this.getUserDataRecord(this.state.pagination);
@@ -239,9 +224,8 @@ class AllRecentRequest extends Component {
   getUserDataRecord = async (pagination) => {
     await this.setState({ isLoading: true, columns: [], data: [] })
     await getUserData(pagination).then(response => {
-
       const { data, responses } = response;
-      const { currentPage, totalRecords } = responses.data.page;
+      const { currentPage, totalRecords } = responses.data.result.page;
       this.setState({
         lastPage: Number(currentPage) + 1,
         pagination: {
@@ -260,9 +244,8 @@ class AllRecentRequest extends Component {
   getCategoriesDataRecord = async (pagination) => {
     await this.setState({ isLoading: true, columns: [], data: [] })
     await getCategoriesData(pagination).then(response => {
-      //const { currentPage, totalRecords } = response.data.result.page;
+      //const { currentPage, totalRecords } = responses.data.result.page;
       this.setState({
-
         pagination: {
           ...this.state.pagination,
           current: 1,
@@ -273,10 +256,6 @@ class AllRecentRequest extends Component {
       });
 
     })
-  }
-
-  componentWillReceiveProps() {
-
   }
 
   //To get all recent request
@@ -300,6 +279,7 @@ class AllRecentRequest extends Component {
       })
       .catch(error => {
         this.setState({ isLoading: false });
+        console.log(error);
       })
   }
 
@@ -316,12 +296,10 @@ class AllRecentRequest extends Component {
     return newArr;
   };
 
-
   async dropDownHandleChange(value) {
     await this.setState({ selectedStatus: '' })
     await this.setState({ selectedStatus: value.value })
   }
-
 
   filterData(tabelData) {
     if (this.props.title === "request") {
@@ -381,25 +359,17 @@ class AllRecentRequest extends Component {
     }
   }
 
-
-
   SearchTextHandle(searchTxt) {
     clearTimeout(this.typingTimer);
-
     let inputText = this.validateEmail(searchTxt);
     if (inputText) {
-
       this.typingTimer = setTimeout(() => {
-
         this.getAllUserByEmailIId(this.state.pagination, searchTxt);
-
       }, 8);
     }
     else {
       this.typingTimer = setTimeout(() => {
-
         this.getAllUserByName(this.state.pagination, searchTxt);
-
       }, 5);
     }
   }
@@ -421,9 +391,8 @@ class AllRecentRequest extends Component {
     await this.setState({ isLoading: true, columns: [], data: [] })
     await getUsersByName(pagination, searchTxt)
       .then(response => {
-
-        const { currentPage, totalRecords } = response.data.page;
-        const RequestData = this.setItemCategories(response.data.content);
+        const { currentPage, totalRecords } = response.data.result.page;
+        const RequestData = this.setItemCategories(response.data.result.content);
         this.setState({
           pagination: {
             ...this.state.pagination,
@@ -437,6 +406,7 @@ class AllRecentRequest extends Component {
       })
       .catch(error => {
         this.setState({ isLoading: false });
+        console.log(error);
       })
   }
 
@@ -444,7 +414,6 @@ class AllRecentRequest extends Component {
     await this.setState({ isLoading: true, columns: [], data: [] })
     await getUsersByEmailID(pagination, searchTxt)
       .then(response => {
-
         const { currentPage, totalRecords } = response.data.page;
         const RequestData = this.setItemCategories(response.data.content);
         this.setState({
@@ -456,41 +425,42 @@ class AllRecentRequest extends Component {
           },
           columns: userColumn, data: RequestData, isLoading: false
         });
-
       })
       .catch(error => {
         this.setState({ isLoading: false });
+        console.log(error);
       })
   }
-
 
   validateEmail = (email) => {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(email)) {
       //Email valid. Procees to test if it's from the right domain (Second argument is to check that the string ENDS with this domain, and that it doesn't just contain it)
       if (email.indexOf("@xebia.com", email.length - "@xebia.com".length) !== -1) {
-        //VALID
+        //VALID        
         return true;
       }
     }
   }
+
   buttonActionHandler = (event) => {
     this.setState(prevstate => ({
       ...prevstate,
       showModal: !prevstate.showModal
     }))
   }
+
   onSelectedRowAction = (record) => {
     if (record) {
       this.setState({ adminRecentData: record, showModal: true, })
     }
   }
+
   render() {
     const columns = this.state.columns;
     const tabelData = this.state.data;
     const selectedStatusData = this.filterData(tabelData);
     return (
-
       <div>
         {this.state.isLoading ? <div className="loaderLayout">
           <Loader />
@@ -511,7 +481,6 @@ class AllRecentRequest extends Component {
                 >
                 </Table>
               </Col>
-
             </Row> : null
           }
           {this.props.value.userClickColor === "black" ?
@@ -524,7 +493,7 @@ class AllRecentRequest extends Component {
             <DropDown subHeaderTextTitle={this.props.value.subHeaderTextTitle} placeholder={this.state.dropDownDefaultValue} title={this.props.title} value={this.state} onSelect={(value) => this.dropDownHandleChange(value)} />
           </div>
 
-          {this.state.showModal && this.props.title!=='request'? <AdminPopUpModel
+          {this.state.showModal && this.props.title !== 'request' ? <AdminPopUpModel
             onOk={this.buttonActionHandler}
             onCancel={this.buttonActionHandler}
             isAddEditIdea="false"
@@ -535,24 +504,25 @@ class AllRecentRequest extends Component {
           /> : null}
         </div>
 
-        {this.state.showModal && this.props.title!=='request' ? <AdminPopUpModel
-                        onOk={this.buttonActionHandler}
-                        onCancel={this.buttonActionHandler}
-                        isAddEditIdea="false"
-                        isViewIdea="true"
-                        adminRecentData={this.state.adminRecentData}
-                        refreshUserList = {this.refreshUserList}
-                        refreshCategoriesList = {this.refreshCategoriesList}
-                        selectedTab = {this.props.value.subHeaderTextTitle}
-                    /> : null}
-         {this.state.showModal && this.props.title ==='request'?  <PopUpModel title="request"
+        {this.state.showModal && this.props.title !== 'request' ? <AdminPopUpModel
+          onOk={this.buttonActionHandler}
+          onCancel={this.buttonActionHandler}
+          isAddEditIdea="false"
+          isViewIdea="true"
+          adminRecentData={this.state.adminRecentData}
+          refreshUserList={this.refreshUserList}
+          refreshCategoriesList={this.refreshCategoriesList}
+          selectedTab={this.props.value.subHeaderTextTitle}
+        /> : null}
+
+        {this.state.showModal && this.props.title === 'request' ? <PopUpModel title="request"
           onOk={this.buttonActionHandler}
           onCancel={this.buttonActionHandler}
           ideaId={this.state.adminRecentData.key}
           btnColor={this.state.btnColor}
-          isOperPerform = "true"
+          isOperPerform="true"
           isAddEditIdea="false"
-          isViewIdea="true"/>:null}       
+          isViewIdea="true" /> : null}
       </div>
     );
   }
