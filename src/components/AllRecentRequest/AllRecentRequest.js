@@ -210,7 +210,6 @@ class AllRecentRequest extends Component {
 
       }
       else {
-        console.log("Users");
         this.getUserDataRecord(this.state.pagination);
       }
     }
@@ -242,7 +241,6 @@ class AllRecentRequest extends Component {
     await getUserData(pagination).then(response => {
 
       const { data, responses } = response;
-      console.log(response, "4567");
       const { currentPage, totalRecords } = responses.data.page;
       this.setState({
         lastPage: Number(currentPage) + 1,
@@ -286,7 +284,6 @@ class AllRecentRequest extends Component {
     await this.setState({ isLoading: true, columns: [], data: [] })
     await getAllRecentRequest(pagination)
       .then(response => {
-        console.log(response, "requestw");
         const { currentPage, totalRecords } = response.data.result.page;
         const RequestData = this.setRecentItem(response.data.result.content);
         this.setState({
@@ -303,7 +300,6 @@ class AllRecentRequest extends Component {
       })
       .catch(error => {
         this.setState({ isLoading: false });
-        console.log(error);
       })
   }
 
@@ -323,14 +319,11 @@ class AllRecentRequest extends Component {
 
   async dropDownHandleChange(value) {
     await this.setState({ selectedStatus: '' })
-    console.log(value);
     await this.setState({ selectedStatus: value.value })
-    console.log(this.state.selectedStatus, "manii")
   }
 
 
   filterData(tabelData) {
-    console.log(tabelData, "monster");
     if (this.props.title === "request") {
       if (this.state.selectedStatus === "All Status") {
         return tabelData;
@@ -371,22 +364,18 @@ class AllRecentRequest extends Component {
 
   //Handle pagination
   handlePageChange(pagination) {
-    console.log(pagination, this.state.lastPage);
     if (this.props.title === "request") {
-      console.log("request");
       if (this.state.lastPage !== pagination.current) {
         this.getAllRecentRequestRecord(this.state.pagination);
       }
     }
     else if (this.props.value.subHeaderTextTitle === "Categories") {
-      console.log("categories");
       if (this.state.lastPage !== pagination.current) {
         this.getCategoriesDataRecord(this.state.pagination);
       }
     }
     else {
       if (this.state.lastPage !== pagination.current) {
-        console.log("users");
         this.getUserDataRecord(this.state.pagination);
       }
     }
@@ -395,7 +384,6 @@ class AllRecentRequest extends Component {
 
 
   SearchTextHandle(searchTxt) {
-    console.log(searchTxt);
     clearTimeout(this.typingTimer);
 
     let inputText = this.validateEmail(searchTxt);
@@ -430,13 +418,11 @@ class AllRecentRequest extends Component {
   };
 
   getAllUserByName = async (pagination, searchTxt) => {
-    console.log(searchTxt);
     await this.setState({ isLoading: true, columns: [], data: [] })
     await getUsersByName(pagination, searchTxt)
       .then(response => {
 
         const { currentPage, totalRecords } = response.data.page;
-        console.log(response.data.content, "userName")
         const RequestData = this.setItemCategories(response.data.content);
         this.setState({
           pagination: {
@@ -451,7 +437,6 @@ class AllRecentRequest extends Component {
       })
       .catch(error => {
         this.setState({ isLoading: false });
-        console.log(error);
       })
   }
 
@@ -461,7 +446,6 @@ class AllRecentRequest extends Component {
       .then(response => {
 
         const { currentPage, totalRecords } = response.data.page;
-        console.log(response.data.content, "emailID")
         const RequestData = this.setItemCategories(response.data.content);
         this.setState({
           pagination: {
@@ -476,7 +460,6 @@ class AllRecentRequest extends Component {
       })
       .catch(error => {
         this.setState({ isLoading: false });
-        console.log(error);
       })
   }
 
@@ -487,7 +470,6 @@ class AllRecentRequest extends Component {
       //Email valid. Procees to test if it's from the right domain (Second argument is to check that the string ENDS with this domain, and that it doesn't just contain it)
       if (email.indexOf("@xebia.com", email.length - "@xebia.com".length) !== -1) {
         //VALID
-        console.log("VALID");
         return true;
       }
     }
@@ -499,17 +481,14 @@ class AllRecentRequest extends Component {
     }))
   }
   onSelectedRowAction = (record) => {
-    debugger;
     if (record) {
       this.setState({ adminRecentData: record, showModal: true, })
     }
   }
   render() {
     const columns = this.state.columns;
-    debugger;
     const tabelData = this.state.data;
     const selectedStatusData = this.filterData(tabelData);
-    console.log(selectedStatusData);
     return (
 
       <div>

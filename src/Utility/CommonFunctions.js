@@ -25,7 +25,8 @@ const months = [
 //Get headers for request
 export const getHeaders = () => {
     const token = getToken();//Get token
-    const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+    const headers = {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}
+
     return headers;
 };
 

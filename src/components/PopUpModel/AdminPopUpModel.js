@@ -9,6 +9,9 @@ import {
   ROLE_ADMIN,
   NON_TECHNICAL,
   TECHNICAL,
+  EMPLOYEE,
+  ADMIN,
+  MANAGER,
 } from "../../Config/Constants";
 import GenericButton from "../Button/Button";
 import { putChangeUserRole, putCategories, postCategories } from "../../services/AppService";
@@ -43,7 +46,7 @@ export class AdminPopUpModel extends Component {
     switch (event.target.textContent) {
       case "Employee":
         this.setState({
-          userRole: ROLE_EMPLOYEE,
+          userRole: EMPLOYEE,
           userEmpBGColor: "#f7941d",
           userMgrBGColor: "#b1b1b1",
           userAdmBGColor: "#b1b1b1",
@@ -51,7 +54,7 @@ export class AdminPopUpModel extends Component {
         break;
       case "Manager":
         this.setState({
-          userRole: ROLE_MANAGER,
+          userRole: MANAGER,
           userMgrBGColor: "#f7941d",
           userEmpBGColor: "#b1b1b1",
           userAdmBGColor: "#b1b1b1",
@@ -59,7 +62,7 @@ export class AdminPopUpModel extends Component {
         break;
       case "Admin":
         this.setState({
-          userRole: ROLE_ADMIN,
+          userRole: ADMIN,
           userAdmBGColor: "#f7941d",
           userMgrBGColor: "#b1b1b1",
           userEmpBGColor: "#b1b1b1",
@@ -110,16 +113,18 @@ export class AdminPopUpModel extends Component {
     }
     else {
       let userRole = "";
-      if (this.state.userRole === "Employee") {
+      let subCategoryId = "";
+      if (this.state.userRole === EMPLOYEE) {
         userRole = ROLE_EMPLOYEE;
-      } else if (this.state.userRole === "Manager") {
+      } else if (this.state.userRole === MANAGER) {
         userRole = ROLE_MANAGER;
-      } else if (this.state.userRole === "Admin") {
+        subCategoryId = 1;
+      } else if (this.state.userRole === ADMIN) {
         userRole = ROLE_ADMIN;
       } else {
         userRole = this.state.userRole;
       }
-      putChangeUserRole(this.state.userID, userRole, this.state.userStatus)
+      putChangeUserRole(this.state.userID, userRole, this.state.userStatus,subCategoryId)
         .then((response) => {
           this.props.refreshUserList();
         })
