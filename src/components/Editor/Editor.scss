@@ -8,6 +8,7 @@
 .app .ql-snow.ql-toolbar {
   display: flex;
   background: #ffffff;
+  width: 359px;
 }
 
 .app .ql-editor {
@@ -35,7 +36,7 @@
 .app .ql-container {
   background: #fefcfc;
   top: 42px;
-  height: 143px;
+  height: 125px;
   position: relative;
   font-size: 13px;
   font-family: "Helvetica" !important;
@@ -48,7 +49,6 @@
   padding: 8px;
   position: absolute;
   text-align: center;
-  left: 20px;
   display: block;
   width: 92.6%;
 }

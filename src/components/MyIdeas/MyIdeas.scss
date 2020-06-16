@@ -116,3 +116,10 @@
     border: 1px solid #a0a0a0;
   }
 }
+
+.loaderLayout {
+  position: absolute;
+  left: calc(50vh - 20px);
+  top: calc(50vw - 20px);
+  z-index: 50;
+}

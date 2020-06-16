@@ -18,6 +18,7 @@ import { addNewProperty } from '../../Utility/CommonFunctions';
 import { ReactComponent as AttachmentIcon } from '../../images/attach.svg'
 import StatusTag from '../StatusTag/StatusTag';
 import Alertbox from '../Alert/Alert';
+import Loader from '../Loader/Loader';
 
 const myIdeasColumn = [
   {
@@ -99,7 +100,8 @@ class MyIdeas extends PureComponent {
       isAddEditIdea: "false",
       isViewIdea: "true",
       isEditIdea: "false",
-      ideaId: ''
+      ideaId: '',
+      isLoading: false,
     }
     this.saveandSubmitHandler = this.saveandSubmitHandler.bind(this)
   }
@@ -140,8 +142,9 @@ class MyIdeas extends PureComponent {
   }
 
   //Get my ideas list
-  getIdeaDetails = (pagination) => {
-    getMyIdeas(pagination)
+  getIdeaDetails = async (pagination) => {
+    await this.setState({ isLoading: true })
+    await getMyIdeas(pagination)
       .then(response => {
         if (response.data.message === SUCCESS) {
           const myIdeasList = addNewProperty(response.data.result.content, GET_MYIDEAS_DETAIL);
@@ -155,23 +158,26 @@ class MyIdeas extends PureComponent {
               current: Number(currentPage) + 1,
               total: totalRecords,
               showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
-            }
+            },
+            isLoading: false
           });
         }
       })
       .catch(error => {
+        this.setState({ isLoading: false });
         console.log(error);
       })
   }
 
   //Save and submit handler
-  saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId, ideaId) {
+  saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId, businessImpact, ideaId) {
     let requestParam = {
       title: ideaSubject,
       ideaDescription: ideaDetails,
       categoryId: ideaType,
       subCategoryId: ideaCategoryValue,
-      ideaStatusId: ideaStatusId
+      ideaStatusId: ideaStatusId,
+      businessImpact: businessImpact,
     }
     this.saveAndSubmitIdea(requestParam, ideaId);
   }
@@ -224,6 +230,10 @@ class MyIdeas extends PureComponent {
   render() {
     return (
       <>
+        {this.state.isLoading ? <div className="loaderLayout">
+          <Loader />
+        </div> : null
+        }
         {this.state.displayAlert ?
           <Alertbox alertName={IDEA_UPDATED_MESSAGE} /> : null
         }

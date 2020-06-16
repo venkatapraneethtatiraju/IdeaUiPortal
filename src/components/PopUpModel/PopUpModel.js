@@ -81,6 +81,8 @@ class PopUpModel extends Component {
             ideaStatus: '',
             visible: false,
             titleMessage: '',
+            businessImpactError: "",
+            businessImpact: ''
         }
 
         if (this.props.editIdeaData) {
@@ -90,6 +92,7 @@ class PopUpModel extends Component {
             this.state.ideaDetails = datas.ideaDescription;
             this.state.ideaType = datas.ideaType === TECHNICAL ? this.state.ideaType = 1 : this.state.ideaType = 2;
             this.state.ideaStatus = datas.ideaStatus;
+            this.state.businessImpact = datas.businessImpact;
         }
 
         if (this.props.isViewIdea === "true") {
@@ -99,7 +102,7 @@ class PopUpModel extends Component {
 
     validateInputs = () => {
 
-        const { ideaSubject, ideaCategoryValue, ideaDetails } = this.state;
+        const { ideaSubject, ideaCategoryValue, ideaDetails, businessImpact } = this.state;
         let valid = false;
 
         if (ideaSubject.trim() === "") {
@@ -126,6 +129,14 @@ class PopUpModel extends Component {
             valid = false;
         }
 
+        if (businessImpact.trim() === "") {
+            this.setState({ businessImpactError: WARNING_MESSAGE });
+            valid = true;
+        } else {
+            this.setState({ businessImpactError: '' });
+            valid = false;
+        }
+
         return valid;
     }
 
@@ -140,8 +151,8 @@ class PopUpModel extends Component {
         if (this.validateInputs())
             return;
         else {
-            const { ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaId } = this.state;
-            this.props.saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId, ideaId);
+            const { ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaId, businessImpact } = this.state;
+            this.props.saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId, businessImpact, ideaId);
         }
     }
 
@@ -152,6 +163,8 @@ class PopUpModel extends Component {
     inputChangedHandler = (event) => {
         if (event.target.name === "ideaSubject") {
             this.setState({ ideaSubject: event.target.value })
+        } else if (event.target.name === "businessImpact") {
+            this.setState({ businessImpact: event.target.value })
         }
     }
 
@@ -386,6 +399,7 @@ class PopUpModel extends Component {
             subcategoryName,
             ideaStatus, ideaDescription,
             ideaStatusHistories,
+            businessImpact,
             likeIdeaDetailList } = this.state.ideaDetailsListView;
 
         return (
@@ -532,15 +546,30 @@ class PopUpModel extends Component {
                                     {this.state.ideaCategoryValueError ? <div className="errorMessage">
                                         {this.state.ideaCategoryValueError}</div> : null}
                                 </Row>
-                                <Row style={{ marginBottom: '15px' }}>
-                                    <label className="text-formatter">Idea Details</label>
-                                    <Editor name="ideaDetails" value={this.state.ideaDetails}
-                                        onEditChanged={this.onEditChanged}
-                                        ref="ideaDetails" />
-                                    {this.state.ideaDetailsError ?
-                                        <div className="errorMessage" style={{ position: 'absolute', bottom: '20px' }}>
-                                            {this.state.ideaDetailsError}
-                                        </div> : null}
+                                <Row className="tab-container">
+                                    <Tabs defaultActiveKey="Idea-Details">
+                                        <TabPane tab="Idea Details" key="Idea-Details">
+                                            <Row>
+                                                <Editor name="ideaDetails" value={this.state.ideaDetails}
+                                                    onEditChanged={this.onEditChanged}
+                                                    ref="ideaDetails" />
+                                            </Row>
+                                            {this.state.ideaDetailsError ?
+                                                <div className="errorMessage" style={{ position: 'absolute', bottom: '30px' }}>
+                                                    {this.state.ideaDetailsError}
+                                                </div> : null}
+                                        </TabPane>
+                                        <TabPane tab="Business Impact" key="Business-Impact">
+                                            <TextArea className={!this.state.businessImpactError ? 'business-impact' : 'errorTextArea'}
+                                                value={this.state.businessImpact}
+                                                name="businessImpact"
+                                                onChange={this.inputChangedHandler} />
+                                            {this.state.businessImpactError ?
+                                                <div className="errorMessage">
+                                                    {this.state.businessImpactError}
+                                                </div> : null}
+                                        </TabPane>
+                                    </Tabs>
                                 </Row>
                             </Col>
                         </Col> : null}
@@ -580,9 +609,7 @@ class PopUpModel extends Component {
                                             <p>{ReactHtmlParser(ideaDescription)}</p>
                                         </TabPane>
                                         <TabPane tab="Business Impact" key="Business-Impact">
-                                            <p>This is for Business Impact. When we add the idea
-                                            we should define how it is important for business.
-                                            </p>
+                                            <p>{businessImpact}</p>
                                         </TabPane>
                                     </Tabs>
                                 </Row>
@@ -655,7 +682,7 @@ class PopUpModel extends Component {
                                             {ideaStatusHistories && ideaStatusHistories.map((timeline) => (
                                                 <Timeline.Item>
                                                     <Col>
-                                                        <p>{getFormatttedDate(timeline.creationTime)}</p>
+                                                        <p>{getFormatttedDate(timeline.modificationTime)}</p>
                                                         <Row>
                                                             <StatusTag ideaStatus={timeline.ideaStatus} statusWidth="96px" statusCursor="default" />
                                                             <p>by {timeline.name}</p>
