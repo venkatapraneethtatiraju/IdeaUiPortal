@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Row, Col, Tag, Input, Switch } from "antd";
+import { Modal, Row, Col, Tag, Input, Switch,Select } from "antd";
 import StatusTag from "../StatusTag/StatusTag";
 import {
   ACTIVE,
@@ -14,7 +14,7 @@ import {
   MANAGER,
 } from "../../Config/Constants";
 import GenericButton from "../Button/Button";
-import { putChangeUserRole, putCategories, postCategories } from "../../services/AppService";
+import { putChangeUserRole, putCategories, postCategories, getActiveCategories } from "../../services/AppService";
 
 export class AdminPopUpModel extends Component {
   constructor(props) {
@@ -34,6 +34,9 @@ export class AdminPopUpModel extends Component {
       nonTechBGColor: "#b1b1b1",
       categoriesValue: this.props.adminRecentData.categories,
       categoryStatus: this.props.adminRecentData.active,
+      ideaActiveCategories : [],
+      showCategories : false,
+      selectedCatValue :'',
     };
   }
 
@@ -42,7 +45,7 @@ export class AdminPopUpModel extends Component {
   };
 
   onUserTypeClicked = (event) => {
-    this.setState({ tabClicked: true });
+    this.setState({ tabClicked: true, showCategories : false });
     switch (event.target.textContent) {
       case "Employee":
         this.setState({
@@ -58,7 +61,9 @@ export class AdminPopUpModel extends Component {
           userMgrBGColor: "#f7941d",
           userEmpBGColor: "#b1b1b1",
           userAdmBGColor: "#b1b1b1",
+          showCategories : true,
         });
+        this.getCategories();
         break;
       case "Admin":
         this.setState({
@@ -127,7 +132,7 @@ export class AdminPopUpModel extends Component {
         userRole = ROLE_EMPLOYEE;
       } else if (this.state.userRole === MANAGER) {
         userRole = ROLE_MANAGER;
-        subCategoryId = 1;
+        subCategoryId = this.state.selectedCatValue;
       } else if (this.state.userRole === ADMIN) {
         userRole = ROLE_ADMIN;
       } else {
@@ -165,6 +170,18 @@ export class AdminPopUpModel extends Component {
       this.setState({ userID: this.props.adminRecentData.key });
     }
   }
+
+  getCategories = () => {
+    getActiveCategories()
+        .then(response => {
+            this.setState({ ideaActiveCategories: response.data })
+        })
+        .catch(error => {
+        });
+}
+onCategoryItemChanged = (value) => {
+  this.setState({ selectedCatValue: value })
+}
 
   render() {
     const {
@@ -311,6 +328,22 @@ export class AdminPopUpModel extends Component {
                   Admin
               </Tag>
               </Row>
+              {this.state.showCategories ?
+              <Row style={{ marginTop: '10px' }}>
+                <label>Assigning for Category</label>
+             <Select
+                 placeholder="---select category from here---"
+                 style={{ width: "96%" ,paddingTop : '5px'}}
+                 onChange={this.onCategoryItemChanged}>
+                 {this.state.ideaActiveCategories.length > 0 ?
+                 <>
+                  {this.state.ideaActiveCategories.map(item => (
+                   <Select.Option value={item.id}>{item.subCategoryName}</Select.Option>
+                  ))}
+                  </>
+                 : null}
+              </Select>
+              </Row>:null}
               <Row gutter={8} style={{ marginTop: "16px" }} className="tag-div">
                 <Col style={{ padding: "5px 4px" }}>
                   <label style={{ marginRight: "20px" }}>Deactivate User</label>
