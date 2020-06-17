@@ -158,7 +158,7 @@ export const postOTP = (requestParam) => {
 //Service call to get VERIFY OTP 
 export const getVerifyOtp = (otp) => {
     const headers = getHeaders();
-    return Axios.get(`${VERIFY_OTP}/otp=${otp}`, { headers });
+    return Axios.get(`${VERIFY_OTP}${otp}`, { headers });
 }
 
 
