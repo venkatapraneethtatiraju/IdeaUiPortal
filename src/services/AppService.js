@@ -19,7 +19,8 @@ import {
     BASE_URL,
     GET_OTP,
     VERIFY_OTP,
-    EMAIL_VERIFY_REGISTER
+    EMAIL_VERIFY_REGISTER,
+    UPDATE_IDEA_STATUS
 } from '../Config/ServiceUrl';
 import { getHeaders } from '../Utility/CommonFunctions';
 import { getUserId } from '../components/Auth/Auth';
@@ -138,11 +139,11 @@ export const createNewIdea = (requestParam) => {
 }
 
 //Service call to edit  addCategorie
-
 export const putCategories = (userId, requestParam) => {
     const headers = getHeaders();
     return Axios.put(`${PUT_POST_CATEGORIES}/${userId}`, JSON.stringify(requestParam), { headers });
 }
+
 //Service call to edit  editCategorie
 export const postCategories = (requestParam) => {
     const headers = getHeaders();
@@ -151,9 +152,8 @@ export const postCategories = (requestParam) => {
 
 // Service to get otp on given email ID
 export const postOTP = (requestParam) => {
-    return Axios.post(`${GET_OTP}`,{requestParam});
+    return Axios.post(`${GET_OTP}`, { requestParam });
 }
-
 
 //Service call to get VERIFY OTP 
 export const getVerifyOtp = (otp) => {
@@ -161,8 +161,13 @@ export const getVerifyOtp = (otp) => {
     return Axios.get(`${VERIFY_OTP}${otp}`, { headers });
 }
 
-
 //Service call to check email is register or not
 export const getEmailVerify = (email) => {
     return Axios.get(`${EMAIL_VERIFY_REGISTER}${email}`);
+}
+
+//Service call to update idea status
+export const updateIdeaStatus = (requestParam) => {
+    const headers = getHeaders();
+    return Axios.put(`${UPDATE_IDEA_STATUS}`, JSON.stringify(requestParam), { headers });
 }

@@ -10,7 +10,8 @@ import {
     REVIEW,
     CLOSED,
     ACTIVE,
-    DEACTIVATED
+    DEACTIVATED,
+    REVIEWED
 } from '../../Config/Constants';
 
 export class StatusTag extends Component {
@@ -28,7 +29,7 @@ export class StatusTag extends Component {
             color = '#1A8B45';
         } else if (ideaStatus === DRAFT) {
             color = '#F7941D';
-        } else if (ideaStatus === REVIEW) {
+        } else if (ideaStatus === REVIEW || ideaStatus === REVIEWED) {
             color = '#F7C51D';
         } else if (ideaStatus === CLOSED || ideaStatus === DEACTIVATED) {
             color = '#7A8083';

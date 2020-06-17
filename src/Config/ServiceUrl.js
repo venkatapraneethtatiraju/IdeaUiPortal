@@ -18,3 +18,4 @@ export const PUT_POST_CATEGORIES = BASE_URL + '/categories';
 export const GET_OTP = BASE_URL + '/otp';
 export const VERIFY_OTP = BASE_URL + '/otp/verify?otp=';
 export const EMAIL_VERIFY_REGISTER = BASE_URL + '/token/verify?emailId=';
+export const UPDATE_IDEA_STATUS = BASE_URL + '/ideas/updatestatus';

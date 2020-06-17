@@ -7,15 +7,14 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
-import Login from './components/login/Login';
 
 ReactDOM.render(
   <React.StrictMode>
     <ErrorBoundary>
       <BrowserRouter>
-          <App/>
+        <App />
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>,

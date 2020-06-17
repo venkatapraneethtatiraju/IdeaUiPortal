@@ -88,6 +88,11 @@ class RecentRequests extends PureComponent {
         }))
     }
 
+    refereshRecentRequest = () => {
+        this.getRecentRequestRecord();
+        this.buttonActionHandler();
+    }
+
     render() {
         const recentReuestData = this.state.recentRequestdata.filter((el, index) => index < 5);
         return (
@@ -116,6 +121,8 @@ class RecentRequests extends PureComponent {
                     isViewIdea="true"
                     ideaId={this.state.ideaId}
                     isOperPerform="true"
+                    requestedPage="RecentRequest"
+                    refereshRecentRequest={this.refereshRecentRequest}
                 /> : null}
             </Col>
         )
