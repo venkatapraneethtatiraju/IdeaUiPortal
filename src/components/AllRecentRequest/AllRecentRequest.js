@@ -176,8 +176,6 @@ class AllRecentRequest extends Component {
 
   // every time invoke cycle on update
   async componentDidUpdate(prevState, nextState) {
-    console.log(prevState, "Previous");
-    console.log(this.props, "Current");
     if (prevState.title !== this.props.title) {
       if (this.props.title === "request") {
         this.getAllRecentRequestRecord(this.state.requestPagination);
@@ -194,6 +192,9 @@ class AllRecentRequest extends Component {
         else {
           this.getUserDataRecord(this.state.userPagination);
         }
+      }
+      if(prevState.reloadCat !== this.props.reloadCat && this.props.value.subHeaderTextTitle === "Categories") {
+        this.getCategoriesDataRecord();
       }
     }
   }
@@ -383,7 +384,6 @@ class AllRecentRequest extends Component {
 
   // get all user by name search from API.
   getAllUserByName = async (pagination, searchTxt) => {
-    console.log(searchTxt);
     await this.setState({ isLoading: true })
     await getUsersByName(pagination, searchTxt)
       .then(response => {
@@ -439,7 +439,6 @@ class AllRecentRequest extends Component {
 
   // on row selection of table function
   onSelectedRowAction = (record) => {
-    //debugger;
     if (record) {
       this.setState({ adminRecentData: record, showModal: true, })
     }

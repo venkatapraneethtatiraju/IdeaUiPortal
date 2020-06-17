@@ -69,6 +69,7 @@ export default class HomePage extends PureComponent {
       ideaCategoryValue: '',
       ideaDetails: '',
       status: 0,
+      reloadCat : '',
     };
     this.saveandSubmitHandler = this.saveandSubmitHandler.bind(this)
   }
@@ -85,7 +86,7 @@ export default class HomePage extends PureComponent {
 
     if (event === "management") {
       this.usersClicked();
-      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black', categoriesClickColor: 'grey' });
+      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black', categoriesClickColor: 'grey', reloadCat : ""});
 
     }
     else {
@@ -106,6 +107,12 @@ export default class HomePage extends PureComponent {
   }
 
   buttonActionHandler = (event) => {
+    if(event === 'addCateSucess') {
+      this.setState({reloadCat : 'reloadCat'})
+    }
+    else {
+      this.setState({reloadCat : ""})
+    }
     this.setState(prevstate => ({
       ...prevstate,
       showModal: !prevstate.showModal,
@@ -114,6 +121,8 @@ export default class HomePage extends PureComponent {
       this.setState({ showAlert: false })
     }, 4000);
     this.categoriesClicked();
+
+    
   }
 
   saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId, businessImpact) {
@@ -143,7 +152,6 @@ export default class HomePage extends PureComponent {
   // user clicked inside the Management tab
   async usersClicked(event) {
     await this.setState({ subHeaderTextTitle: 'Users', userClickColor: "black", categoriesClickColor: "gray" })
-    console.log(this.state.isUserSelected, "monster")
   }
 
   // categories clicked inside the Management tab
@@ -302,9 +310,8 @@ export default class HomePage extends PureComponent {
             <AllRecentRequest title={this.state.title} value={this.state} />
           </Route>
           <Route  path="/management">
-            <AllRecentRequest title={this.state.title} value={this.state} />
+            <AllRecentRequest title={this.state.title} value={this.state} reloadCat={this.state.reloadCat}/>
           </Route>
-         
         </Switch>
       </div>
     );

@@ -156,7 +156,7 @@ export class AdminPopUpModel extends Component {
   addCategorie = (requestParam) => {
     postCategories(requestParam)
       .then((response) => {
-        this.props.onOk();
+        this.props.onOk("addCateSucess");
       })
       .catch((error) => { });
   }
@@ -192,7 +192,8 @@ onCategoryItemChanged = (value) => {
       categories,
       enabled,
       active,
-      type
+      type,
+      status
     } = this.props.adminRecentData;
 
     let userRole = role;
@@ -260,14 +261,7 @@ onCategoryItemChanged = (value) => {
                   </Col>
                   <Col>
                     <StatusTag
-                      ideaStatus={ACTIVE}
-                      statusWidth="85px"
-                      statusCursor="default"
-                    />
-                  </Col>
-                  <Col style={{ display: "none" }}>
-                    <StatusTag
-                      ideaStatus={DEACTIVATED}
+                      ideaStatus={status}
                       statusWidth="85px"
                       statusCursor="default"
                     />
