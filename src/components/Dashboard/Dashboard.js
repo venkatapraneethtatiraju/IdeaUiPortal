@@ -32,8 +32,10 @@ class Dashboard extends Component {
 
     componentDidMount(){
        
-        this.getAllUserByEmailIId(); 
-         
+        setTimeout(() => {
+            this.getAllUserByEmailIId(); 
+          }, 1000);
+       
     }
     // get all user by email ID search from API.
 

@@ -66,6 +66,7 @@ export const REASON_COMPLETE = 'Reason for completing this';
 // DropDown Values
 export const ALLSTATUS = ["All Status",
     "Submitted",
+    "Reviewed",
     "Approved",
     "Completed",
     "Development",

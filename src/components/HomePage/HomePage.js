@@ -41,27 +41,6 @@ export default class HomePage extends PureComponent {
       showAlert: false,
       headerTabs: {
         leftTabs: {
-          // dashboard: {
-          //   title: 'Dashboard',
-          //   isActive: true,
-          //   icon: <ClockIcon className="header-icon" />
-          // },
-          // management: {
-          //   title: 'Management',
-          //   isActive: false,
-          //   icon: <ProfileIcon className="header-icon" />
-          // },
-          // request: {
-          //   title: 'Request',
-          //   isActive: false,
-          //   icon: <RecentIcon className="header-icon" />
-          // },
-          // myIdeas: {
-          //   title: 'My Ideas',
-          //   isActive: false,
-          //   icon: <ThinkIcon className="header-icon" />
-          // }
-
         }
       },
       ideaSubject: '',
@@ -155,9 +134,9 @@ export default class HomePage extends PureComponent {
 
   componentDidMount()
   {
-    
-      this.updateHeaders()
-    //this.updateHeaders();
+      setTimeout(() => {
+        this.updateHeaders();
+      }, 1000);
   }
 
   updateHeaders()
