@@ -194,7 +194,7 @@ div.ant-modal-content {
       padding-top: 24px;
       .attachment-title-container {
         border: 1px dashed #dedede;
-        width: 85%;
+        width: 90%;
         margin-top: 5px;
         height: 60px;
         display: inline-flex;
@@ -571,5 +571,12 @@ div.ant-modal-content {
   border: 1px solid #cc0000;
   width: 367px;
   height: 170px !important;
+  border-radius: 4px;
+}
+
+.errorComment {
+  border: 1px solid #cc0000;
+  width: 367px;
+  height: 134px !important;
   border-radius: 4px;
 }

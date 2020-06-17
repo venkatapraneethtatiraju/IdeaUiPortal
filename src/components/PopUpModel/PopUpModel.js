@@ -14,7 +14,8 @@ import {
     postIdeaLike,
     postIdeaDisLike,
     getIdeaDetailsById,
-    getActiveCategories
+    getActiveCategories,
+    updateIdeaStatus
 } from '../../services/AppService';
 import Editor from '../Editor/Editor';
 import {
@@ -33,7 +34,17 @@ import {
     REASON_REVIEW,
     REASON_APPROVED,
     REASON_DEVELOPMENT,
-    REASON_COMPLETE
+    REASON_COMPLETE,
+    CLOSED_STATUS_ID,
+    REVIEWED_STATUS_ID,
+    APPROVED_STATUS_ID,
+    DEVELOPMENT_STATUS_ID,
+    COMPLETE_STATUS_ID,
+    CLOSED,
+    COMPLETED,
+    REVIEWED,
+    DRAFT_STATUS_ID,
+    SUBMITTED_STATUS_ID
 } from '../../Config/Constants';
 import ReactHtmlParser from 'react-html-parser';
 import { createIconShortName, getFormatttedDate } from '../../Utility/CommonFunctions';
@@ -41,6 +52,7 @@ import StatusButton from '../StatusButton/StatusButton';
 import StatusTag from '../StatusTag/StatusTag';
 import { getUserId, getUserName } from '../Auth/Auth';
 import TextArea from 'antd/lib/input/TextArea';
+import CommentPopupModel from './CommentPopupModel';
 
 const { TabPane } = Tabs;
 
@@ -79,10 +91,11 @@ class PopUpModel extends Component {
             ideaCategoryTech: [],
             ideaCategoryNonTech: [],
             ideaStatus: '',
-            visible: false,
+            openCommentPopup: false,
             titleMessage: '',
             businessImpactError: "",
-            businessImpact: ''
+            businessImpact: '',
+            statusName: ''
         }
 
         if (this.props.editIdeaData) {
@@ -143,10 +156,10 @@ class PopUpModel extends Component {
     saveandSubmitHandler = (e) => {
         let ideaStatusId = 0;
         if (e.target.textContent === 'Save & Submit') {
-            ideaStatusId = 2;
+            ideaStatusId = SUBMITTED_STATUS_ID;
         }
         else {
-            ideaStatusId = 1;
+            ideaStatusId = DRAFT_STATUS_ID;
         }
         if (this.validateInputs())
             return;
@@ -338,57 +351,99 @@ class PopUpModel extends Component {
         return false;
     }
 
-    handleOk = () => {
-        this.setState({
-            visible: false,
-        });
-    };
-
-    handleCancel = () => {
-        this.setState({
-            visible: false,
-        });
-    };
-
     onStatusClose = () => {
         this.setState({
-            visible: true,
-            titleMessage: REASON_CLOSE
+            openCommentPopup: true,
+            titleMessage: REASON_CLOSE,
+            statusName: CLOSE
         });
     }
 
     onStatusReview = () => {
         this.setState({
-            visible: true,
-            titleMessage: REASON_REVIEW
+            openCommentPopup: true,
+            titleMessage: REASON_REVIEW,
+            statusName: REVIEW
         });
     }
 
     onStatusApproved = () => {
         this.setState({
-            visible: true,
-            titleMessage: REASON_APPROVED
+            openCommentPopup: true,
+            titleMessage: REASON_APPROVED,
+            statusName: APPROVED
         });
     }
 
     onStatusDevelopment = () => {
         this.setState({
-            visible: true,
-            titleMessage: REASON_DEVELOPMENT
+            openCommentPopup: true,
+            titleMessage: REASON_DEVELOPMENT,
+            statusName: DEVELOPMENT
         });
     }
 
     onStatusComplete = () => {
         this.setState({
-            visible: true,
-            titleMessage: REASON_COMPLETE
+            openCommentPopup: true,
+            titleMessage: REASON_COMPLETE,
+            statusName: COMPLETE
         });
     }
 
-    closeReasonHandler = () => {
-        this.setState({
-            visible: false,
-        });
+    popupActionHandler = (event) => {
+        this.setState(prevstate => ({
+            openCommentPopup: !prevstate.openCommentPopup,
+            titleMessage: '',
+            statusName: ''
+        }))
+    }
+
+    getStatusID = (statusName) => {
+        let statusId = '';
+        switch (statusName) {
+            case CLOSE:
+                return statusId = CLOSED_STATUS_ID;
+            case REVIEW:
+                return statusId = REVIEWED_STATUS_ID;
+            case APPROVED:
+                return statusId = APPROVED_STATUS_ID;
+            case DEVELOPMENT:
+                return statusId = DEVELOPMENT_STATUS_ID;
+            case COMPLETE:
+                return statusId = COMPLETE_STATUS_ID;
+            default:
+                return statusId;
+        }
+    }
+
+    changeStatusHandler = (comment) => {
+        const { statusName } = this.state;
+        let requestParam = {
+            ideaId: this.props.ideaId,
+            statusId: this.getStatusID(statusName),
+            comment: comment
+        }
+        this.updateIdeaStatus(requestParam);
+    }
+
+    updateIdeaStatus = (requestParam) => {
+        updateIdeaStatus(requestParam)
+            .then(response => {
+                this.refereshDataTable();
+                this.popupActionHandler();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    refereshDataTable = () => {
+        if (this.props.requestedPage === "RecentRequest") {
+            this.props.refereshRecentRequest();
+        } else if (this.props.requestedPage === "Request") {
+            this.props.refereshRequest();
+        }
     }
 
     render() {
@@ -404,32 +459,14 @@ class PopUpModel extends Component {
 
         return (
             <div className="modal-content">
-                <Modal
-                    title=''
-                    centered
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    width={407}
-                    footer={null}>
-                    <Col className="reason-main">
-                        <Col className="col-inner">
-                            <label className="reason-header-label">
-                                {this.state.titleMessage}
-                            </label>
-                        </Col>
-                        <Col className="col-inner">
-                            <TextArea className="textarea-style" />
-                        </Col>
-                        <Col className="close-button-div">
-                            <GenericButton
-                                buttonClickHandler={this.closeReasonHandler}
-                                buttonName="Close"
-                                btnColor={this.props.btnColor}
-                            ></GenericButton>
-                        </Col>
-                    </Col>
-                </Modal>
+                {this.state.openCommentPopup ?
+                    <CommentPopupModel
+                        titleMessage={this.state.titleMessage}
+                        onCancel={this.popupActionHandler}
+                        onOk={this.popupActionHandler}
+                        changeStatusHandler={this.changeStatusHandler}
+                    /> : null}
+
                 <Modal
                     title={
                         <Row className="popup-header-title" gutter={2}>
@@ -458,10 +495,13 @@ class PopUpModel extends Component {
                             </Col>
 
                             {this.state.isAddEditIdea === "true" ? <Row className="right-display">
+                                {console.log(ideaStatus, 'ideaStatus')}
                                 <Row>
-                                    <Button type="link" onClick={this.saveandSubmitHandler} style={{
-                                        color: this.props.btnColor
-                                    }}>Save as Draft</Button>
+                                    {this.state.ideaStatus === DRAFT || this.state.ideaStatus === '' ?
+                                        <Button type="link" onClick={this.saveandSubmitHandler} style={{
+                                            color: this.props.btnColor
+                                        }}>Save as Draft</Button> : null}
+
                                     <GenericButton
                                         buttonClickHandler={this.saveandSubmitHandler}
                                         buttonName={this.props.saveandSubmit}
@@ -470,7 +510,10 @@ class PopUpModel extends Component {
                                 </Row>
                             </Row> : null}
 
-                            {this.state.isViewIdea === "true" && ideaStatus !== undefined && ideaStatus === DRAFT ?
+                            {this.state.isViewIdea === "true"
+                                && ideaStatus !== undefined
+                                && (ideaStatus === DRAFT || ideaStatus === REVIEWED)
+                                && (this.state.isOperPerform === undefined || this.state.isOperPerform !== "true") ?
                                 <Col className="right-display">
                                     <GenericButton
                                         buttonClickHandler={this.props.buttonEditHandler}
@@ -480,7 +523,7 @@ class PopUpModel extends Component {
                                 </Col> : null}
 
                             {this.state.isOperPerform === "true" && (ideaStatus === SUBMITTED ||
-                                ideaStatus === CLOSE || ideaStatus === REVIEW) ?
+                                ideaStatus === CLOSED || ideaStatus === REVIEWED) ?
                                 <Row className="right-display">
                                     <StatusButton ideaStatus={CLOSE} onStatusChange={this.onStatusClose} />
                                     <Col className="split-line" />
@@ -488,8 +531,9 @@ class PopUpModel extends Component {
                                     <Col className="split-line" />
                                     <StatusButton ideaStatus={APPROVED} onStatusChange={this.onStatusApproved} />
                                 </Row> : null}
+
                             {this.state.isOperPerform === "true" && (ideaStatus === APPROVED ||
-                                ideaStatus === DEVELOPMENT || ideaStatus === COMPLETE) ?
+                                ideaStatus === DEVELOPMENT || ideaStatus === COMPLETED) ?
                                 <Row className="right-display">
                                     <StatusButton ideaStatus={DEVELOPMENT} onStatusChange={this.onStatusDevelopment} />
                                     <Col className="split-line" />

@@ -1,4 +1,3 @@
-//
 import {
     TOKEN_KEY,
     USERNAME_KEY,
@@ -7,16 +6,12 @@ import {
     USER_EMAIL
 } from '../../Config/Constants';
 
-
-
-export const setUserType= userType =>{
-    localStorage.setItem(USERROLE_KEY,userType);
+export const setUserType = userType => {
+    localStorage.setItem(USERROLE_KEY, userType);
 }
-export const setUserEmail = userEmail =>{
-    localStorage.setItem(USER_EMAIL,userEmail);
+export const setUserEmail = userEmail => {
+    localStorage.setItem(USER_EMAIL, userEmail);
 }
-
-
 
 export const isAuthenticated = () => (localStorage.getItem(TOKEN_KEY) !== null
     && localStorage.getItem(USERNAME_KEY) !== null
@@ -28,7 +23,7 @@ export const getToken = () => localStorage.getItem(TOKEN_KEY);
 export const getUserName = () => localStorage.getItem(USERNAME_KEY);
 export const getUserId = () => localStorage.getItem(USERID_KEY);
 export const getUserRole = () => localStorage.getItem(USERROLE_KEY);
-export const getEmailId= () => localStorage.getItem(USER_EMAIL);
+export const getEmailId = () => localStorage.getItem(USER_EMAIL);
 
 export const login = loginData => {
     localStorage.setItem(TOKEN_KEY, loginData.token);
