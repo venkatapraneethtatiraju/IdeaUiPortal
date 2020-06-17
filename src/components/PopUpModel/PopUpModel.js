@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import './PopUpModel.scss';
 import {
     Modal, Row, Col, Tag, Button, Timeline,
@@ -56,7 +56,7 @@ import CommentPopupModel from './CommentPopupModel';
 
 const { TabPane } = Tabs;
 
-class PopUpModel extends Component {
+class PopUpModel extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
@@ -114,10 +114,8 @@ class PopUpModel extends Component {
     }
 
     validateInputs = () => {
-
         const { ideaSubject, ideaCategoryValue, ideaDetails, businessImpact } = this.state;
         let valid = false;
-
         if (ideaSubject.trim() === "") {
             this.setState({ ideaSubjectError: WARNING_MESSAGE });
             valid = true;
@@ -125,7 +123,6 @@ class PopUpModel extends Component {
             this.setState({ ideaSubjectError: '' });
             valid = false;
         }
-
         if (ideaCategoryValue.length === 0) {
             this.setState({ ideaCategoryValueError: WARNING_MESSAGE });
             valid = true;
@@ -133,7 +130,6 @@ class PopUpModel extends Component {
             this.setState({ ideaCategoryValueError: '' });
             valid = false;
         }
-
         if (ideaDetails.trim() === "" || ideaDetails === '<p><br></p>') {
             this.setState({ ideaDetailsError: WARNING_MESSAGE });
             valid = true;
@@ -141,7 +137,6 @@ class PopUpModel extends Component {
             this.setState({ ideaDetailsError: '' });
             valid = false;
         }
-
         if (businessImpact.trim() === "") {
             this.setState({ businessImpactError: WARNING_MESSAGE });
             valid = true;
@@ -149,7 +144,6 @@ class PopUpModel extends Component {
             this.setState({ businessImpactError: '' });
             valid = false;
         }
-
         return valid;
     }
 
