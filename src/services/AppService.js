@@ -152,13 +152,12 @@ export const postCategories = (requestParam) => {
 
 // Service to get otp on given email ID
 export const postOTP = (requestParam) => {
-    return Axios.post(`${GET_OTP}`, { requestParam });
+    return Axios.post(`${GET_OTP}`, { requestParam }, '');
 }
 
 //Service call to get VERIFY OTP 
 export const getVerifyOtp = (otp) => {
-    const headers = getHeaders();
-    return Axios.get(`${VERIFY_OTP}/otp=${otp}`, { headers });
+    return Axios.get(`${VERIFY_OTP}${otp}`);
 }
 
 //Service call to check email is register or not
