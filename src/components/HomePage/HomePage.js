@@ -141,9 +141,7 @@ export default class HomePage extends PureComponent {
   // component Did mount
 
   componentDidMount() {
-    setTimeout(() => {
-      this.updateHeaders();
-    }, 1000);
+    this.updateHeaders();
   }
 
   updateHeaders() {
