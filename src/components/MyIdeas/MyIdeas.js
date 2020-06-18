@@ -122,6 +122,7 @@ class MyIdeas extends PureComponent {
 
   componentDidMount() {
     this.mounted = true;
+    this.props.onClick("myIdeas");
     this.getIdeaDetails(this.state.pagination);
   }
 

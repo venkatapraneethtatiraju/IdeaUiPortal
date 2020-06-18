@@ -18,7 +18,7 @@ import { grey } from '@material-ui/core/colors';
 import AdminPopUpModel from '../PopUpModel/AdminPopUpModel';
 import { createNewIdea } from '../../services/AppService';
 import { IDEA_ADDED_MESSAGE } from '../../Config/Constants';
-import {setUserType,getUserRole} from '../Auth/Auth';
+import { setUserType, getUserRole } from '../Auth/Auth';
 import { useTheme } from '@material-ui/core';
 import Login from '../login/Login';
 
@@ -27,7 +27,7 @@ export default class HomePage extends PureComponent {
     super(props);
 
     this.state = {
-      userType:'',
+      userType: '',
       subHeaderTextTitle: 'Users',
       userClickColor: "gray",
       categoriesClickColor: "gray",
@@ -69,7 +69,7 @@ export default class HomePage extends PureComponent {
       ideaCategoryValue: '',
       ideaDetails: '',
       status: 0,
-      reloadCat : '',
+      reloadCat: '',
     };
     this.saveandSubmitHandler = this.saveandSubmitHandler.bind(this)
   }
@@ -81,12 +81,12 @@ export default class HomePage extends PureComponent {
   }
 
   clickActionHandler = async (event) => {
-   
+
     this.updateHeaders();
 
     if (event === "management") {
       this.usersClicked();
-      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black', categoriesClickColor: 'grey', reloadCat : ""});
+      await this.setState({ buttonName: "Add Category", title: "management", userClickColor: 'black', categoriesClickColor: 'grey', reloadCat: "" });
 
     }
     else {
@@ -107,11 +107,11 @@ export default class HomePage extends PureComponent {
   }
 
   buttonActionHandler = (event) => {
-    if(event === 'addCateSucess') {
-      this.setState({reloadCat : 'reloadCat'})
+    if (event === 'addCateSucess') {
+      this.setState({ reloadCat: 'reloadCat' })
     }
     else {
-      this.setState({reloadCat : ""})
+      this.setState({ reloadCat: "" })
     }
     this.setState(prevstate => ({
       ...prevstate,
@@ -122,7 +122,7 @@ export default class HomePage extends PureComponent {
     }, 4000);
     this.categoriesClicked();
 
-    
+
   }
 
   saveandSubmitHandler(ideaSubject, ideaType, ideaCategoryValue, ideaDetails, ideaStatusId, businessImpact) {
@@ -161,38 +161,36 @@ export default class HomePage extends PureComponent {
 
   // component Did mount
 
-  componentDidMount()
-  {
-    
-      this.updateHeaders()
+  componentDidMount() {
+
+    this.updateHeaders()
     //this.updateHeaders();
   }
 
-  updateHeaders()
-  {
-      const userType= getUserRole();
-      let leftObjects={};
-      this.setState({userType:userType});
-      if(userType ==="Employee"){
+  updateHeaders() {
+    const userType = getUserRole();
+    let leftObjects = {};
+    this.setState({ userType: userType });
+    if (userType === "Employee") {
 
-        leftObjects = {
-          dashboard: {
-            title: 'Dashboard',
-            isActive: true,
-            icon: <ClockIcon className="header-icon" />
-          },
-          myIdeas: {
-            title: 'My Ideas',
-            isActive: false,
-            icon: <ThinkIcon className="header-icon" />
-          }
+      leftObjects = {
+        dashboard: {
+          title: 'Dashboard',
+          isActive: true,
+          icon: <ClockIcon className="header-icon" />
+        },
+        myIdeas: {
+          title: 'My Ideas',
+          isActive: false,
+          icon: <ThinkIcon className="header-icon" />
         }
       }
-      else if(userType ==="Manager"){
+    }
+    else if (userType === "Manager") {
 
-        leftObjects =
-        {  
-          dashboard: {
+      leftObjects =
+      {
+        dashboard: {
           title: 'Dashboard',
           isActive: true,
           icon: <ClockIcon className="header-icon" />
@@ -207,45 +205,44 @@ export default class HomePage extends PureComponent {
           isActive: false,
           icon: <ThinkIcon className="header-icon" />
         }
-       }
       }
-      else {
-        leftObjects = {
-          dashboard: {
-            title: 'Dashboard',
-            isActive: true,
-            icon: <ClockIcon className="header-icon" />
-          },
-          management: {
-            title: 'Management',
-            isActive: false,
-            icon: <ProfileIcon className="header-icon" />
-          },
-          request: {
-            title: 'Request',
-            isActive: false,
-            icon: <RecentIcon className="header-icon" />
-          },
-          myIdeas: {
-            title: 'My Ideas',
-            isActive: false,
-            icon: <ThinkIcon className="header-icon" />
-          }
+    }
+    else {
+      leftObjects = {
+        dashboard: {
+          title: 'Dashboard',
+          isActive: true,
+          icon: <ClockIcon className="header-icon" />
+        },
+        management: {
+          title: 'Management',
+          isActive: false,
+          icon: <ProfileIcon className="header-icon" />
+        },
+        request: {
+          title: 'Request',
+          isActive: false,
+          icon: <RecentIcon className="header-icon" />
+        },
+        myIdeas: {
+          title: 'My Ideas',
+          isActive: false,
+          icon: <ThinkIcon className="header-icon" />
         }
       }
+    }
 
-     this.setState(prevState => ({
+    this.setState(prevState => ({
       ...prevState,
-      userType:userType,
+      userType: userType,
       headerTabs: {
         leftTabs: leftObjects
       }
     }))
   }
 
-  componentDidUpdate(prevState,nextState)
-  {
-     
+  componentDidUpdate(prevState, nextState) {
+
   }
 
   render() {
@@ -297,20 +294,20 @@ export default class HomePage extends PureComponent {
           /> : null}
 
 
-          <Switch>
+        <Switch>
           <Redirect exact from="/" to="/dashboard" />
-          <Route  path="/dashboard"  >
+          <Route path="/dashboard"  >
             <Dashboard onClick={(event) => this.clickActionHandler(event)} />
           </Route>
-          <Route  path="/myIdeas" >
-            <MyIdeas myIdeaData={this.state.myIdeaData} />
+          <Route path="/myIdeas" >
+            <MyIdeas myIdeaData={this.state.myIdeaData} onClick={(event) => this.clickActionHandler(event)} />
           </Route>
-          <Route  path="/allIdeas" component={AllIdea} />
-          <Route  path="/request">
+          <Route path="/allIdeas" component={AllIdea} />
+          <Route path="/request">
             <AllRecentRequest title={this.state.title} value={this.state} />
           </Route>
-          <Route  path="/management">
-            <AllRecentRequest title={this.state.title} value={this.state} reloadCat={this.state.reloadCat}/>
+          <Route path="/management">
+            <AllRecentRequest title={this.state.title} value={this.state} reloadCat={this.state.reloadCat} />
           </Route>
         </Switch>
       </div>

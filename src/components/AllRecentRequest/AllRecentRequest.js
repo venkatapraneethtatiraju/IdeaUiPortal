@@ -193,7 +193,7 @@ class AllRecentRequest extends Component {
           this.getUserDataRecord(this.state.userPagination);
         }
       }
-      if(prevState.reloadCat !== this.props.reloadCat && this.props.value.subHeaderTextTitle === "Categories") {
+      if (prevState.reloadCat !== this.props.reloadCat && this.props.value.subHeaderTextTitle === "Categories") {
         this.getCategoriesDataRecord();
       }
     }
