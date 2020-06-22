@@ -4,7 +4,9 @@ import {
     GET_MYIDEAS_DETAIL,
     RECENTLY_SUBMITTED_IDEAS,
     ALL_IDEAS,
-    RECENT_REQUEST
+    RECENT_REQUEST,
+    EMAIL_REGULAR_EXPRESSION,
+    XEBIA_EMAIL_DOMAIN
 } from '../Config/Constants'
 
 const months = [
@@ -23,9 +25,9 @@ const months = [
 ]
 
 //Get headers for request
-export const getHeaders =  () => {
-    const token =  getToken();//Get token
-    const headers = {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}
+export const getHeaders = () => {
+    const token = getToken();//Get token
+    const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
 
     return headers;
 };
@@ -140,14 +142,12 @@ export const getFormatttedDate = (dateString) => {
     return `${date} ${monthName}, ${year}`
 }
 
-// email validation check
- export const validateEmail = (email) => {
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (re.test(email)) {
-      //Email valid. Procees to test if it's from the right domain (Second argument is to check that the string ENDS with this domain, and that it doesn't just contain it)
-      if (email.indexOf("@xebia.com", email.length - "@xebia.com".length) !== -1) {
-        //VALID        
-        return true;
-      }
+//Email valid. Procees to test if it's from the right domain (Second argument 
+//is to check that the string ENDS with this domain, and that it doesn't just contain it)
+export const validateEmail = (email) => {
+    if (EMAIL_REGULAR_EXPRESSION.test(email)) {
+        if (email.indexOf(XEBIA_EMAIL_DOMAIN, email.length - XEBIA_EMAIL_DOMAIN.length) !== -1) {
+            return true;
+        }
     }
-  }
+}

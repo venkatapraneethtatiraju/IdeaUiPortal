@@ -27,7 +27,7 @@ export class TopContributors extends PureComponent {
                 {
                     dataIndex: 'user',
                     ellipsis: true,
-                    width: '50%',
+                    width: '44%',
                     render: (user) =>
                         <div>
                             <div className="txt-div"><span className="name-designation name-color">{user.username}</span></div>
@@ -37,9 +37,9 @@ export class TopContributors extends PureComponent {
                 {
                     dataIndex: 'totalIdeas',
                     ellipsis: true,
-                    width: '15%',
+                    width: '20%',
                     render: (totalIdeas) =>
-                        <div>
+                        <div className="count-div">
                             <Tooltip title={`${SUBMITTED_IDEAS} : ${totalIdeas}`}>
                                 <EditToolsIcon className="edit-interface edit-tools" alt="Edit-Tools" />
                                 <span className="edit-interface-count edit-count-color">{totalIdeas}</span>
@@ -51,7 +51,7 @@ export class TopContributors extends PureComponent {
                     ellipsis: true,
                     width: '20%',
                     render: (approvedIdeas) =>
-                        <div>
+                        <div className="count-div">
                             <Tooltip title={`${APPROVED_IDEAS} : ${approvedIdeas}`}>
                                 <InterfaceIcon className="edit-interface interface" alt="Interface" />
                                 <span className="edit-interface-count interface-count-color">{approvedIdeas}</span>
@@ -64,7 +64,7 @@ export class TopContributors extends PureComponent {
 
     //Called the service when component is mount
     componentDidMount() {
-        
+
         this.getTopContributorRecord();
     }
 

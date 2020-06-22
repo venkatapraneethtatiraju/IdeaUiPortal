@@ -1,13 +1,27 @@
 import React, { PureComponent } from 'react';
 import './Login.scss';
 import { Form, Input, Button } from 'antd';
-import XebiaLogo from '../../images/Logo.svg';
-import axios from 'axios';
+import { ReactComponent as XebiaLogo } from '../../images/Logo.svg';
 import { login } from '../Auth/Auth';
 import HomePage from '../HomePage/HomePage';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import Alertbox from '../Alert/Alert';
 import { isAuthenticated } from '../Auth/Auth';
+import {
+  getEmailVerify,
+  getOTPByEmail,
+  getVerifyOtp
+} from '../../services/AppService';
+import {
+  EMAIL_SUCCESS_MESSAGE,
+  EMAIL_ERROR_MESSAGE,
+  OTP_SUCCESS_MESSAGE,
+  EMAIL_ENTER_MESSAGE,
+  OTP_ENTER_MESSAGE,
+  SUCCESS,
+  OTP_INVALID_MESSAGE
+} from '../../Config/Constants';
+import { validateEmail } from '../../Utility/CommonFunctions';
 
 class Login extends PureComponent {
   constructor(props) {
@@ -17,7 +31,7 @@ class Login extends PureComponent {
       messageStatus: "",
       inputEmailStyle: "registeredinputEmail",
       emailRegister: false,
-      loginLableName: 'Enter your Email Id',
+      loginLableName: EMAIL_ENTER_MESSAGE,
       inputPlaceHolder: '',
       loginBtnName: 'Next',
       loginInfo: '',
@@ -37,6 +51,7 @@ class Login extends PureComponent {
     }
   }
 
+  //Duplicate Call we can remove it
   onButtonClicked1 = () => {
     this.setState({ isLogin: true, buttonEnabled: true })
   }
@@ -53,7 +68,7 @@ class Login extends PureComponent {
       this.setState({
         email: "",
         loginBtnName: "Login",
-        inputPlaceHolder: 'Enter One Time Password',
+        inputPlaceHolder: OTP_ENTER_MESSAGE,
         emailInputView: false,
         loginInfo: "",
         buttonStatus: "otpBtn",
@@ -61,7 +76,6 @@ class Login extends PureComponent {
         otpSendEnabled: false,
         otpResendEnabled: true
       })
-      console.log(this.state, "check");
     }
   }
 
@@ -73,33 +87,33 @@ class Login extends PureComponent {
 
   getOTP() {
     const email = this.state.emailIDText;
-    if (email)
-      axios.post(`https://cors-anywhere.herokuapp.com/http://iportal.herokuapp.com/innovation-portal/api/v1/otp`, { email })
+    if (email) {
+      const requestParam = {
+        email: email
+      };
+      getOTPByEmail(requestParam)
         .then(res => {
-          this.setAlertName = "OTP send successfully!";
-          this.setState({ showAlert: true, alertText: 'OTP send successfully!', otpSuccess: true, emailStatus: true });
-          this.AlertShow("OTP send successfully!");
+          this.setAlertName = OTP_SUCCESS_MESSAGE;
+          this.setState({ showAlert: true, alertText: OTP_SUCCESS_MESSAGE, otpSuccess: true, emailStatus: true });
+          this.AlertShow(OTP_SUCCESS_MESSAGE);
         })
         .catch(error => {
           console.log(error)
           this.setState({ otpSuccess: false, emailStatus: false });
         });
+    }
   }
 
   getOTPVerify(otp) {
     if (otp) {
-      const otpAPI = 'https://cors-anywhere.herokuapp.com/http://iportal.herokuapp.com/innovation-portal/api/v1/otp/verify';
-      axios.get(otpAPI,
-        {
-          params: {
-            otp: otp
-          }
-        })
+      const requestParam = {
+        otp: otp
+      }
+      getVerifyOtp(requestParam)
         .then(response => {
-          console.log('getEmailVerify', response)
-          if (response.data.message === 'success') {
+          if (response.data.message === SUCCESS) {
             login(response.data);
-            setTimeout(() => {
+            this.loginTimer = setTimeout(() => {
               this.setState({ isLogin: true })
             }, 1000);
           }
@@ -110,17 +124,16 @@ class Login extends PureComponent {
         });
     }
     else {
-      alert("Please enter valid otp");
+      alert(OTP_INVALID_MESSAGE);
     }
   }
 
   handleChange = (evt) => {
     this.setState({ email: evt.target.value });
     if (this.state.emailInputView) {
-      const val = evt.target.value;
-      console.log(val);
+      const val = String(evt.target.value).toLowerCase();
       clearTimeout(this.typingTimer);
-      let ve = this.validateEmail(val);
+      let ve = validateEmail(val);
       if (ve) {
         this.typingTimer = setTimeout(() => {
           this.setState({ emailRegister: true })
@@ -135,7 +148,6 @@ class Login extends PureComponent {
     }
     else {
       const valOTP = evt.target.value;
-      console.log(valOTP, "otp");
       // check otp 
       if (valOTP) {
         this.setState({ otpText: valOTP });
@@ -143,59 +155,47 @@ class Login extends PureComponent {
     }
   }
 
-  validateEmail = (email) => {
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (re.test(email)) {
-      //Email valid. Procees to test if it's from the right domain (Second argument is to check that the string ENDS with this domain, and that it doesn't just contain it)
-      if (email.indexOf("@xebia.com", email.length - "@xebia.com".length) !== -1) {
-        //VALID
-        console.log("VALID");
-        return true;
-      }
-    }
-  }
-
   emailRegisteredCheck = (email) => {
-    axios.get('http://iportal.herokuapp.com/innovation-portal/api/v1/token/verify?emailId=' + email)
+    const requestParam = {
+      emailId: email
+    }
+    getEmailVerify(requestParam)
       .then(response => {
-        console.log(response.data.result);
-        this.setState({
-          buttonStatus: "emailSuccess",
-          loginInfo: 'Your will receive an OTP on this email to continue to application.',
-          emailRegister: false,
-          messageStatus: "optMessage",
-          inputEmailStyle: "registeredinputEmail",
-          buttonEnabled: false
-        });
-        console.log(this.state);
+        if (response.data.message === SUCCESS) {
+          if (response.data.result === true) {
+            this.setState({
+              buttonStatus: "emailSuccess",
+              loginInfo: EMAIL_SUCCESS_MESSAGE,
+              emailRegister: false,
+              messageStatus: "optMessage",
+              inputEmailStyle: "registeredinputEmail",
+              buttonEnabled: false
+            });
+          } else if (response.data.result === false) {
+            this.setState({
+              buttonStatus: "emailCheck",
+              loginInfo: EMAIL_ERROR_MESSAGE,
+              emailRegister: false,
+              messageStatus: 'emailMessage',
+              inputEmailStyle: "notRegisteredEmail",
+              buttonEnabled: true
+            });
+          }
+        }
       })
       .catch(error => {
         console.log(error);
-        this.setState({
-          buttonStatus: "emailCheck",
-          loginInfo: 'This email address is not registered with us, try with different one.',
-          emailRegister: false,
-          messageStatus: 'emailMessage',
-          inputEmailStyle: "notRegisteredEmail",
-          buttonEnabled: true
-        });
-        console.log(this.state);
       });
   }
 
   componentWillUnmount() {
     clearTimeout(this.typingTimer);
+    clearTimeout(this.alertTimer);
+    clearTimeout(this.loginTimer);
   }
 
-  componentDidUpdate(prevState) {
-    if (this.prevState !== this.state) {
-      console.log(prevState);
-    }
-  }
-
-  resendTextOnMouseover(e) {
-    console.log(e);
-    if (e === "In") {
+  resendTextOnMouseover(event) {
+    if (event === "In") {
       this.setState({ resendTextStyle: "Didntreceivetext-style-2" });
     }
     else {
@@ -208,40 +208,35 @@ class Login extends PureComponent {
   }
 
   AlertShow(alert) {
-    setTimeout(() => {
+    this.alertTimer = setTimeout(() => {
       this.setState({ showAlert: false })
     }, 4000);
   };
-
 
   render() {
     if (this.state.isLogin || isAuthenticated()) {
       return <HomePage />
     }
-    const alertName = "OTP send successfully!";
+    const alertName = OTP_SUCCESS_MESSAGE;
     return (
       <div className="App">
         {this.state.showAlert ?
           <Alertbox alertName={alertName} alertText={this.state.alertText} /> : null
         }
-        <div className="headerlogos">
-          <img src={XebiaLogo} alt="logo" className="xebia_logo-large-transparent" />
-        </div>
+        <XebiaLogo className='xebia-login-logo' />
         <div className="main">
-          <h2 className='Login' >Login</h2>
+          <h2 className='Login'>Login</h2>
           <div className="mainContaine">
             <Form>
               <Form.Item className="enterYourEmailId" label={this.state.loginLableName}>
                 <Input placeholder={this.state.inputPlaceHolder} className={"inputEmail"}
                   value={this.state.email} onChange={this.handleChange}>
                 </Input>
-
                 {this.state.emailRegister ?
-                  <div className='progrees' >
+                  <div className='progrees'>
                     <ProgressBar />
                   </div> : null
                 }
-
               </Form.Item>
               <h3 className={this.state.messageStatus}> {this.state.loginInfo}</h3>
               <Form.Item>

@@ -516,8 +516,7 @@ class PopUpModel extends PureComponent {
                                     ></GenericButton>
                                 </Col> : null}
 
-                            {this.state.isOperPerform === "true" && (ideaStatus === SUBMITTED ||
-                                ideaStatus === CLOSED || ideaStatus === REVIEWED) ?
+                            {this.state.isOperPerform === "true" && ideaStatus === SUBMITTED ?
                                 <Row className="right-display">
                                     <StatusButton ideaStatus={CLOSE} onStatusChange={this.onStatusClose} />
                                     <Col className="split-line" />
@@ -527,7 +526,7 @@ class PopUpModel extends PureComponent {
                                 </Row> : null}
 
                             {this.state.isOperPerform === "true" && (ideaStatus === APPROVED ||
-                                ideaStatus === DEVELOPMENT || ideaStatus === COMPLETED) ?
+                                ideaStatus === DEVELOPMENT) ?
                                 <Row className="right-display">
                                     <StatusButton ideaStatus={DEVELOPMENT} onStatusChange={this.onStatusDevelopment} />
                                     <Col className="split-line" />

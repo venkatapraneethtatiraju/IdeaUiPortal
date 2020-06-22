@@ -103,3 +103,12 @@ export const DEVELOPMENT_STATUS_ID = 7;
 export const COMPLETE_STATUS_ID = 8;
 export const CLOSED_STATUS_ID = 9;
 
+export const XEBIA_EMAIL_DOMAIN = "@xebia.com";
+export const EMAIL_REGULAR_EXPRESSION = /^(([^<>()[\]\\.,;:\s@\\"]+(\.[^<>()[\]\\.,;:\s@\\"]+)*)|(\\".+\\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+export const EMAIL_SUCCESS_MESSAGE = 'Your will receive an OTP on this email to continue to application.';
+export const EMAIL_ERROR_MESSAGE = 'This email address is not registered with us, try with different one.';
+export const OTP_SUCCESS_MESSAGE = "OTP send successfully!";
+export const EMAIL_ENTER_MESSAGE = 'Enter your Email Id';
+export const OTP_ENTER_MESSAGE = 'Enter One Time Password';
+export const OTP_INVALID_MESSAGE = "Please enter valid otp";
+

@@ -6,7 +6,7 @@ import IdeasStats from './IdeasStats/IdeasStats';
 import TopContributors from './TopContributors/TopContributors';
 import RecentlySubmittedIdeas from './RecentlySubmittedIdeas/RecentlySubmittedIdeas';
 import RecentRequests from './RecentRequests/RecentRequests';
-import {setUserType,getUserType, getEmailId} from '../Auth/Auth';
+import { setUserType, getUserType, getEmailId } from '../Auth/Auth';
 import { getUsersByEmailID } from '../../services/AppService';
 import {
     DEFAULT_PAGE_SIZE
@@ -14,11 +14,11 @@ import {
 
 class Dashboard extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
-        this.state={
-            userRole:'',
+        this.state = {
+            userRole: '',
             pagination1: {
                 current: 1,
                 pageSize: DEFAULT_PAGE_SIZE,
@@ -26,32 +26,30 @@ class Dashboard extends Component {
                 position: ['topRight'],
                 total: 0,
                 showQuickJumper: true,
-              }
+            }
         }
     }
 
-    componentDidMount(){
-       
+    componentDidMount() {
         setTimeout(() => {
-            this.getAllUserByEmailIId(); 
-          }, 1000);
-       
+            this.getAllUserByEmailIId();
+        }, 1000);
     }
     // get all user by email ID search from API.
 
-    getAllUserByEmailIId = async ()=>{
+    getAllUserByEmailIId = async () => {
 
         let emailId = getEmailId();
-        await getUsersByEmailID(this.state.pagination1,emailId)
+        await getUsersByEmailID(this.state.pagination1, emailId)
             .then(response => {
-        const userRole =  response.data.result.content[0].role;
-        setUserType(userRole);
-        this.setState({userRole:userRole});
-   })
-   .catch(error => {
-     console.log(error);
-   })
-   }
+                const userRole = response.data.result.content[0].role;
+                setUserType(userRole);
+                this.setState({ userRole: userRole });
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
 
     render() {
         const userRole = this.state.userRole;
@@ -67,10 +65,10 @@ class Dashboard extends Component {
                             <TopContributors />
                             <RecentlySubmittedIdeas />
                         </Row>
-                        {userRole ==="Manager" || userRole ==="Admin"?
-                        <Row gutter={16} >
-                            <RecentRequests onClick={this.props.onClick} />
-                        </Row>:null
+                        {userRole === "Manager" || userRole === "Admin" ?
+                            <Row gutter={16} >
+                                <RecentRequests onClick={this.props.onClick} />
+                            </Row> : null
                         }
                     </Col>
                 </Row>
