@@ -11,7 +11,9 @@ import {
   IDEA_CATEGORY,
   SUBMITTED_ON,
   IDEA_STATUS,
-  IDEA_UPDATED_MESSAGE
+  IDEA_SUBMITTED_MESSAGE,
+  SUBMITTED_STATUS_ID,
+  IDEA_UPDATE_MESSAGE
 } from '../../Config/Constants';
 import { getMyIdeas, saveAndSubmitIdeaById } from '../../services/AppService';
 import { addNewProperty } from '../../Utility/CommonFunctions';
@@ -102,6 +104,7 @@ class MyIdeas extends PureComponent {
       isEditIdea: "false",
       ideaId: '',
       isLoading: false,
+      ideaDisplayMessage: '',
     }
     this.saveandSubmitHandler = this.saveandSubmitHandler.bind(this)
   }
@@ -187,7 +190,12 @@ class MyIdeas extends PureComponent {
   saveAndSubmitIdea(requestParam, ideaId) {
     saveAndSubmitIdeaById(requestParam, ideaId)
       .then(response => {
-        this.setState({ status: response.data.code, isSubmitted: true, displayAlert: true });
+        if (requestParam.ideaStatusId === SUBMITTED_STATUS_ID) {
+          this.setState({ status: response.data.code, isSubmitted: true, displayAlert: true, ideaDisplayMessage: IDEA_SUBMITTED_MESSAGE });
+        } else {
+          this.setState({ status: response.data.code, isSubmitted: true, displayAlert: true, ideaDisplayMessage: IDEA_UPDATE_MESSAGE });
+        }
+
         this.buttonActionHandler();
       })
       .catch(error => {
@@ -236,7 +244,7 @@ class MyIdeas extends PureComponent {
         </div> : null
         }
         {this.state.displayAlert ?
-          <Alertbox alertName={IDEA_UPDATED_MESSAGE} /> : null
+          <Alertbox alertName={this.state.ideaDisplayMessage} /> : null
         }
         <div className="my-ideas-container">
           <Row justify="center">

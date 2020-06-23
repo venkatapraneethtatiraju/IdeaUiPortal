@@ -44,8 +44,9 @@ export const EMPLOYEE = 'Employee';
 export const MANAGER = 'Manager';
 export const ADMIN = 'Admin';
 export const WARNING_MESSAGE = 'This is a mandatory field';
-export const IDEA_UPDATED_MESSAGE = "Idea Updated Successfully!";
-export const IDEA_ADDED_MESSAGE = "Idea Added Successfully!";
+export const IDEA_SUBMITTED_MESSAGE = "Your idea has been submitted successfully.";
+export const IDEA_ADDED_MESSAGE = "Your idea has been added successfully.";
+export const IDEA_UPDATE_MESSAGE = "Your idea has been updated successfully.";
 export const TECHNICAL = 'Technical';
 export const NON_TECHNICAL = 'Non-Technical';
 
